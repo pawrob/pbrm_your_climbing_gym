@@ -5,7 +5,6 @@ import pl.ftims.ias.your_climbing_gym.dto.AbstractDTO;
 
 
 @Data
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
