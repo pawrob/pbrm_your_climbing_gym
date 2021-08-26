@@ -1,4 +1,4 @@
-package pl.ftims.ias.your_climbing_gym.Entities;
+package pl.ftims.ias.your_climbing_gym.entities;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
