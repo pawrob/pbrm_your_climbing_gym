@@ -1,15 +1,12 @@
 package pl.ftims.ias.your_climbing_gym.entities;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
-import java.util.Objects;
 
-@Setter
-@Getter
+@Data
 @MappedSuperclass
+@EqualsAndHashCode
 public abstract class AbstractEntity {
     @Setter(AccessLevel.PROTECTED)
     private long id;
@@ -27,19 +24,5 @@ public abstract class AbstractEntity {
     @Column(name = "version", nullable = false)
     public Long getVersion() {
         return version;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == null || this.getClass() != obj.getClass()) {
-            return false;
-        }
-        AbstractEntity other = (AbstractEntity) obj;
-        return this.getId() == other.getId();
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
     }
 }

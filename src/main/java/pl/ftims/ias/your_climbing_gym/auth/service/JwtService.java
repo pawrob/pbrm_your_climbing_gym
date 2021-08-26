@@ -71,7 +71,7 @@ public class JwtService {
         Boolean isManager = claims.get("isManager", Boolean.class);
         Boolean isClimber = claims.get("isClimber", Boolean.class);
 
-        if (isAdmin != null && isAdmin)roles.add(new SimpleGrantedAuthority("ROLE_ADMINISTRATOR"));
+        if (isAdmin != null && isAdmin) roles.add(new SimpleGrantedAuthority("ROLE_ADMINISTRATOR"));
         if (isManager != null && isManager) roles.add(new SimpleGrantedAuthority("ROLE_MANAGER"));
         if (isClimber != null && isClimber) roles.add(new SimpleGrantedAuthority("ROLE_CLIMBER"));
 

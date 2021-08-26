@@ -14,6 +14,9 @@ import java.io.Serializable;
 @DiscriminatorValue("MANAGER")
 @PrimaryKeyJoinColumn(name = "access_level_id")
 @Table(name = "manager", schema = "public")
-public class ManagerEntity extends AccessLevelEntity implements Serializable  {
+public class ManagerEntity extends AccessLevelEntity implements Serializable {
 
+    public ManagerEntity(boolean isActive, UserEntity userEntity) {
+        super(isActive, userEntity);
+    }
 }

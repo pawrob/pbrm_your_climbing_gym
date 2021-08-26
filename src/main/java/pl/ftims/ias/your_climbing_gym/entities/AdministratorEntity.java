@@ -17,4 +17,7 @@ import java.io.Serializable;
 @Table(name = "administrator", schema = "public")
 public class AdministratorEntity extends AccessLevelEntity implements Serializable {
 
+    public AdministratorEntity(boolean isActive, UserEntity userEntity) {
+        super(isActive, userEntity);
+    }
 }

@@ -6,16 +6,17 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
 @Setter
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor
 @Inheritance(strategy = InheritanceType.JOINED)
 @DiscriminatorColumn(name = "access_level", discriminatorType = DiscriminatorType.STRING, length = 16)
 @Table(name = "access_level_table", schema = "public")
-public  abstract class AccessLevelEntity extends AbstractEntity {
+public abstract class AccessLevelEntity extends AbstractEntity implements Serializable {
 
     private String accessLevel;
     private Boolean isActive;
@@ -42,6 +43,11 @@ public  abstract class AccessLevelEntity extends AbstractEntity {
 
     public void setActive(Boolean active) {
         isActive = active;
+    }
+
+    public AccessLevelEntity(boolean isActive, UserEntity userEntity) {
+        this.setActive(isActive);
+        this.setUser(userEntity);
     }
 
 }

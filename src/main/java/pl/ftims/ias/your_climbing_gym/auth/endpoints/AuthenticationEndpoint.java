@@ -17,12 +17,19 @@ import pl.ftims.ias.your_climbing_gym.dto.TokenDTO;
 @RestController
 public class AuthenticationEndpoint {
 
-    @Autowired
+
     private AuthenticationManager authenticationManager;
-    @Autowired
+
     private AuthUserDetailsService userDetailsService;
-    @Autowired
+
     private JwtService jwtService;
+
+    @Autowired
+    public AuthenticationEndpoint(AuthenticationManager authenticationManager, AuthUserDetailsService userDetailsService, JwtService jwtService) {
+        this.authenticationManager = authenticationManager;
+        this.userDetailsService = userDetailsService;
+        this.jwtService = jwtService;
+    }
 
     @PostMapping("/authenticate")
     public ResponseEntity<?> createAuthenticationToken(@RequestBody CredentialsDTO credentialsDTO) throws Exception {

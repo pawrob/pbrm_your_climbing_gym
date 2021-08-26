@@ -71,4 +71,14 @@ public class PersonalDataEntity implements Serializable {
     public UserEntity getUser() {
         return user;
     }
+
+    public PersonalDataEntity(long userId, String name, String surname, String phoneNumber, String language, Boolean gender, long version) {
+        this.userId = userId;
+        this.name = name;
+        this.surname = surname;
+        this.phoneNumber = phoneNumber;
+        this.language = language;
+        this.gender = gender;
+        this.version = version;
+    }
 }

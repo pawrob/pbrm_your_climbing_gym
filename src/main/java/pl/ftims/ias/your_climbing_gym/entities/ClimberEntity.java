@@ -16,4 +16,7 @@ import java.io.Serializable;
 @Table(name = "climber", schema = "public")
 public class ClimberEntity extends AccessLevelEntity implements Serializable {
 
+    public ClimberEntity(Boolean isActive, UserEntity user) {
+        super(isActive, user);
+    }
 }

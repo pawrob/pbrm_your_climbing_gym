@@ -15,6 +15,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @Table(name = "authentication_view", schema = "public")
 public class AuthenticationViewEntity implements Serializable {
+
     private Long id;
     private String login;
     private String password;
@@ -33,7 +34,7 @@ public class AuthenticationViewEntity implements Serializable {
     }
 
     @Basic
-    @Column(name = "password",columnDefinition = "bpchar(60)", nullable = false, length = 60)
+    @Column(name = "password", columnDefinition = "bpchar(60)", nullable = false, length = 60)
     public String getPassword() {
         return password;
     }

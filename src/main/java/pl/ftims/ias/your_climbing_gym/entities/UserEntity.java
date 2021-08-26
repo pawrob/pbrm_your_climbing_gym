@@ -8,6 +8,8 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
+import java.util.Collection;
 
 @Entity
 @Setter
@@ -28,6 +30,7 @@ public class UserEntity implements Serializable {
     private OffsetDateTime emailResetTokenTimestamp;
     private Short failedLogin;
     private Long version;
+    private Collection<AccessLevelEntity> accessLevels = new ArrayList<>();
     private PersonalDataEntity personalData;
 
     @Id
@@ -43,7 +46,7 @@ public class UserEntity implements Serializable {
     }
 
     @Basic
-    @Column(name = "password",columnDefinition = "bpchar(60)", nullable = false, length = 60)
+    @Column(name = "password", columnDefinition = "bpchar(60)", nullable = false, length = 60)
     public String getPassword() {
         return password;
     }
@@ -68,10 +71,11 @@ public class UserEntity implements Serializable {
     }
 
     @Basic
-    @Column(name = "password_reset_token",columnDefinition = "bpchar(60)", nullable = false, length = 64)
+    @Column(name = "password_reset_token", columnDefinition = "bpchar(60)", nullable = false, length = 64)
     public String getPasswordResetToken() {
         return passwordResetToken;
     }
+
     @Basic
     @Column(name = "password_reset_token_timestamp")
     public OffsetDateTime getPasswordResetTokenTimestamp() {
@@ -79,7 +83,7 @@ public class UserEntity implements Serializable {
     }
 
     @Basic
-    @Column(name = "email_reset_token",columnDefinition = "bpchar(60)", nullable = false, length = 64)
+    @Column(name = "email_reset_token", columnDefinition = "bpchar(60)", nullable = false, length = 64)
     public String getEmailResetToken() {
         return emailResetToken;
     }
@@ -108,6 +112,10 @@ public class UserEntity implements Serializable {
         return personalData;
     }
 
+    @OneToMany(mappedBy = "user", cascade = {CascadeType.ALL})
+    public Collection<AccessLevelEntity> getAccessLevels() {
+        return accessLevels;
+    }
 
     public void setActive(Boolean active) {
         isActive = active;
@@ -115,5 +123,11 @@ public class UserEntity implements Serializable {
 
     public void setVerified(Boolean verified) {
         isVerified = verified;
+    }
+
+    public UserEntity(String login, String email, String password) {
+        this.login = login;
+        this.password = password;
+        this.email = email;
     }
 }

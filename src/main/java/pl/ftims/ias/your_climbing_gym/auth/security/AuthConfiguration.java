@@ -17,39 +17,38 @@ import pl.ftims.ias.your_climbing_gym.auth.service.AuthUserDetailsService;
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(securedEnabled = true)
-public class AuthConfiguration extends WebSecurityConfigurerAdapter{
-	
-	@Autowired
-	private AuthUserDetailsService userDetailsService;
-	@Autowired
-	private JwtRequestFilter jwtRequestFilter;
-	@Autowired
-	private JwtAuthExceptionHandler jwtAuthExceptionHandler;
+public class AuthConfiguration extends WebSecurityConfigurerAdapter {
 
-	
-	@Override
-	public void configure(AuthenticationManagerBuilder auth) throws Exception {
-		auth.userDetailsService(userDetailsService).passwordEncoder(new BCryptPasswordEncoder());
-	}
-	
-	@Bean
-	@Override
-	public AuthenticationManager authenticationManagerBean() throws Exception {
-		return super.authenticationManagerBean();
-	}
-	
-	@Override
-	public void configure(HttpSecurity http) throws Exception {
-		http.csrf().disable().authorizeRequests()
+    @Autowired
+    private AuthUserDetailsService userDetailsService;
+    @Autowired
+    private JwtRequestFilter jwtRequestFilter;
+    @Autowired
+    private JwtAuthExceptionHandler jwtAuthExceptionHandler;
+
+
+    @Override
+    public void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.userDetailsService(userDetailsService).passwordEncoder(new BCryptPasswordEncoder());
+    }
+
+    @Bean
+    @Override
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        return super.authenticationManagerBean();
+    }
+
+    @Override
+    public void configure(HttpSecurity http) throws Exception {
+        http.csrf().disable().authorizeRequests()
 //		.antMatchers("/helloadmin").hasRole("ADMINISTRATOR")
 //		.antMatchers("/hellouser").hasAnyRole("CLIMBER","MANAGER","ADMINISTRATOR")
-		.antMatchers("/authenticate").permitAll().anyRequest().authenticated()
-		//todo czy tego potrzebujemy?
-		.and().exceptionHandling().authenticationEntryPoint(jwtAuthExceptionHandler)
-		.and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).
-		and().addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
-	}
-
+                .antMatchers("/auth/authenticate").permitAll().anyRequest().authenticated()
+                //todo czy tego potrzebujemy?
+                .and().exceptionHandling().authenticationEntryPoint(jwtAuthExceptionHandler)
+                .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).
+                and().addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+    }
 
 
 }
