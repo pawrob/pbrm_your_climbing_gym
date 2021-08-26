@@ -1,6 +1,7 @@
-package pl.ftims.ias.your_climbing_gym.auth;
+package pl.ftims.ias.your_climbing_gym.auth.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -8,7 +9,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import pl.ftims.ias.your_climbing_gym.entities.AuthenticationViewEntity;
-import pl.ftims.ias.your_climbing_gym.repositories.AuthViewRepository;
+import pl.ftims.ias.your_climbing_gym.auth.repositories.AuthViewRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,5 +38,13 @@ public class AuthUserDetailsService implements UserDetailsService {
         }
         //todo return not found exception
         return new User(credentials.get(0).getLogin(), credentials.get(0).getPassword(), roles);
+    }
+
+    private List<GrantedAuthority> getGrantedAuthorities(List<String> privileges) {
+        List<GrantedAuthority> authorities = new ArrayList<>();
+        for (String privilege : privileges) {
+            authorities.add(new SimpleGrantedAuthority(privilege));
+        }
+        return authorities;
     }
 }

@@ -1,4 +1,4 @@
-package pl.ftims.ias.your_climbing_gym.auth;
+package pl.ftims.ias.your_climbing_gym.auth.security;
 
 import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
+import pl.ftims.ias.your_climbing_gym.auth.service.JwtService;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -21,7 +22,7 @@ import java.io.IOException;
 public class JwtRequestFilter extends OncePerRequestFilter {
 
 	@Autowired
-	private JwtUtil jwtTokenUtil;
+	private JwtService jwtTokenUtil;
 
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)

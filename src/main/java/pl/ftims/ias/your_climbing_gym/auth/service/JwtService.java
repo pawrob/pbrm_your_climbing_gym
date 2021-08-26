@@ -1,4 +1,4 @@
-package pl.ftims.ias.your_climbing_gym.auth;
+package pl.ftims.ias.your_climbing_gym.auth.service;
 
 import io.jsonwebtoken.*;
 import org.springframework.beans.factory.annotation.Value;
@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 import java.util.*;
 
 @Service
-public class JwtUtil {
+public class JwtService {
 
     private String secret;
     private int jwtExpirationInMs;

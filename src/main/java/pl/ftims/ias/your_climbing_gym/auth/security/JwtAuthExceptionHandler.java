@@ -1,4 +1,4 @@
-package pl.ftims.ias.your_climbing_gym.auth;
+package pl.ftims.ias.your_climbing_gym.auth.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.MediaType;
