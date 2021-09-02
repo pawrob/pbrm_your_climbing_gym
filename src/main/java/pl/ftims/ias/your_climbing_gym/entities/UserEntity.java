@@ -114,7 +114,7 @@ public class UserEntity extends AbstractEntity implements Serializable {
         return personalData;
     }
 
-    @OneToMany(mappedBy = "user", cascade = {CascadeType.ALL})
+    @OneToMany(mappedBy = "user", cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
     public Collection<AccessLevelEntity> getAccessLevels() {
         return accessLevels;
     }
