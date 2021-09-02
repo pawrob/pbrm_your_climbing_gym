@@ -15,9 +15,9 @@
     <description>Project for bachelor degree</description>
     <properties>
         <java.version>11</java.version>
-        <flyway.url>jdbc:postgresql://localhost:5432/climbing</flyway.url>
-        <flyway.user>postgres</flyway.user>
-        <flyway.password>lanu332w7</flyway.password>
+        <flyway.url>jdbc:postgresql://localhost:2137/perfectbeta</flyway.url>
+        <flyway.user>perfectbeta_admin</flyway.user>
+        <flyway.password>0ndr4123!</flyway.password>
     </properties>
     <dependencies>
         <!--		Spring boot dependencies-->
@@ -85,19 +85,26 @@
             <artifactId>spring-aspects</artifactId>
             <version>5.2.8.RELEASE</version>
         </dependency>
+        <!--        for generate token-->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.12.0</version>
+        </dependency>
+
     </dependencies>
 
     <build>
         <plugins>
 
-                <plugin>
-                    <groupId>org.flywaydb</groupId>
-                    <artifactId>flyway-maven-plugin</artifactId>
-                    <version>7.14.0</version>
-                    <configuration>
-                        <baselineOnMigrate>true</baselineOnMigrate>
-                    </configuration>
-                </plugin>
+            <plugin>
+                <groupId>org.flywaydb</groupId>
+                <artifactId>flyway-maven-plugin</artifactId>
+                <version>7.14.0</version>
+                <configuration>
+                    <baselineOnMigrate>true</baselineOnMigrate>
+                </configuration>
+            </plugin>
 
             <plugin>
                 <groupId>org.springframework.boot</groupId>

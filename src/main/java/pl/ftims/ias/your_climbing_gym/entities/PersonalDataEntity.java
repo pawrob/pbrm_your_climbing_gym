@@ -14,21 +14,14 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "personal_data", schema = "public")
-public class PersonalDataEntity implements Serializable {
-    private Long userId;
+public class PersonalDataEntity extends AbstractEntity implements Serializable {
+
     private String name;
     private String surname;
     private String phoneNumber;
     private Boolean gender;
     private String language = "PL";
-    private Long version;
     private UserEntity user;
-
-    @Id
-    @Column(name = "user_id")
-    public Long getUserId() {
-        return userId;
-    }
 
     @Basic
     @Column(name = "name")
@@ -60,26 +53,21 @@ public class PersonalDataEntity implements Serializable {
         return language;
     }
 
-    @Basic
-    @Version
-    @Column(name = "version")
-    public Long getVersion() {
-        return version;
-    }
-
-    @OneToOne(optional = false)
-    @PrimaryKeyJoinColumn(name = "user_id", referencedColumnName = "id")
+    @OneToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
     public UserEntity getUser() {
         return user;
     }
 
-    public PersonalDataEntity(long userId, String name, String surname, String phoneNumber, String language, Boolean gender, long version) {
-        this.userId = userId;
+    public PersonalDataEntity(UserEntity user) {
+        this.user = user;
+    }
+
+    public PersonalDataEntity(String name, String surname, String phoneNumber, String language, Boolean gender) {
         this.name = name;
         this.surname = surname;
         this.phoneNumber = phoneNumber;
         this.language = language;
         this.gender = gender;
-        this.version = version;
     }
 }

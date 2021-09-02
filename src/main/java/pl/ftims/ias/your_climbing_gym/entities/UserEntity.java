@@ -28,6 +28,8 @@ public class UserEntity extends AbstractEntity implements Serializable {
     private OffsetDateTime passwordResetTokenTimestamp;
     private String emailResetToken;
     private OffsetDateTime emailResetTokenTimestamp;
+    private String verifyToken;
+    private OffsetDateTime verifyTokenTimestamp;
     private Short failedLogin = 0;
     private Collection<AccessLevelEntity> accessLevels = new ArrayList<>();
     private PersonalDataEntity personalData;
@@ -65,7 +67,7 @@ public class UserEntity extends AbstractEntity implements Serializable {
     }
 
     @Basic
-    @Column(name = "password_reset_token", columnDefinition = "bpchar(60)", nullable = false, length = 64)
+    @Column(name = "password_reset_token", columnDefinition = "bpchar(60)", length = 64)
     public String getPasswordResetToken() {
         return passwordResetToken;
     }
@@ -77,7 +79,7 @@ public class UserEntity extends AbstractEntity implements Serializable {
     }
 
     @Basic
-    @Column(name = "email_reset_token", columnDefinition = "bpchar(60)", nullable = false, length = 64)
+    @Column(name = "email_reset_token", columnDefinition = "bpchar(60)", length = 64)
     public String getEmailResetToken() {
         return emailResetToken;
     }
@@ -86,6 +88,18 @@ public class UserEntity extends AbstractEntity implements Serializable {
     @Column(name = "email_reset_token_timestamp")
     public OffsetDateTime getEmailResetTokenTimestamp() {
         return emailResetTokenTimestamp;
+    }
+
+    @Basic
+    @Column(name = "verify_token", columnDefinition = "bpchar(60)", length = 64)
+    public String getVerifyToken() {
+        return verifyToken;
+    }
+
+    @Basic
+    @Column(name = "verify_token_timestamp")
+    public OffsetDateTime getVerifyTokenTimestamp() {
+        return verifyTokenTimestamp;
     }
 
     @Basic

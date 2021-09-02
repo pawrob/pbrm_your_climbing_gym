@@ -7,6 +7,9 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,6 +21,7 @@ import pl.ftims.ias.your_climbing_gym.dto.TokenDTO;
 
 @RequestMapping("auth")
 @RestController
+@Transactional(isolation = Isolation.READ_COMMITTED, propagation = Propagation.NEVER)
 public class AuthenticationEndpoint {
 
 

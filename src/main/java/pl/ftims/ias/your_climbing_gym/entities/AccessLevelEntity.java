@@ -14,7 +14,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "access_level_table", schema = "public")
-public  class AccessLevelEntity extends AbstractEntity implements Serializable {
+public class AccessLevelEntity extends AbstractEntity implements Serializable {
 
     private String accessLevel;
     private Boolean isActive;

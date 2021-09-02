@@ -2,10 +2,9 @@ package pl.ftims.ias.your_climbing_gym.exceptions;
 
 import lombok.Getter;
 
-import javax.ejb.ApplicationException;
 import java.util.Locale;
 
-@ApplicationException(rollback = true)
+
 public abstract class AbstractAppException extends Exception {
     @Getter
     private final String key = getClass().getSimpleName()

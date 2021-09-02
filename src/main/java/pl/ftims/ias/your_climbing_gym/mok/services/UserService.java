@@ -1,6 +1,7 @@
 package pl.ftims.ias.your_climbing_gym.mok.services;
 
 import org.apache.commons.collections4.IterableUtils;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
@@ -37,29 +38,16 @@ public class UserService {
         return userRepository.findById(id).orElseThrow(() -> UserNotFoundAppException.createUserWithProvidedIdNotFoundException(id));
     }
 
-    public UserEntity createUserAccountWithAccessLevel(UserEntity userEntity) throws AbstractAppException {
-
+    public UserEntity createUserAccountWithAccessLevel(UserEntity userEntity) {
         userEntity.setPassword(HashGenerator.generateHash(userEntity.getPassword()));
-        String token = HashGenerator.generateSecureRandomToken();
+        userEntity.setVerifyToken(RandomStringUtils.randomAlphabetic(64));
+        userEntity.setVerifyTokenTimestamp(OffsetDateTime.now());
 
-        userEntity.setPasswordResetToken(token);
-        userEntity.setPasswordResetTokenTimestamp(OffsetDateTime.now());
-        userEntity.setEmailResetToken(token);
-        userEntity.setEmailResetTokenTimestamp(OffsetDateTime.now());
-        AccessLevelEntity accessLevelEntity = new AccessLevelEntity(true,userEntity,"CLIMBER");
+        userEntity.getAccessLevels().add(new AccessLevelEntity(true, userEntity, "CLIMBER"));
+        userEntity.setPersonalData(new PersonalDataEntity(userEntity));
 
-        userEntity.getAccessLevels().add(accessLevelEntity);
-
-
-        userRepository.saveAndFlush(userEntity);
-
-//        PersonalDataEntity personalDataEntity = new PersonalDataEntity();
-//        personalDataEntity.setUser(userEntity);
-//        personalDataEntity.setUserId(userEntity.getId());
-//        userEntity.setPersonalData(personalDataEntity);
-
-        return userEntity;
-        }
-
+        return userRepository.save(userEntity);
     }
+
+}
 

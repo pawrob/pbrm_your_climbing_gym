@@ -8,7 +8,6 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import pl.ftims.ias.your_climbing_gym.dto.user_dtos.UserDTO;
-import pl.ftims.ias.your_climbing_gym.dto.user_dtos.UserWithAccessLevelDTO;
 import pl.ftims.ias.your_climbing_gym.dto.user_dtos.UserWithPersonalDataAccessLevelDTO;
 import pl.ftims.ias.your_climbing_gym.exceptions.AbstractAppException;
 import pl.ftims.ias.your_climbing_gym.mok.services.UserService;
@@ -41,10 +40,7 @@ public class UserEndpoint {
     @Secured("ROLE_ADMINISTRATOR")
     @GetMapping("/{id}")
     public UserWithPersonalDataAccessLevelDTO getUserById(@PathVariable Long id) throws AbstractAppException {
-
-
         return retry.execute(arg0 -> UserConverter.userWithPersonalDataAccessLevelDTOFromEntity(userService.getUserById(id)));
-
     }
 
     @Secured("ROLE_ADMINISTRATOR")

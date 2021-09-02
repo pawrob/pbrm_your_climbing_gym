@@ -11,7 +11,7 @@ import java.util.Optional;
 
 @Repository
 @Transactional(isolation = Isolation.READ_COMMITTED, propagation = Propagation.MANDATORY)
-public interface UserRepository extends JpaRepository<UserEntity,Long> {
+public interface UserRepository extends JpaRepository<UserEntity, Long> {
 
     Optional<UserEntity> findById(Long id);
 }

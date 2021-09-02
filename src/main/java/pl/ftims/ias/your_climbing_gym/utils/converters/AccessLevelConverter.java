@@ -1,7 +1,7 @@
 package pl.ftims.ias.your_climbing_gym.utils.converters;
 
 import lombok.NoArgsConstructor;
-import pl.ftims.ias.your_climbing_gym.dto.access_levels.AccessLevelDTO;
+import pl.ftims.ias.your_climbing_gym.dto.AccessLevelDTO;
 import pl.ftims.ias.your_climbing_gym.entities.AccessLevelEntity;
 
 import java.util.Collection;

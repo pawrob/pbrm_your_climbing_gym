@@ -43,7 +43,9 @@ public class AuthConfiguration extends WebSecurityConfigurerAdapter {
         http.csrf().disable().authorizeRequests()
 //		.antMatchers("/helloadmin").hasRole("ADMINISTRATOR")
 //		.antMatchers("/hellouser").hasAnyRole("CLIMBER","MANAGER","ADMINISTRATOR")
+                .antMatchers("/user/add/.*").permitAll()
                 .antMatchers("/auth/authenticate").permitAll().anyRequest().authenticated()
+
                 //todo czy tego potrzebujemy?
                 .and().exceptionHandling().authenticationEntryPoint(jwtAuthExceptionHandler)
                 .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).

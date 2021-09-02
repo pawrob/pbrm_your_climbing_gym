@@ -9,7 +9,7 @@ import pl.ftims.ias.your_climbing_gym.dto.AbstractDTO;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class UserDTO  extends AbstractDTO {
+public class UserDTO extends AbstractDTO {
 
     private String login;
     private String email;

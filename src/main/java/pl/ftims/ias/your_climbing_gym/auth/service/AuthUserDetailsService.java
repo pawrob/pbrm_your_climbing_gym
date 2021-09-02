@@ -8,6 +8,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import pl.ftims.ias.your_climbing_gym.auth.repositories.AuthViewRepository;
 import pl.ftims.ias.your_climbing_gym.entities.AuthenticationViewEntity;
 
@@ -15,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@Transactional(isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRES_NEW)
 public class AuthUserDetailsService implements UserDetailsService {
 
 

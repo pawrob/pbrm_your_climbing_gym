@@ -2,9 +2,6 @@ package pl.ftims.ias.your_climbing_gym.utils;
 
 import org.springframework.security.crypto.bcrypt.BCrypt;
 
-import java.security.SecureRandom;
-import java.util.Base64;
-
 public class HashGenerator {
 
     private HashGenerator() {
@@ -19,10 +16,4 @@ public class HashGenerator {
         return BCrypt.checkpw(password, hash);
     }
 
-    public static String generateSecureRandomToken() {
-        var secureRandom = new SecureRandom();
-        float token = secureRandom.nextFloat();
-        String tokenString = Float.toString(token);
-        return Base64.getEncoder().encodeToString(tokenString.getBytes());
-    }
 }

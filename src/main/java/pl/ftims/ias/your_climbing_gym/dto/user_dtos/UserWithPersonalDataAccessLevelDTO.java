@@ -4,7 +4,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import pl.ftims.ias.your_climbing_gym.dto.PersonalDataDTO;
-import pl.ftims.ias.your_climbing_gym.dto.access_levels.AccessLevelDTO;
+import pl.ftims.ias.your_climbing_gym.dto.AccessLevelDTO;
 
 import java.util.List;
 

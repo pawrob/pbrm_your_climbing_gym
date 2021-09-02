@@ -1,7 +1,7 @@
 package pl.ftims.ias.your_climbing_gym.dto.user_dtos;
 
 import lombok.*;
-import pl.ftims.ias.your_climbing_gym.dto.access_levels.AccessLevelDTO;
+import pl.ftims.ias.your_climbing_gym.dto.AccessLevelDTO;
 
 import java.util.List;
 
