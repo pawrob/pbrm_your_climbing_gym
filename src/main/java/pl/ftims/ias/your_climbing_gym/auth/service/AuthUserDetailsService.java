@@ -8,8 +8,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import pl.ftims.ias.your_climbing_gym.entities.AuthenticationViewEntity;
 import pl.ftims.ias.your_climbing_gym.auth.repositories.AuthViewRepository;
+import pl.ftims.ias.your_climbing_gym.entities.AuthenticationViewEntity;
 
 import java.util.ArrayList;
 import java.util.List;

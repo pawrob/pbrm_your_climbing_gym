@@ -13,10 +13,8 @@ import java.io.Serializable;
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor
-@Inheritance(strategy = InheritanceType.JOINED)
-@DiscriminatorColumn(name = "access_level", discriminatorType = DiscriminatorType.STRING, length = 16)
 @Table(name = "access_level_table", schema = "public")
-public abstract class AccessLevelEntity extends AbstractEntity implements Serializable {
+public  class AccessLevelEntity extends AbstractEntity implements Serializable {
 
     private String accessLevel;
     private Boolean isActive;
@@ -45,9 +43,10 @@ public abstract class AccessLevelEntity extends AbstractEntity implements Serial
         isActive = active;
     }
 
-    public AccessLevelEntity(boolean isActive, UserEntity userEntity) {
+    public AccessLevelEntity(boolean isActive, UserEntity userEntity, String accessLevel) {
         this.setActive(isActive);
         this.setUser(userEntity);
+        this.setAccessLevel(accessLevel);
     }
 
 }

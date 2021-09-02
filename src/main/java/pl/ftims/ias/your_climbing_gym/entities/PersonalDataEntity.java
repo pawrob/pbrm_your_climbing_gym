@@ -20,7 +20,7 @@ public class PersonalDataEntity implements Serializable {
     private String surname;
     private String phoneNumber;
     private Boolean gender;
-    private String language;
+    private String language = "PL";
     private Long version;
     private UserEntity user;
 
@@ -61,6 +61,7 @@ public class PersonalDataEntity implements Serializable {
     }
 
     @Basic
+    @Version
     @Column(name = "version")
     public Long getVersion() {
         return version;

@@ -1,6 +1,9 @@
 package pl.ftims.ias.your_climbing_gym.entities;
 
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Setter;
 
 import javax.persistence.*;
 
@@ -10,7 +13,7 @@ import javax.persistence.*;
 public abstract class AbstractEntity {
     @Setter(AccessLevel.PROTECTED)
     private long id;
-    private Long version;
+    private Long version = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

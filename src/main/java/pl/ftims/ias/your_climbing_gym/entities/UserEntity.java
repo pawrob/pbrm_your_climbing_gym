@@ -13,31 +13,25 @@ import java.util.Collection;
 
 @Entity
 @Setter
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "user", schema = "public")
-public class UserEntity implements Serializable {
-    private Long id;
+public class UserEntity extends AbstractEntity implements Serializable {
+
     private String login;
     private String password;
     private String email;
-    private Boolean isActive;
-    private Boolean isVerified;
+    private Boolean isActive = true;
+    private Boolean isVerified = false;
     private String passwordResetToken;
     private OffsetDateTime passwordResetTokenTimestamp;
     private String emailResetToken;
     private OffsetDateTime emailResetTokenTimestamp;
-    private Short failedLogin;
-    private Long version;
+    private Short failedLogin = 0;
     private Collection<AccessLevelEntity> accessLevels = new ArrayList<>();
     private PersonalDataEntity personalData;
 
-    @Id
-    @Column(name = "id")
-    public Long getId() {
-        return id;
-    }
 
     @Basic
     @Column(name = "login")
@@ -98,12 +92,6 @@ public class UserEntity implements Serializable {
     @Column(name = "failed_login")
     public Short getFailedLogin() {
         return failedLogin;
-    }
-
-    @Basic
-    @Column(name = "version")
-    public Long getVersion() {
-        return version;
     }
 
 
