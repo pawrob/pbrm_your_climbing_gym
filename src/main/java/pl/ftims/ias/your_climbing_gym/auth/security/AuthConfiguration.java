@@ -42,7 +42,6 @@ public class AuthConfiguration extends WebSecurityConfigurerAdapter {
     public void configure(HttpSecurity http) throws Exception {
         http.csrf().disable().authorizeRequests()
 //		.antMatchers("/helloadmin").hasRole("ADMINISTRATOR")
-//		.antMatchers("/hellouser").hasAnyRole("CLIMBER","MANAGER","ADMINISTRATOR")
                 .antMatchers("/users/register").permitAll()
                 .antMatchers("/auth/refreshtoken").hasAnyRole("CLIMBER","MANAGER","ADMINISTRATOR")
                 .antMatchers("/auth/authenticate").permitAll().anyRequest().authenticated()

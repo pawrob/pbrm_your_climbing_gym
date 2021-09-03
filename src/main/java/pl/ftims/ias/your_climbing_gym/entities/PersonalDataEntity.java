@@ -10,7 +10,7 @@ import java.io.Serializable;
 
 @Entity
 @Setter
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "personal_data", schema = "public")
@@ -19,6 +19,7 @@ public class PersonalDataEntity extends AbstractEntity implements Serializable {
     private String name;
     private String surname;
     private String phoneNumber;
+    //m = true, f=false
     private Boolean gender;
     private String language = "PL";
     private UserEntity user;
