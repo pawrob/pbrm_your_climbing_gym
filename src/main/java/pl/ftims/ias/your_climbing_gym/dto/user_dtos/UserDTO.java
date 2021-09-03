@@ -3,6 +3,10 @@ package pl.ftims.ias.your_climbing_gym.dto.user_dtos;
 
 import lombok.*;
 import pl.ftims.ias.your_climbing_gym.dto.AbstractDTO;
+import pl.ftims.ias.your_climbing_gym.dto.validation.Email;
+
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 @Data
 @Builder
@@ -11,8 +15,16 @@ import pl.ftims.ias.your_climbing_gym.dto.AbstractDTO;
 @EqualsAndHashCode(callSuper = true)
 public class UserDTO extends AbstractDTO {
 
+    @NotNull
+    @NotBlank
     private String login;
+
+    @Email
+    @NotBlank
+    @NotNull
     private String email;
+
+
     private Boolean isActive;
     private Boolean isVerified;
 

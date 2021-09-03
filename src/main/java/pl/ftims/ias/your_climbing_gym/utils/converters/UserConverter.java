@@ -1,10 +1,7 @@
 package pl.ftims.ias.your_climbing_gym.utils.converters;
 
 import lombok.NoArgsConstructor;
-import pl.ftims.ias.your_climbing_gym.dto.user_dtos.UserDTO;
-import pl.ftims.ias.your_climbing_gym.dto.user_dtos.UserWithAccessLevelDTO;
-import pl.ftims.ias.your_climbing_gym.dto.user_dtos.UserWithPersonalDataAccessLevelDTO;
-import pl.ftims.ias.your_climbing_gym.dto.user_dtos.UserWithPersonalDataDTO;
+import pl.ftims.ias.your_climbing_gym.dto.user_dtos.*;
 import pl.ftims.ias.your_climbing_gym.entities.UserEntity;
 
 import java.util.Collection;
@@ -21,22 +18,22 @@ public class UserConverter {
                 userEntity.getActive(), userEntity.getVerified());
     }
 
-    public static UserEntity createNewUserEntityFromDTO(UserDTO userDTO, String password) {
-        return new UserEntity(userDTO.getLogin(), userDTO.getEmail(), password);
+    public static UserEntity createNewUserEntityFromDTO(RegistrationDTO userDTO) {
+        return new UserEntity(userDTO.getLogin(), userDTO.getEmail(), userDTO.getPassword());
     }
 
-    public static UserEntity userWithPersonalDataDTOtoEntity(UserWithPersonalDataDTO userDTO, String password) {
-        UserEntity userEntity = createNewUserEntityFromDTO(userDTO, password);
-        userEntity.setActive(userDTO.getIsActive());
-        userEntity.setVerified(userDTO.getIsVerified());
-        if (null != userDTO.getPersonalData()) {
-            userEntity.setPersonalData(
-                    PersonalDataConverter.personalDataEntityFromDTO(
-                            userDTO.getPersonalData(), userDTO.getId()
-                    ));
-        }
-        return userEntity;
-    }
+//    public static UserEntity userWithPersonalDataDTOtoEntity(UserWithPersonalDataDTO userDTO, String password) {
+//        UserEntity userEntity = createNewUserEntityFromDTO(userDTO, password);
+//        userEntity.setActive(userDTO.getIsActive());
+//        userEntity.setVerified(userDTO.getIsVerified());
+//        if (null != userDTO.getPersonalData()) {
+//            userEntity.setPersonalData(
+//                    PersonalDataConverter.personalDataEntityFromDTO(
+//                            userDTO.getPersonalData(), userDTO.getId()
+//                    ));
+//        }
+//        return userEntity;
+//    }
 
     public static List<UserDTO> createUserListDTOFromEntity(Collection<UserEntity> userEntities) {
         return null == userEntities ? null : userEntities.stream()

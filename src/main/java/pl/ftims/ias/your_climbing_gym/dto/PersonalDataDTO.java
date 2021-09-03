@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import pl.ftims.ias.your_climbing_gym.dto.validation.PhoneNumber;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -16,15 +17,13 @@ import javax.validation.constraints.Size;
 public class PersonalDataDTO extends AbstractDTO {
 
     @Size(max = 30)
-//    @NameOrSurname
     private String name;
 
     @Size(max = 30)
-//    @NameOrSurname
     private String surname;
 
     @Size(max = 15)
-//    @PhoneNumber
+    @PhoneNumber
     private String phoneNumber;
 
     @NotNull

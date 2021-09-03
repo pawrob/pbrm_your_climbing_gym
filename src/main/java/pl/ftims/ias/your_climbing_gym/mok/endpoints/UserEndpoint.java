@@ -7,14 +7,13 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
-import pl.ftims.ias.your_climbing_gym.dto.user_dtos.UserDTO;
+import pl.ftims.ias.your_climbing_gym.dto.user_dtos.RegistrationDTO;
 import pl.ftims.ias.your_climbing_gym.dto.user_dtos.UserWithPersonalDataAccessLevelDTO;
 import pl.ftims.ias.your_climbing_gym.exceptions.AbstractAppException;
 import pl.ftims.ias.your_climbing_gym.mok.services.UserService;
 import pl.ftims.ias.your_climbing_gym.utils.converters.UserConverter;
 
 import javax.validation.Valid;
-import javax.validation.constraints.Pattern;
 import java.util.List;
 
 @RestController
@@ -43,10 +42,11 @@ public class UserEndpoint {
         return retry.execute(arg0 -> UserConverter.userWithPersonalDataAccessLevelDTOFromEntity(userService.getUserById(id)));
     }
 
-    @Secured("ROLE_ADMINISTRATOR")
-    @PostMapping("add/{password}")
-    public UserWithPersonalDataAccessLevelDTO addClient(@RequestBody @Valid UserDTO user, @Valid @Pattern(regexp = "^(?!.*[\\s])^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@$%^&*]).{8,}$") @PathVariable String password) throws AbstractAppException {
-        return retry.execute(arg0 -> UserConverter.userWithPersonalDataAccessLevelDTOFromEntity(userService.createUserAccountWithAccessLevel(UserConverter.createNewUserEntityFromDTO(user, password))));
+
+    @PostMapping("register")
+    public UserWithPersonalDataAccessLevelDTO addClient(@RequestBody @Valid RegistrationDTO user) {
+        return retry.execute(arg0 -> UserConverter.userWithPersonalDataAccessLevelDTOFromEntity(
+                userService.createUserAccountWithAccessLevel(UserConverter.createNewUserEntityFromDTO(user))));
 
     }
 }
