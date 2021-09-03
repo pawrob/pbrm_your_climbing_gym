@@ -21,7 +21,8 @@ CREATE TABLE public."user"
     CONSTRAINT user_password_bcrypt_form CHECK ( password ~*
                                                  '^[$]2[abxy][$](?:0[4-9]|[12][0-9]|3[01])[$][./0-9a-zA-Z]{53}$')
 );
-ALTER TABLE public."user" OWNER TO perfectbeta_admin;
+ALTER TABLE public."user"
+    OWNER TO perfectbeta_admin;
 
 
 CREATE TABLE public.personal_data
@@ -43,7 +44,8 @@ CREATE TABLE public.personal_data
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
 );
-ALTER TABLE public."personal_data" OWNER TO perfectbeta_admin;
+ALTER TABLE public."personal_data"
+    OWNER TO perfectbeta_admin;
 
 CREATE TABLE public.access_level_table
 (
@@ -61,7 +63,8 @@ CREATE TABLE public.access_level_table
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
 );
-ALTER TABLE public."access_level_table" OWNER TO perfectbeta_admin;
+ALTER TABLE public."access_level_table"
+    OWNER TO perfectbeta_admin;
 
 
 CREATE OR REPLACE VIEW public.authentication_view
@@ -78,7 +81,8 @@ WHERE u.is_active
   AND u.verify_token IS NULL
   AND al.is_active;
 
-ALTER TABLE public."authentication_view" OWNER TO perfectbeta_admin;
+ALTER TABLE public."authentication_view"
+    OWNER TO perfectbeta_admin;
 
 DROP
     INDEX IF EXISTS personal_data_user_id;

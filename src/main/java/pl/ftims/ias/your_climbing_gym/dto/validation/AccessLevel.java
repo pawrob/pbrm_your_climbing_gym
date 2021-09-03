@@ -8,12 +8,13 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 
-
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
 @Constraint(validatedBy = AccessLevelValidation.class)
 public @interface AccessLevel {
     String message() default "Access level is not valid";
+
     Class<?>[] groups() default {};
+
     public abstract Class<? extends Payload>[] payload() default {};
 }

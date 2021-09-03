@@ -1,7 +1,6 @@
 package pl.ftims.ias.your_climbing_gym.auth.endpoints;
 
 
-import io.jsonwebtoken.impl.DefaultClaims;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -19,8 +18,6 @@ import pl.ftims.ias.your_climbing_gym.dto.CredentialsDTO;
 import pl.ftims.ias.your_climbing_gym.dto.TokenDTO;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.HashMap;
-import java.util.Map;
 
 @RequestMapping("auth")
 @RestController

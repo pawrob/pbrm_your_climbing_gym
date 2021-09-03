@@ -41,9 +41,10 @@ public class AuthConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(HttpSecurity http) throws Exception {
         http.csrf().disable().authorizeRequests()
-//		.antMatchers("/helloadmin").hasRole("ADMINISTRATOR")
                 .antMatchers("/users/register").permitAll()
-                .antMatchers("/auth/refreshtoken").hasAnyRole("CLIMBER","MANAGER","ADMINISTRATOR")
+                .antMatchers("/users/verify").permitAll()
+                .antMatchers("/actuator/**").hasRole("ADMINISTRATOR")
+                .antMatchers("/auth/refreshtoken").hasAnyRole("CLIMBER", "MANAGER", "ADMINISTRATOR")
                 .antMatchers("/auth/authenticate").permitAll().anyRequest().authenticated()
 
                 //todo czy tego potrzebujemy?

@@ -9,8 +9,6 @@ public class UniqueConstraintAppException extends AbstractAppException {
     public static final String EMAIL_TAKEN = "Email is already taken";
 
 
-
-
     private UniqueConstraintAppException(String message) {
         super(message);
     }
@@ -25,7 +23,7 @@ public class UniqueConstraintAppException extends AbstractAppException {
 
 
     @ApplicationException(rollback = true)
-    public static class LoginTakenAppException extends UniqueConstraintAppException{
+    public static class LoginTakenAppException extends UniqueConstraintAppException {
 
         private LoginTakenAppException(String message) {
             super(message);
@@ -36,7 +34,7 @@ public class UniqueConstraintAppException extends AbstractAppException {
      * Wyjątek wyrzucany w przypadku gdy podany email jest juz zajęty
      */
     @ApplicationException(rollback = true)
-    public static class EmailTakenAppException extends UniqueConstraintAppException{
+    public static class EmailTakenAppException extends UniqueConstraintAppException {
 
         private EmailTakenAppException(String message) {
             super(message);

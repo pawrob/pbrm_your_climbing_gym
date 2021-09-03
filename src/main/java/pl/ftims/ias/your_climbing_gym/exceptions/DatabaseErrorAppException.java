@@ -18,7 +18,7 @@ public class DatabaseErrorAppException extends AbstractAppException {
         return new DatabaseErrorAppException(DB_CONNECTION_ERROR, ex);
     }
 
-    public static DatabaseErrorAppException createDatabaseAppException(){
+    public static DatabaseErrorAppException createDatabaseAppException() {
         return new DatabaseErrorAppException(DB_CONNECTION_ERROR);
     }
 }

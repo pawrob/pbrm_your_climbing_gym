@@ -30,6 +30,7 @@ public class JwtService {
     public void setJwtExpirationInMs(int jwtExpirationInMs) {
         this.jwtExpirationInMs = jwtExpirationInMs;
     }
+
     @Value("${jwt.refreshExpirationInMs}")
     public void setjwtRefreshExpirationInMs(int jwtRefreshExpirationInMs) {
         this.jwtRefreshExpirationInMs = jwtRefreshExpirationInMs;
@@ -63,6 +64,7 @@ public class JwtService {
 
         return doGenerateRefreshToken(claims, getUsernameFromToken(authToken));
     }
+
     public String doGenerateRefreshToken(Map<String, Object> claims, String subject) {
 
         return Jwts.builder().setClaims(claims).setSubject(subject).setIssuedAt(new Date(System.currentTimeMillis()))

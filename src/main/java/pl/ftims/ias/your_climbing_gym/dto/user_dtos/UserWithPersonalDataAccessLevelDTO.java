@@ -3,8 +3,8 @@ package pl.ftims.ias.your_climbing_gym.dto.user_dtos;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import pl.ftims.ias.your_climbing_gym.dto.PersonalDataDTO;
 import pl.ftims.ias.your_climbing_gym.dto.AccessLevelDTO;
+import pl.ftims.ias.your_climbing_gym.dto.PersonalDataDTO;
 
 import java.util.List;
 

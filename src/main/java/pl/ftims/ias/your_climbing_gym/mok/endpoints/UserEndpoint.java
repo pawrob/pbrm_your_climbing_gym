@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import pl.ftims.ias.your_climbing_gym.dto.user_dtos.RegistrationDTO;
+import pl.ftims.ias.your_climbing_gym.dto.user_dtos.UserWithAccessLevelDTO;
 import pl.ftims.ias.your_climbing_gym.dto.user_dtos.UserWithPersonalDataAccessLevelDTO;
 import pl.ftims.ias.your_climbing_gym.exceptions.AbstractAppException;
 import pl.ftims.ias.your_climbing_gym.mok.services.UserService;
@@ -48,6 +49,11 @@ public class UserEndpoint {
         return retry.execute(arg0 -> UserConverter.userWithPersonalDataAccessLevelDTOFromEntity(
                 userService.createUserAccountWithAccessLevel(UserConverter.createNewUserEntityFromDTO(user))));
 
+    }
+
+    @PutMapping("/verify")
+    public UserWithAccessLevelDTO verifyUser(@RequestParam("username") String username, @RequestParam("token") String token) throws AbstractAppException {
+        return retry.execute(arg0 -> UserConverter.userWithAccessLevelDTOFromEntity(userService.verifyUser(username, token)));
     }
 }
 

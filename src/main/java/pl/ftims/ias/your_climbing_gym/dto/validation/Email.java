@@ -13,6 +13,8 @@ import java.lang.annotation.Target;
 @Constraint(validatedBy = EmailValidation.class)
 public @interface Email {
     String message() default "Email is not valid";
+
     Class<?>[] groups() default {};
+
     public abstract Class<? extends Payload>[] payload() default {};
 }

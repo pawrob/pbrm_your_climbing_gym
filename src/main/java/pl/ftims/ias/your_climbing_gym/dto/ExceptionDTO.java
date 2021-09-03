@@ -9,10 +9,10 @@ import java.time.ZonedDateTime;
 @Getter
 @NoArgsConstructor
 public class ExceptionDTO {
-    private  String message;
-    private  HttpStatus httpStatus;
-    private  ZonedDateTime timestamp;
-    private  String  key;
+    private String message;
+    private HttpStatus httpStatus;
+    private ZonedDateTime timestamp;
+    private String key;
 
     public ExceptionDTO(String message, HttpStatus httpStatus, ZonedDateTime timestamp) {
         this.message = message;

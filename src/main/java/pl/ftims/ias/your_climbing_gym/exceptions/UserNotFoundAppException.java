@@ -10,7 +10,7 @@ public class UserNotFoundAppException extends AbstractAppException {
 
     public static final String USER_NOT_EXISTS = "User with identifier: %s does not exist";
     public static final String USER_WITH_EMAIL_NOT_EXISTS = "User with email: %s does not exist";
-    public static final String USER_WITH_LOGIN_NOT_EXISTS = "User with email: %s does not exist";
+    public static final String USER_WITH_LOGIN_NOT_EXISTS = "User with login: %s does not exist";
 
     private UserNotFoundAppException(String message) {
         super(message);
