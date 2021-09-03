@@ -44,6 +44,7 @@ public class AuthConfiguration extends WebSecurityConfigurerAdapter {
 //		.antMatchers("/helloadmin").hasRole("ADMINISTRATOR")
 //		.antMatchers("/hellouser").hasAnyRole("CLIMBER","MANAGER","ADMINISTRATOR")
                 .antMatchers("/user/add/.*").permitAll()
+                .antMatchers("/auth/refreshtoken").hasAnyRole("CLIMBER","MANAGER","ADMINISTRATOR")
                 .antMatchers("/auth/authenticate").permitAll().anyRequest().authenticated()
 
                 //todo czy tego potrzebujemy?

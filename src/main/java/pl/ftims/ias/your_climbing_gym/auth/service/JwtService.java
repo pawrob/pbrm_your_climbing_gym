@@ -19,6 +19,7 @@ public class JwtService {
 
     private String secret;
     private int jwtExpirationInMs;
+    private int jwtRefreshExpirationInMs;
 
     @Value("${jwt.secret}")
     public void setSecret(String secret) {
@@ -28,6 +29,10 @@ public class JwtService {
     @Value("${jwt.expirationDateInMs}")
     public void setJwtExpirationInMs(int jwtExpirationInMs) {
         this.jwtExpirationInMs = jwtExpirationInMs;
+    }
+    @Value("${jwt.refreshExpirationInMs}")
+    public void setjwtRefreshExpirationInMs(int jwtRefreshExpirationInMs) {
+        this.jwtRefreshExpirationInMs = jwtRefreshExpirationInMs;
     }
 
     public String generateToken(UserDetails userDetails) {
@@ -46,6 +51,23 @@ public class JwtService {
                 .setExpiration(new Date(System.currentTimeMillis() + jwtExpirationInMs))
                 .signWith(SignatureAlgorithm.HS512, secret).compact();
 
+    }
+
+    public String refreshToken(String authToken) {
+        Map<String, Object> claims = new HashMap<>();
+        Collection<? extends GrantedAuthority> roles = getRolesFromToken(authToken);
+
+        if (roles.contains(new SimpleGrantedAuthority("ROLE_ADMINISTRATOR"))) claims.put("isAdmin", true);
+        if (roles.contains(new SimpleGrantedAuthority("ROLE_MANAGER"))) claims.put("isManager", true);
+        if (roles.contains(new SimpleGrantedAuthority("ROLE_CLIMBER"))) claims.put("isClimber", true);
+
+        return doGenerateRefreshToken(claims, getUsernameFromToken(authToken));
+    }
+    public String doGenerateRefreshToken(Map<String, Object> claims, String subject) {
+
+        return Jwts.builder().setClaims(claims).setSubject(subject).setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + jwtRefreshExpirationInMs))
+                .signWith(SignatureAlgorithm.HS512, secret).compact();
     }
 
     public boolean validateToken(String authToken) {

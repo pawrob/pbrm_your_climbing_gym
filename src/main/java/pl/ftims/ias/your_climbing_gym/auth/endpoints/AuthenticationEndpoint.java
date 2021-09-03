@@ -1,6 +1,7 @@
 package pl.ftims.ias.your_climbing_gym.auth.endpoints;
 
 
+import io.jsonwebtoken.impl.DefaultClaims;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -10,14 +11,16 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import pl.ftims.ias.your_climbing_gym.auth.security.JwtRequestFilter;
 import pl.ftims.ias.your_climbing_gym.auth.service.AuthUserDetailsService;
 import pl.ftims.ias.your_climbing_gym.auth.service.JwtService;
 import pl.ftims.ias.your_climbing_gym.dto.CredentialsDTO;
 import pl.ftims.ias.your_climbing_gym.dto.TokenDTO;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
+import java.util.Map;
 
 @RequestMapping("auth")
 @RestController
@@ -54,4 +57,11 @@ public class AuthenticationEndpoint {
         return ResponseEntity.ok(new TokenDTO(jwtService.generateToken(
                 userDetailsService.loadUserByUsername(username))));
     }
+
+    @GetMapping(value = "/refreshtoken")
+    public ResponseEntity<?> refreshToken(HttpServletRequest request) {
+        return ResponseEntity.ok(new TokenDTO(jwtService.refreshToken(JwtRequestFilter.extractJwtFromRequest(request))));
+    }
+
+
 }
