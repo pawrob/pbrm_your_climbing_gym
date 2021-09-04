@@ -6,17 +6,17 @@ VALUES (-1, 'jkowalski', '$2y$12$ealytKG0z6p3hipT2XpxfeDDL7fPS7Dy5aDKkOzKaMnSUfo
 --login:anowak haslo:Nowak123!
 INSERT INTO public.user (id, login, password, email, is_active, is_verified)
 VALUES (-2, 'anowak', '$2y$12$Rv/0rpWtKOKcoM2k2R7zbOyNjSx2hVDceU8EE9RXJRl6URTQehw/a', 'nowak@example.com', true, true);
---login:msipinski haslo:Sipin123!
+--login:pbucki haslo:Ppucki123!
 INSERT INTO public.user (id, login, password, email, is_active, is_verified)
-VALUES (-3, 'msipinski', '$2y$12$q1rYhhNHlYr2Mq.vZuIklO31YsVliLfii2ug4WkvB7D.CtFUUhnNy', 'sipin@example.com', true,
+VALUES (-3, 'pbucki', '$2a$10$1LtTBewk4PopyuRkUPbgdO3j2uifQKNB7bBL8tholoamonzHUjENS', 'pbucki@example.com', true,
         true);
---login:aremplewicz haslo:Rempek123!
+--login:rmakrocki haslo:Makro123!
 INSERT INTO public.user (id, login, password, email, is_active, is_verified)
-VALUES (-4, 'aremplewicz', '$2y$12$yyzobmoHaPCC87aPF27I2.4IjNRPLo12KNB8HE27u15dcPczlRls6', 'rempek@example.com', true,
+VALUES (-4, 'rmakrocki', '$2a$10$ZvRquOlERcwSp/OGgoJPYeerZZnTNeD/xQUASse3Tgs85aAn1lHx2', 'rmakrocki@example.com', true,
         true);
---login:adrajling haslo:Drajling123!
+--login:johndoe haslo:Jdoe123!
 INSERT INTO public.user (id, login, password, email, is_active, is_verified)
-VALUES (-5, 'adrajling', '$2y$12$g66Xs5jGrjGiSQRI.ikuMeadyAHwpgF4noiofSG09j47CQV.EnDK6', 'drajling@example.com', true,
+VALUES (-5, 'johndoe', '$2a$10$CHy4qgOzzBZbJTXw1nGfAuAjuwCdt1Y8NCD41.LIyYMfLr750KiTC', 'jdoe@example.com', true,
         true);
 
 --personal_data
@@ -25,11 +25,11 @@ VALUES (-1, 'Jan', 'Kowalski', '111111111', true);
 INSERT INTO public.personal_data (user_id, name, surname, phone_number, gender)
 VALUES (-2, 'Anna', 'Nowak', '222222222', false);
 INSERT INTO public.personal_data (user_id, name, surname, phone_number, gender)
-VALUES (-3, 'Mateusz', 'Sipiński', '333333333', true);
-INSERT INTO public.personal_data (user_id, name, surname, phone_number, gender, language)
-VALUES (-4, 'Arkadiusz', 'Remplewicz', '444444444', true, 'EN');
+VALUES (-3, 'Paweł', 'Bucki', '333333333', true);
 INSERT INTO public.personal_data (user_id, name, surname, phone_number, gender)
-VALUES (-5, 'Aleksander', 'Drajling', '555555555', true);
+VALUES (-4, 'Robert', 'Makrocki', '444444444', true);
+INSERT INTO public.personal_data (user_id, name, surname, phone_number, gender, language)
+VALUES (-5, 'John', 'Doe', '555555555', true, 'EN');
 
 --access_level
 INSERT INTO public.access_level_table (id, user_id, access_level, is_active)
