@@ -12,23 +12,46 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import pl.ftims.ias.your_climbing_gym.auth.repositories.AuthViewRepository;
+import pl.ftims.ias.your_climbing_gym.auth.repositories.SessionLogRepository;
 import pl.ftims.ias.your_climbing_gym.entities.AuthenticationViewEntity;
+import pl.ftims.ias.your_climbing_gym.entities.SessionLogEntity;
+import pl.ftims.ias.your_climbing_gym.entities.UserEntity;
+import pl.ftims.ias.your_climbing_gym.mok.repositories.UserRepository;
 
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional(isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRES_NEW)
 public class AuthUserDetailsService implements UserDetailsService {
 
 
-    @Autowired
     AuthViewRepository authViewRepository;
+    SessionLogRepository sessionLogRepository;
+    UserRepository userRepository;
+
+    @Autowired
+    public AuthUserDetailsService(AuthViewRepository authViewRepository, SessionLogRepository sessionLogRepository, UserRepository userRepository) {
+        this.authViewRepository = authViewRepository;
+        this.userRepository = userRepository;
+        this.sessionLogRepository = sessionLogRepository;
+    }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        List<AuthenticationViewEntity> credentials = authViewRepository.findByLogin(username);
+    public UserDetails loadUserByUsername(String username) {
+        List<AuthenticationViewEntity> credentials = new ArrayList<>();
         List<SimpleGrantedAuthority> roles = new ArrayList<>();
+
+        Optional<List<AuthenticationViewEntity>> authenticationViewEntityList = authViewRepository.findByLogin(username);
+        if (authenticationViewEntityList.get().size() != 0) {
+            credentials = authenticationViewEntityList.get();
+        } else {
+            throw new UsernameNotFoundException(username);
+        }
+
+
         for (AuthenticationViewEntity credential : credentials) {
             if (credential.getAccessLevel().equals("ADMINISTRATOR")) {
                 roles.add(new SimpleGrantedAuthority("ROLE_ADMINISTRATOR"));
@@ -40,7 +63,6 @@ public class AuthUserDetailsService implements UserDetailsService {
                 roles.add(new SimpleGrantedAuthority("ROLE_MANAGER"));
             }
         }
-        //todo return not found exception
         return new User(credentials.get(0).getLogin(), credentials.get(0).getPassword(), roles);
     }
 
@@ -50,5 +72,33 @@ public class AuthUserDetailsService implements UserDetailsService {
             authorities.add(new SimpleGrantedAuthority(privilege));
         }
         return authorities;
+    }
+
+    public void addSessionLog(String ip, String username, Boolean isSuccessful) {
+        Optional<UserEntity> user = userRepository.findByLogin(username);
+
+        if (user.isPresent()) {
+            userRepository.save(checkIfNeedBlock(user.get(), isSuccessful));
+            sessionLogRepository.save(new SessionLogEntity(OffsetDateTime.now(), ip, isSuccessful, user.get()));
+        } else {
+            sessionLogRepository.save(new SessionLogEntity(OffsetDateTime.now(), ip, isSuccessful, null));
+        }
+
+
+    }
+
+    public UserEntity checkIfNeedBlock(UserEntity userEntity, Boolean isSuccessful) {
+        if (Boolean.FALSE.equals(isSuccessful)) {
+            userEntity.setFailedLogin(userEntity.getFailedLogin() + 1);
+        }
+        if (Boolean.TRUE.equals(userEntity.getActive()) && userEntity.getFailedLogin() != 0 && Boolean.TRUE.equals(isSuccessful)) {
+            userEntity.setFailedLogin(0);
+        }
+
+        if (userEntity.getFailedLogin() > 3) {
+            userEntity.setActive(false);
+        }
+
+        return userEntity;
     }
 }

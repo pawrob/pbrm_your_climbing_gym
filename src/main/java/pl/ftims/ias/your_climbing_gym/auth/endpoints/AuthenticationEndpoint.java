@@ -16,6 +16,8 @@ import pl.ftims.ias.your_climbing_gym.auth.service.AuthUserDetailsService;
 import pl.ftims.ias.your_climbing_gym.auth.service.JwtService;
 import pl.ftims.ias.your_climbing_gym.dto.CredentialsDTO;
 import pl.ftims.ias.your_climbing_gym.dto.TokenDTO;
+import pl.ftims.ias.your_climbing_gym.exceptions.AbstractAppException;
+import pl.ftims.ias.your_climbing_gym.exceptions.InvalidCredentialsException;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -39,20 +41,18 @@ public class AuthenticationEndpoint {
     }
 
     @PostMapping("/authenticate")
-    public ResponseEntity<?> createAuthenticationToken(@RequestBody CredentialsDTO credentialsDTO) throws Exception {
+    public ResponseEntity<?> createAuthenticationToken(@RequestBody CredentialsDTO credentialsDTO, HttpServletRequest request) throws AbstractAppException {
         String username = credentialsDTO.getUsername();
         try {
-            authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(username, credentialsDTO.getPassword()));
-            //todo replace with own exception
-        } catch (DisabledException e) {
-            throw new Exception("USER_DISABLED", e);
-        } catch (BadCredentialsException e) {
-            throw new Exception("INVALID_CREDENTIALS", e);
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, credentialsDTO.getPassword()));
+
+        } catch (DisabledException | BadCredentialsException e) {
+            userDetailsService.addSessionLog(request.getRemoteAddr(), username, false);
+            throw InvalidCredentialsException.createInvalidCredentialsException();
         }
 
-        return ResponseEntity.ok(new TokenDTO(jwtService.generateToken(
-                userDetailsService.loadUserByUsername(username))));
+        userDetailsService.addSessionLog(request.getRemoteAddr(), username, true);
+        return ResponseEntity.ok(new TokenDTO(jwtService.generateToken(userDetailsService.loadUserByUsername(username))));
     }
 
     @GetMapping(value = "/refreshtoken")

@@ -12,7 +12,7 @@ CREATE TABLE public."user"
     email_reset_token_timestamp    TIMESTAMP WITH TIME ZONE,
     verify_token                   CHARACTER(64),
     verify_token_timestamp         TIMESTAMP WITH TIME ZONE,
-    failed_login                   SMALLINT              NOT NULL DEFAULT 0,
+    failed_login                   INTEGER               NOT NULL DEFAULT 0,
     version                        BIGINT                NOT NULL DEFAULT 1,
     CONSTRAINT user_pkey PRIMARY KEY (id),
     CONSTRAINT user_login_key UNIQUE (login),
@@ -65,6 +65,23 @@ CREATE TABLE public.access_level_table
 );
 ALTER TABLE public."access_level_table"
     OWNER TO perfectbeta_admin;
+
+CREATE TABLE public.session_log
+(
+    id               BIGSERIAL                NOT NULL,
+    user_id          BIGINT,
+    action_timestamp TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    ip_address       CHARACTER VARYING(15)    NOT NULL,
+    is_successful    BOOLEAN                  NOT NULL,
+    version          BIGINT                   NOT NULL DEFAULT 1,
+    CONSTRAINT ip_address_correctness CHECK (ip_address ~
+                                             '^(([0-2]?[0-9]?[0-9])?\s?([.]||[:])){3,7}([0-2]?[0-9]?[0-9])?\s?$'),
+    CONSTRAINT session_log_pkey PRIMARY KEY (id),
+    CONSTRAINT session_log_user_id_fkey FOREIGN KEY (user_id)
+        REFERENCES public."user" (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+);
+
 
 
 CREATE OR REPLACE VIEW public.authentication_view

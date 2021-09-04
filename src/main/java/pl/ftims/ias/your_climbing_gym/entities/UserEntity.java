@@ -30,7 +30,7 @@ public class UserEntity extends AbstractEntity implements Serializable {
     private OffsetDateTime emailResetTokenTimestamp;
     private String verifyToken;
     private OffsetDateTime verifyTokenTimestamp;
-    private Short failedLogin = 0;
+    private Integer failedLogin = 0;
     private Collection<AccessLevelEntity> accessLevels = new ArrayList<>();
     private PersonalDataEntity personalData;
 
@@ -104,7 +104,7 @@ public class UserEntity extends AbstractEntity implements Serializable {
 
     @Basic
     @Column(name = "failed_login")
-    public Short getFailedLogin() {
+    public Integer getFailedLogin() {
         return failedLogin;
     }
 

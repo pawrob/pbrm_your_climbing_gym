@@ -48,4 +48,10 @@ public class AppExceptionHandler {
         ExceptionDTO exceptionDTO = new ExceptionDTO(e.getMessage(), HttpStatus.CONFLICT, ZonedDateTime.now(), "INVALID_TOKEN");
         return new ResponseEntity<>(exceptionDTO, HttpStatus.CONFLICT);
     }
+
+    @ExceptionHandler(value = InvalidCredentialsException.class)
+    public ResponseEntity<Object> handleInvalidCredentialsException(InvalidCredentialsException e) {
+        ExceptionDTO exceptionDTO = new ExceptionDTO(e.getMessage(), HttpStatus.UNAUTHORIZED, ZonedDateTime.now(), "INVALID_CREDENTIALS");
+        return new ResponseEntity<>(exceptionDTO, HttpStatus.UNAUTHORIZED);
+    }
 }
