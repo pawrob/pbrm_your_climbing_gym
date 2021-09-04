@@ -49,6 +49,7 @@ public class UserService {
     }
 
     public UserEntity createUserAccountWithAccessLevel(UserEntity userEntity) {
+        //todo check if login/email is taken to optimize
         userEntity.setPassword(HashGenerator.generateHash(userEntity.getPassword()));
         userEntity.setVerifyToken(RandomStringUtils.randomAlphabetic(64));
         userEntity.setVerifyTokenTimestamp(OffsetDateTime.now());
