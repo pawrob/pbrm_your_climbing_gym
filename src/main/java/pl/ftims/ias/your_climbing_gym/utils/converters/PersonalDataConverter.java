@@ -7,8 +7,8 @@ import pl.ftims.ias.your_climbing_gym.entities.PersonalDataEntity;
 @NoArgsConstructor
 public class PersonalDataConverter {
 
-    public static PersonalDataEntity personalDataEntityFromDTO(PersonalDataDTO personalDataDTO, long userId) {
-        return new PersonalDataEntity(personalDataDTO.getName(),
+    public static PersonalDataEntity personalDataEntityFromDTO(PersonalDataDTO personalDataDTO) {
+        return new PersonalDataEntity(personalDataDTO.getId(),personalDataDTO.getVersion(),personalDataDTO.getName(),
                 personalDataDTO.getSurname(), personalDataDTO.getPhoneNumber(),
                 personalDataDTO.getLanguage(), personalDataDTO.getGender());
     }

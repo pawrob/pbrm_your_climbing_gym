@@ -7,6 +7,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.orm.jpa.EntityManagerFactoryBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
@@ -15,39 +16,43 @@ import pl.ftims.ias.your_climbing_gym.entities.*;
 
 import javax.sql.DataSource;
 
-@Configuration
-@EnableJpaRepositories(basePackages = "pl.ftims.ias.your_climbing_gym.mok",
-        entityManagerFactoryRef = "mokEntityManagerFactory",
-        transactionManagerRef = "authTransactionManager"
-)
-public class MokDbConfig {
-
-    @Bean
-    @ConfigurationProperties("app.datasource.mok")
-    public DataSourceProperties mokDataSourceProperties() {
-        return new DataSourceProperties();
-    }
-
-    @Bean
-    @ConfigurationProperties("app.datasource.mok.configuration")
-    public DataSource mokDataSource() {
-        return mokDataSourceProperties().initializeDataSourceBuilder()
-                .type(HikariDataSource.class).build();
-    }
-
-
-    @Bean(name = "mokEntityManagerFactory")
-    public LocalContainerEntityManagerFactoryBean mokEntityManagerFactory(EntityManagerFactoryBuilder builder) {
-        return builder
-                .dataSource(mokDataSource())
-                .packages(SessionLogEntity.class, AuthenticationViewEntity.class, UserEntity.class, PersonalDataEntity.class, AccessLevelEntity.class, AbstractEntity.class)
-                .build();
-    }
-
-
-    @Bean
-    public PlatformTransactionManager mokTransactionManager(
-            final @Qualifier("mokEntityManagerFactory") LocalContainerEntityManagerFactoryBean mokEntityManagerFactory) {
-        return new JpaTransactionManager(mokEntityManagerFactory.getObject());
-    }
-}
+//@Configuration
+//@EnableJpaRepositories(basePackages = "pl.ftims.ias.your_climbing_gym.mok",
+//        entityManagerFactoryRef = "mokEntityManagerFactory",
+//        transactionManagerRef = "mokTransactionManager"
+//)
+//public class MokDbConfig {
+//
+//
+//    @Bean
+//    @ConfigurationProperties("app.datasource.mok")
+//    public DataSourceProperties mokDataSourceProperties() {
+//        return new DataSourceProperties();
+//    }
+//
+//
+//    @Bean
+//    @ConfigurationProperties("app.datasource.mok.configuration")
+//    public DataSource mokDataSource() {
+//        return mokDataSourceProperties().initializeDataSourceBuilder()
+//                .type(HikariDataSource.class).build();
+//    }
+//
+//
+//
+//    @Bean(name = "mokEntityManagerFactory")
+//    public LocalContainerEntityManagerFactoryBean mokEntityManagerFactory(EntityManagerFactoryBuilder builder) {
+//        return builder
+//                .dataSource(mokDataSource())
+//                .packages(SessionLogEntity.class, AuthenticationViewEntity.class, UserEntity.class, PersonalDataEntity.class, AccessLevelEntity.class, AbstractEntity.class)
+//                .build();
+//    }
+//
+//
+//
+//    @Bean
+//    public PlatformTransactionManager mokTransactionManager(
+//            final @Qualifier("mokEntityManagerFactory") LocalContainerEntityManagerFactoryBean mokEntityManagerFactory) {
+//        return new JpaTransactionManager(mokEntityManagerFactory.getObject());
+//    }
+//}

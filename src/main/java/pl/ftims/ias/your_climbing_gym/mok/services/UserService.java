@@ -3,6 +3,8 @@ package pl.ftims.ias.your_climbing_gym.mok.services;
 import org.apache.commons.collections4.IterableUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
@@ -15,6 +17,7 @@ import pl.ftims.ias.your_climbing_gym.entities.UserEntity;
 import pl.ftims.ias.your_climbing_gym.exceptions.AbstractAppException;
 import pl.ftims.ias.your_climbing_gym.exceptions.InvalidTokenException;
 import pl.ftims.ias.your_climbing_gym.exceptions.UserNotFoundAppException;
+import pl.ftims.ias.your_climbing_gym.mok.repositories.PersonalDataMokRepository;
 import pl.ftims.ias.your_climbing_gym.mok.repositories.UserMokRepository;
 import pl.ftims.ias.your_climbing_gym.utils.HashGenerator;
 import pl.ftims.ias.your_climbing_gym.utils.mailing.EmailSender;
@@ -24,18 +27,20 @@ import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 @Service
-@Transactional(isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRED)
+@Transactional(isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRES_NEW)
 public class UserService {
 
 
     private final UserMokRepository userMokRepository;
+    private final PersonalDataMokRepository personalDataMokRepository;
     private final EmailSender emailSender;
     private final TemplateEngine templateEngine;
 
 
     @Autowired
-    public UserService(UserMokRepository userMokRepository, EmailSender emailSender, TemplateEngine templateEngine) {
+    public UserService(UserMokRepository userMokRepository, PersonalDataMokRepository personalDataMokRepository, EmailSender emailSender, TemplateEngine templateEngine) {
         this.userMokRepository = userMokRepository;
+        this.personalDataMokRepository = personalDataMokRepository;
         this.emailSender = emailSender;
         this.templateEngine = templateEngine;
     }
@@ -105,6 +110,26 @@ public class UserService {
 
         return userMokRepository.save(userEntity);
     }
+
+    public UserEntity editUserData(PersonalDataEntity personalDataEntityFromDTO, long id) throws AbstractAppException {
+        UserEntity userEntity = userMokRepository.findById(id).orElseThrow(() -> UserNotFoundAppException.createUserWithProvidedIdNotFoundException(id));
+
+
+        PersonalDataEntity oldData = userEntity.getPersonalData();
+        oldData.setName(personalDataEntityFromDTO.getName());
+        oldData.setSurname(personalDataEntityFromDTO.getSurname());
+        oldData.setPhoneNumber(personalDataEntityFromDTO.getPhoneNumber());
+        oldData.setLanguage(personalDataEntityFromDTO.getLanguage());
+        oldData.setGender(personalDataEntityFromDTO.getGender());
+        oldData.setVersion(personalDataEntityFromDTO.getVersion());
+
+        userEntity.setPersonalData(oldData);
+
+        personalDataMokRepository.save(oldData);
+        return userEntity;
+
+    }
+
 
 }
 

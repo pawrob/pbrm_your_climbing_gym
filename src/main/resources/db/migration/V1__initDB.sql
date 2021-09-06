@@ -131,6 +131,7 @@ GRANT INSERT, SELECT, UPDATE ON TABLE public.session_log TO perfectbeta_auth;
 
 GRANT INSERT, UPDATE, SELECT ON TABLE public.personal_data TO perfectbeta_auth;
 GRANT INSERT, SELECT ON TABLE public.access_level_table TO perfectbeta_auth;
+GRANT INSERT, UPDATE, SELECT, DELETE ON TABLE public.flyway_schema_history TO perfectbeta_mok;
 GRANT INSERT, UPDATE, SELECT, DELETE ON TABLE public.flyway_schema_history TO perfectbeta_auth;
 -- mok
 GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE public.access_level_table TO perfectbeta_mok;

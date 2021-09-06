@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 @Entity
@@ -64,11 +66,15 @@ public class PersonalDataEntity extends AbstractEntity implements Serializable {
         this.user = user;
     }
 
-    public PersonalDataEntity(String name, String surname, String phoneNumber, String language, Boolean gender) {
+    public PersonalDataEntity(long id, Long version, @Size(max = 30) String name, @Size(max = 30) String surname,
+                              @Size(max = 15) String phoneNumber, @NotNull @Size(max = 3) String language, Boolean gender) {
+        super(id, version);
         this.name = name;
         this.surname = surname;
         this.phoneNumber = phoneNumber;
         this.language = language;
         this.gender = gender;
     }
+
+
 }

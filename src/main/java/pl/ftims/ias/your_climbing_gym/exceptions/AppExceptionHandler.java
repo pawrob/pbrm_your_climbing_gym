@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import pl.ftims.ias.your_climbing_gym.dto.ExceptionDTO;
 
+import javax.persistence.OptimisticLockException;
 import java.sql.SQLException;
 import java.time.ZonedDateTime;
 
@@ -53,5 +54,10 @@ public class AppExceptionHandler {
     public ResponseEntity<Object> handleInvalidCredentialsException(InvalidCredentialsException e) {
         ExceptionDTO exceptionDTO = new ExceptionDTO(e.getMessage(), HttpStatus.UNAUTHORIZED, ZonedDateTime.now(), "INVALID_CREDENTIALS");
         return new ResponseEntity<>(exceptionDTO, HttpStatus.UNAUTHORIZED);
+    }
+    @ExceptionHandler(value = OptimisticLockException.class)
+    public ResponseEntity<Object> handleOptimisticLockException(OptimisticLockException e) {
+        ExceptionDTO exceptionDTO = new ExceptionDTO(e.getMessage(), HttpStatus.CONFLICT, ZonedDateTime.now(), "OLE");
+        return new ResponseEntity<>(exceptionDTO, HttpStatus.CONFLICT);
     }
 }

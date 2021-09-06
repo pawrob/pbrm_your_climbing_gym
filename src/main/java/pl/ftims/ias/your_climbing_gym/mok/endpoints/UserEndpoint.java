@@ -7,14 +7,18 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+import pl.ftims.ias.your_climbing_gym.dto.PersonalDataDTO;
 import pl.ftims.ias.your_climbing_gym.dto.user_dtos.RegistrationDTO;
 import pl.ftims.ias.your_climbing_gym.dto.user_dtos.UserWithAccessLevelDTO;
 import pl.ftims.ias.your_climbing_gym.dto.user_dtos.UserWithPersonalDataAccessLevelDTO;
+import pl.ftims.ias.your_climbing_gym.dto.user_dtos.UserWithPersonalDataDTO;
 import pl.ftims.ias.your_climbing_gym.exceptions.AbstractAppException;
 import pl.ftims.ias.your_climbing_gym.mok.services.UserService;
+import pl.ftims.ias.your_climbing_gym.utils.converters.PersonalDataConverter;
 import pl.ftims.ias.your_climbing_gym.utils.converters.UserConverter;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @RestController
@@ -54,6 +58,14 @@ public class UserEndpoint {
     @PutMapping("/verify")
     public UserWithAccessLevelDTO verifyUser(@RequestParam("username") String username, @RequestParam("token") String token) throws AbstractAppException {
         return retry.execute(arg0 -> UserConverter.userWithAccessLevelDTOFromEntity(userService.verifyUser(username, token)));
+    }
+
+
+    @PutMapping("update/{id}")
+    public UserWithPersonalDataDTO updateUser(@RequestBody @NotNull @Valid PersonalDataDTO newData, @PathVariable("id") long id) throws AbstractAppException {
+        return retry.execute(arg0 -> UserConverter.userWithPersonalDataDTOFromEntity(
+                userService.editUserData(PersonalDataConverter.personalDataEntityFromDTO(newData),id)));
+
     }
 }
 
