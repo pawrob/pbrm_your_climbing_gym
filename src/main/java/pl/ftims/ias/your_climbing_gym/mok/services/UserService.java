@@ -15,7 +15,7 @@ import pl.ftims.ias.your_climbing_gym.entities.UserEntity;
 import pl.ftims.ias.your_climbing_gym.exceptions.AbstractAppException;
 import pl.ftims.ias.your_climbing_gym.exceptions.InvalidTokenException;
 import pl.ftims.ias.your_climbing_gym.exceptions.UserNotFoundAppException;
-import pl.ftims.ias.your_climbing_gym.mok.repositories.UserRepository;
+import pl.ftims.ias.your_climbing_gym.mok.repositories.UserMokRepository;
 import pl.ftims.ias.your_climbing_gym.utils.HashGenerator;
 import pl.ftims.ias.your_climbing_gym.utils.mailing.EmailSender;
 
@@ -24,28 +24,29 @@ import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 @Service
-@Transactional(isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRES_NEW)
+@Transactional(isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRED)
 public class UserService {
 
 
-    UserRepository userRepository;
+    private final UserMokRepository userMokRepository;
     private final EmailSender emailSender;
     private final TemplateEngine templateEngine;
 
 
     @Autowired
-    public UserService(UserRepository userRepository, EmailSender emailSender, TemplateEngine templateEngine) {
-        this.userRepository = userRepository;
+    public UserService(UserMokRepository userMokRepository, EmailSender emailSender, TemplateEngine templateEngine) {
+        this.userMokRepository = userMokRepository;
         this.emailSender = emailSender;
         this.templateEngine = templateEngine;
     }
 
     public List<UserEntity> getAllUsers() {
-        return IterableUtils.toList(userRepository.findAll());
+        return IterableUtils.toList(userMokRepository.findAll());
     }
 
+
     public UserEntity getUserById(Long id) throws AbstractAppException {
-        return userRepository.findById(id).orElseThrow(() -> UserNotFoundAppException.createUserWithProvidedIdNotFoundException(id));
+        return userMokRepository.findById(id).orElseThrow(() -> UserNotFoundAppException.createUserWithProvidedIdNotFoundException(id));
     }
 
     public UserEntity createUserAccountWithAccessLevel(UserEntity userEntity) {
@@ -67,11 +68,11 @@ public class UserService {
         emailSender.sendEmail(userEntity.getEmail(), "PerfectBeta - Dziękujemy za założenie profilu", body);
 
 
-        return userRepository.save(userEntity);
+        return userMokRepository.save(userEntity);
     }
 
     public UserEntity verifyUser(String username, String token) throws AbstractAppException {
-        UserEntity userEntity = userRepository.findByLogin(username)
+        UserEntity userEntity = userMokRepository.findByLogin(username)
                 .orElseThrow(() -> UserNotFoundAppException.createUserWithProvidedLoginNotFoundException(username));
 
 
@@ -102,7 +103,7 @@ public class UserService {
         emailSender.sendEmail(userEntity.getEmail(), "PerfectBeta - Dziękujemy za potwierdzenie adresu email", body);
 
 
-        return userRepository.save(userEntity);
+        return userMokRepository.save(userEntity);
     }
 
 }

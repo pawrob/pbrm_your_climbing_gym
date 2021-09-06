@@ -13,10 +13,10 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import pl.ftims.ias.your_climbing_gym.auth.repositories.AuthViewRepository;
 import pl.ftims.ias.your_climbing_gym.auth.repositories.SessionLogRepository;
+import pl.ftims.ias.your_climbing_gym.auth.repositories.UserAuthRepository;
 import pl.ftims.ias.your_climbing_gym.entities.AuthenticationViewEntity;
 import pl.ftims.ias.your_climbing_gym.entities.SessionLogEntity;
 import pl.ftims.ias.your_climbing_gym.entities.UserEntity;
-import pl.ftims.ias.your_climbing_gym.mok.repositories.UserRepository;
 
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
@@ -30,10 +30,10 @@ public class AuthUserDetailsService implements UserDetailsService {
 
     AuthViewRepository authViewRepository;
     SessionLogRepository sessionLogRepository;
-    UserRepository userRepository;
+    UserAuthRepository userRepository;
 
     @Autowired
-    public AuthUserDetailsService(AuthViewRepository authViewRepository, SessionLogRepository sessionLogRepository, UserRepository userRepository) {
+    public AuthUserDetailsService(AuthViewRepository authViewRepository, SessionLogRepository sessionLogRepository, UserAuthRepository userRepository) {
         this.authViewRepository = authViewRepository;
         this.userRepository = userRepository;
         this.sessionLogRepository = sessionLogRepository;

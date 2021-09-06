@@ -1,4 +1,4 @@
-package pl.ftims.ias.your_climbing_gym.mok.repositories;
+package pl.ftims.ias.your_climbing_gym.auth.repositories;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -11,9 +11,6 @@ import java.util.Optional;
 
 @Repository
 @Transactional(isolation = Isolation.READ_COMMITTED, propagation = Propagation.MANDATORY)
-public interface UserRepository extends JpaRepository<UserEntity, Long> {
-
-    Optional<UserEntity> findById(Long id);
-
+public interface UserAuthRepository extends JpaRepository<UserEntity, Long> {
     Optional<UserEntity> findByLogin(String login);
 }

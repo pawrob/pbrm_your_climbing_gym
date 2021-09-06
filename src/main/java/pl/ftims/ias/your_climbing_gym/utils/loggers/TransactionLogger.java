@@ -33,6 +33,7 @@ public class TransactionLogger {
         String log = "transaction end with " + (committed ? "commit" : "rollback");
         logger.info(prepareLog(log));
     }
+
     public void logTransactionError() {
         String log = "Error during transaction, set to rollback";
         logger.info(prepareLog(log));

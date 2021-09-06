@@ -122,8 +122,16 @@ CREATE
 -- grants
 GRANT USAGE ON SEQUENCE public.user_id_seq TO perfectbeta_mok;
 GRANT USAGE ON SEQUENCE public.access_level_table_id_seq TO perfectbeta_mok;
+GRANT USAGE ON SEQUENCE public.session_log_id_seq TO perfectbeta_auth;
+
 -- auth
 GRANT SELECT ON TABLE public.authentication_view TO perfectbeta_auth;
+GRANT INSERT, SELECT, UPDATE ON TABLE public.user TO perfectbeta_auth;
+GRANT INSERT, SELECT, UPDATE ON TABLE public.session_log TO perfectbeta_auth;
+
+GRANT INSERT, UPDATE, SELECT ON TABLE public.personal_data TO perfectbeta_auth;
+GRANT INSERT, SELECT ON TABLE public.access_level_table TO perfectbeta_auth;
+GRANT INSERT, UPDATE, SELECT, DELETE ON TABLE public.flyway_schema_history TO perfectbeta_auth;
 -- mok
 GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE public.access_level_table TO perfectbeta_mok;
 GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE public."user" TO perfectbeta_mok;
