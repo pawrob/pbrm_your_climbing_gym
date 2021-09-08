@@ -16,43 +16,45 @@ import pl.ftims.ias.your_climbing_gym.entities.*;
 
 import javax.sql.DataSource;
 
-//@Configuration
-//@EnableJpaRepositories(basePackages = "pl.ftims.ias.your_climbing_gym.mok",
-//        entityManagerFactoryRef = "mokEntityManagerFactory",
-//        transactionManagerRef = "mokTransactionManager"
-//)
-//public class MokDbConfig {
-//
-//
-//    @Bean
-//    @ConfigurationProperties("app.datasource.mok")
-//    public DataSourceProperties mokDataSourceProperties() {
-//        return new DataSourceProperties();
-//    }
-//
-//
-//    @Bean
-//    @ConfigurationProperties("app.datasource.mok.configuration")
-//    public DataSource mokDataSource() {
-//        return mokDataSourceProperties().initializeDataSourceBuilder()
-//                .type(HikariDataSource.class).build();
-//    }
-//
-//
-//
-//    @Bean(name = "mokEntityManagerFactory")
-//    public LocalContainerEntityManagerFactoryBean mokEntityManagerFactory(EntityManagerFactoryBuilder builder) {
-//        return builder
-//                .dataSource(mokDataSource())
-//                .packages(SessionLogEntity.class, AuthenticationViewEntity.class, UserEntity.class, PersonalDataEntity.class, AccessLevelEntity.class, AbstractEntity.class)
-//                .build();
-//    }
-//
-//
-//
-//    @Bean
-//    public PlatformTransactionManager mokTransactionManager(
-//            final @Qualifier("mokEntityManagerFactory") LocalContainerEntityManagerFactoryBean mokEntityManagerFactory) {
-//        return new JpaTransactionManager(mokEntityManagerFactory.getObject());
-//    }
-//}
+@Configuration
+@EnableJpaRepositories(basePackages = "pl.ftims.ias.your_climbing_gym.mok",
+        entityManagerFactoryRef = "mokEntityManagerFactory",
+        transactionManagerRef = "mokTransactionManager"
+)
+public class MokDbConfig {
+
+@Primary
+    @Bean
+    @ConfigurationProperties("app.datasource.mok")
+    public DataSourceProperties mokDataSourceProperties() {
+        return new DataSourceProperties();
+    }
+
+    @Primary
+
+    @Bean
+    @ConfigurationProperties("app.datasource.mok.configuration")
+    public DataSource mokDataSource() {
+        return mokDataSourceProperties().initializeDataSourceBuilder()
+                .type(HikariDataSource.class).build();
+    }
+
+
+    @Primary
+
+    @Bean(name = "mokEntityManagerFactory")
+    public LocalContainerEntityManagerFactoryBean mokEntityManagerFactory(EntityManagerFactoryBuilder builder) {
+        return builder
+                .dataSource(mokDataSource())
+                .packages( UserEntity.class, PersonalDataEntity.class, AccessLevelEntity.class, AbstractEntity.class)
+                .build();
+    }
+
+
+    @Primary
+    @Bean
+    public PlatformTransactionManager mokTransactionManager(
+            final @Qualifier("mokEntityManagerFactory") LocalContainerEntityManagerFactoryBean mokEntityManagerFactory) {
+        return new JpaTransactionManager(mokEntityManagerFactory.getObject());
+    }
+}

@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-@Transactional(isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRES_NEW)
+@Transactional( transactionManager ="authTransactionManager", isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRES_NEW)
 public class AuthUserDetailsService implements UserDetailsService {
 
 
