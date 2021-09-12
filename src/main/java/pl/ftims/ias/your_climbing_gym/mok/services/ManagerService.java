@@ -9,6 +9,8 @@ import org.springframework.transaction.annotation.Transactional;
 import pl.ftims.ias.your_climbing_gym.entities.AccessLevelEntity;
 import pl.ftims.ias.your_climbing_gym.entities.PersonalDataEntity;
 import pl.ftims.ias.your_climbing_gym.entities.UserEntity;
+import pl.ftims.ias.your_climbing_gym.exceptions.AbstractAppException;
+import pl.ftims.ias.your_climbing_gym.exceptions.UserNotFoundAppException;
 import pl.ftims.ias.your_climbing_gym.mok.repositories.UserMokRepository;
 import pl.ftims.ias.your_climbing_gym.utils.HashGenerator;
 
@@ -33,6 +35,28 @@ public class ManagerService {
         userMokRepository.save(userEntity);
 
 
+        return userEntity;
+    }
+
+    public UserEntity deactivateManager(Long id) throws AbstractAppException {
+        UserEntity userEntity = userMokRepository.findById(id)
+                .orElseThrow(() -> UserNotFoundAppException.createUserWithProvidedIdNotFoundException(id));
+
+        userEntity.getAccessLevels()
+                .stream()
+                .filter(level -> level.getAccessLevel().equalsIgnoreCase("MANAGER"))
+                .forEach(level -> level.setActive(false));
+        return userEntity;
+    }
+
+    public UserEntity activateManager(Long id) throws AbstractAppException {
+        UserEntity userEntity = userMokRepository.findById(id)
+                .orElseThrow(() -> UserNotFoundAppException.createUserWithProvidedIdNotFoundException(id));
+
+        userEntity.getAccessLevels()
+                .stream()
+                .filter(level -> level.getAccessLevel().equalsIgnoreCase("MANAGER"))
+                .forEach(level -> level.setActive(true));
         return userEntity;
     }
 }
