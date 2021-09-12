@@ -1,7 +1,5 @@
 package pl.ftims.ias.your_climbing_gym.exceptions;
 
-import javax.ejb.ApplicationException;
-
 
 public class UniqueConstraintAppException extends AbstractAppException {
 
@@ -22,7 +20,6 @@ public class UniqueConstraintAppException extends AbstractAppException {
     }
 
 
-    @ApplicationException(rollback = true)
     public static class LoginTakenAppException extends UniqueConstraintAppException {
 
         private LoginTakenAppException(String message) {
@@ -30,10 +27,7 @@ public class UniqueConstraintAppException extends AbstractAppException {
         }
     }
 
-    /**
-     * Wyjątek wyrzucany w przypadku gdy podany email jest juz zajęty
-     */
-    @ApplicationException(rollback = true)
+
     public static class EmailTakenAppException extends UniqueConstraintAppException {
 
         private EmailTakenAppException(String message) {

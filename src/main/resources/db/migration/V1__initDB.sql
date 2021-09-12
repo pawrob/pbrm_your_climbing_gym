@@ -122,6 +122,7 @@ CREATE
 -- grants
 GRANT USAGE ON SEQUENCE public.user_id_seq TO perfectbeta_mok;
 GRANT USAGE ON SEQUENCE public.access_level_table_id_seq TO perfectbeta_mok;
+GRANT USAGE ON SEQUENCE public.personal_data_id_seq TO perfectbeta_mok;
 GRANT USAGE ON SEQUENCE public.session_log_id_seq TO perfectbeta_auth;
 
 -- auth

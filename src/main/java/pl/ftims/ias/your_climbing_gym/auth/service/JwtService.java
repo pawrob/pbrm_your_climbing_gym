@@ -79,8 +79,7 @@ public class JwtService {
 
     public boolean validateToken(String authToken) throws UserNotFoundAppException {
         try {
-            //todo potrzebne te claimsy?
-            //for username not found exception
+
             if (authViewRepository.findByLogin(getUsernameFromToken(authToken)).get().isEmpty())
                 return false;
 

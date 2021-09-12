@@ -53,15 +53,14 @@ public class UserService {
         return userMokRepository.findById(id).orElseThrow(() -> UserNotFoundAppException.createUserWithProvidedIdNotFoundException(id));
     }
 
-    public UserEntity createUserAccountWithAccessLevel(UserEntity userEntity) {
-        //todo check if login/email is taken to optimize
+    public UserEntity createUserAccountWithAccessLevel(UserEntity userEntity) throws AbstractAppException {
         userEntity.setPassword(HashGenerator.generateHash(userEntity.getPassword()));
         userEntity.setVerifyToken(RandomStringUtils.randomAlphabetic(64));
         userEntity.setVerifyTokenTimestamp(OffsetDateTime.now());
 
         userEntity.getAccessLevels().add(new AccessLevelEntity(true, userEntity, "CLIMBER"));
         userEntity.setPersonalData(new PersonalDataEntity(userEntity));
-
+        userMokRepository.save(userEntity);
 
         //mailing
         Context context = new Context();
@@ -72,7 +71,7 @@ public class UserService {
         emailSender.sendEmail(userEntity.getEmail(), "PerfectBeta - Dziękujemy za założenie profilu", body);
 
 
-        return userMokRepository.save(userEntity);
+        return userEntity;
     }
 
     public UserEntity verifyUser(String username, String token) throws AbstractAppException {
@@ -110,7 +109,10 @@ public class UserService {
         UserEntity userEntity = userMokRepository.findById(id)
                 .orElseThrow(() -> UserNotFoundAppException.createUserWithProvidedIdNotFoundException(id));
 
-        //todo check who is editing
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (!userEntity.getLogin().equals(auth.getName()))
+            throw NotAllowedAppException.createNotAllowedException();
+
         PersonalDataEntity oldData = userEntity.getPersonalData();
         oldData.setName(personalDataEntityFromDTO.getName());
         oldData.setSurname(personalDataEntityFromDTO.getSurname());

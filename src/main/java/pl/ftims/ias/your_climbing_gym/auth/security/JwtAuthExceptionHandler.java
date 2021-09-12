@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Collections;
 
-//todo co to do chuja robi??
+
 @Component
 public class JwtAuthExceptionHandler implements AuthenticationEntryPoint {
 
