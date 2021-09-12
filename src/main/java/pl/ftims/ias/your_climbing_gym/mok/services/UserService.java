@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 import pl.ftims.ias.your_climbing_gym.dto.ChangePasswordDTO;
+import pl.ftims.ias.your_climbing_gym.dto.EmailDTO;
 import pl.ftims.ias.your_climbing_gym.dto.PasswordDTO;
 import pl.ftims.ias.your_climbing_gym.entities.AccessLevelEntity;
 import pl.ftims.ias.your_climbing_gym.entities.PersonalDataEntity;
@@ -22,6 +23,9 @@ import pl.ftims.ias.your_climbing_gym.mok.repositories.UserMokRepository;
 import pl.ftims.ias.your_climbing_gym.utils.HashGenerator;
 import pl.ftims.ias.your_climbing_gym.utils.mailing.EmailSender;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
@@ -178,7 +182,7 @@ public class UserService {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
         UserEntity userEntity = userMokRepository.findByLogin(auth.getName())
-                .orElseThrow(() -> UserNotFoundAppException.createUserWithProvidedLoginNotFoundException(auth.getName()));
+                .orElseThrow(NotAllowedAppException::createNotAllowedException);
 
         if (!HashGenerator.checkPassword(changePasswordDTO.getOldPassword(), userEntity.getPassword())) {
             throw InvalidCredentialsException.createInvalidPasswordException();
@@ -188,6 +192,54 @@ public class UserService {
         }
 
         userEntity.setPassword(HashGenerator.generateHash(changePasswordDTO.getNewPassword()));
+        return userMokRepository.save(userEntity);
+    }
+
+    public UserEntity changeEmail(String token, String email) throws AbstractAppException {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+        UserEntity userEntity = userMokRepository.findByLogin(auth.getName())
+                .orElseThrow(NotAllowedAppException::createNotAllowedException);
+
+        if (userEntity.getEmailResetToken() == null || userEntity.getEmailResetTokenTimestamp()==null)
+            throw InvalidTokenException.createTokenExpiredException();
+        if (!userEntity.getEmailResetToken().equals(token))
+            throw InvalidTokenException.createInvalidTokenException(userEntity.getLogin());
+        if (userEntity.getEmailResetTokenTimestamp().until(OffsetDateTime.now(), ChronoUnit.MINUTES) > 20)
+            throw InvalidTokenException.createTokenExpiredException();
+        if (!userMokRepository.findByEmail(email).isEmpty())
+            throw UniqueConstraintAppException.createEmailTakenException();
+
+        userEntity.setEmailResetToken(null);
+        userEntity.setEmailResetTokenTimestamp(null);
+
+        userEntity.setEmail(email);
+        return userMokRepository.save(userEntity);
+    }
+
+    public UserEntity requestChangeEmail(EmailDTO emailDTO) throws AbstractAppException {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+        UserEntity userEntity = userMokRepository.findByLogin(auth.getName())
+                .orElseThrow(NotAllowedAppException::createNotAllowedException);
+
+        if (!userMokRepository.findByEmail(emailDTO.getEmail()).isEmpty()) {
+            throw UniqueConstraintAppException.createEmailTakenException();
+        }
+        userEntity.setEmailResetToken(RandomStringUtils.randomAlphabetic(64));
+        userEntity.setEmailResetTokenTimestamp(OffsetDateTime.now());
+
+        //mailing
+        Context context = new Context();
+        context.setVariable("header", "potwierdzenie zmiany adresu email w serwisie PerfectBeta");
+        context.setVariable("title", "Czas lepiej się poznac");
+        // todo set link to production host
+        context.setVariable("description", "https://localhost:8080/api/users/change_email?token="
+                + URLEncoder.encode(userEntity.getEmailResetToken(), StandardCharsets.UTF_8) + "&email="
+                + URLEncoder.encode(emailDTO.getEmail(), StandardCharsets.UTF_8));
+        String body = templateEngine.process("template", context);
+        emailSender.sendEmail("mrpawrob@gmail.com", "PerfectBeta - potwierdzenie zmiany adresu email", body);
+
         return userMokRepository.save(userEntity);
     }
 }

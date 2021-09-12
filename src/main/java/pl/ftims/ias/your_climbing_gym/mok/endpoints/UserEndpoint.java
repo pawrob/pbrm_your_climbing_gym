@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import pl.ftims.ias.your_climbing_gym.dto.ChangePasswordDTO;
+import pl.ftims.ias.your_climbing_gym.dto.EmailDTO;
 import pl.ftims.ias.your_climbing_gym.dto.PasswordDTO;
 import pl.ftims.ias.your_climbing_gym.dto.PersonalDataDTO;
 import pl.ftims.ias.your_climbing_gym.dto.user_dtos.*;
@@ -48,12 +49,10 @@ public class UserEndpoint {
         return retry.execute(arg0 -> UserConverter.userWithPersonalDataAccessLevelDTOFromEntity(userService.getUserById(id)));
     }
 
-
     @PostMapping("register")
-    public UserWithPersonalDataAccessLevelDTO registerClient(@RequestBody @Valid RegistrationDTO user) throws AbstractAppException {
+    public UserWithPersonalDataAccessLevelDTO registerClient(@RequestBody @Valid RegistrationDTO user){
         return retry.execute(arg0 -> UserConverter.userWithPersonalDataAccessLevelDTOFromEntity(
                 userService.createUserAccountWithAccessLevel(UserConverter.createNewUserEntityFromDTO(user))));
-
     }
 
     @PutMapping("/verify")
@@ -94,5 +93,16 @@ public class UserEndpoint {
     public UserDTO activateUser(@PathVariable Long id) throws AbstractAppException {
         return retry.execute(arg0 -> UserConverter.userWithAccessLevelDTOFromEntity(userService.activateUser(id)));
     }
+    @Secured({"ROLE_ADMINISTRATOR", "ROLE_MANAGER", "ROLE_CLIMBER"})
+    @GetMapping("request_change_email")
+    public UserDTO requestChangeEmail(@RequestBody @NotNull @Valid EmailDTO emailDTO) throws AbstractAppException {
+        return retry.execute(arg0 -> UserConverter.userEntityToDTO(userService.requestChangeEmail(emailDTO)));
+    }
+    @Secured({"ROLE_ADMINISTRATOR", "ROLE_MANAGER", "ROLE_CLIMBER"})
+    @GetMapping("change_email")
+    public UserDTO requestChangeEmail(@NotNull @RequestParam("token") String token,@NotNull @RequestParam("email") String email) throws AbstractAppException {
+        return retry.execute(arg0 -> UserConverter.userEntityToDTO(userService.changeEmail(token,email)));
+    }
+
 }
 
