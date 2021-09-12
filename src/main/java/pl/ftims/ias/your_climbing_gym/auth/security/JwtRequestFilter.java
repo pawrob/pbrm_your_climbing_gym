@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 import pl.ftims.ias.your_climbing_gym.auth.service.JwtService;
+import pl.ftims.ias.your_climbing_gym.exceptions.UserNotFoundAppException;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -24,6 +25,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     @Autowired
     private JwtService jwtTokenUtil;
 
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws ServletException, IOException {
@@ -34,6 +36,8 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             if (StringUtils.hasText(jwtToken) && jwtTokenUtil.validateToken(jwtToken)) {
                 UserDetails userDetails = new User(jwtTokenUtil.getUsernameFromToken(jwtToken), "",
                         jwtTokenUtil.getRolesFromToken(jwtToken));
+
+
                 UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
                         userDetails, null, userDetails.getAuthorities());
                 SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
@@ -43,6 +47,8 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         } catch (ExpiredJwtException ex) {
             request.setAttribute("exception", ex);
         } catch (BadCredentialsException ex) {
+            request.setAttribute("exception", ex);
+        } catch (UserNotFoundAppException ex) {
             request.setAttribute("exception", ex);
         }
         chain.doFilter(request, response);

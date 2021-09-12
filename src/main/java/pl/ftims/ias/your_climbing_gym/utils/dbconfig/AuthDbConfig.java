@@ -13,7 +13,9 @@ import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-import pl.ftims.ias.your_climbing_gym.entities.*;
+import pl.ftims.ias.your_climbing_gym.entities.AuthenticationViewEntity;
+import pl.ftims.ias.your_climbing_gym.entities.SessionLogEntity;
+import pl.ftims.ias.your_climbing_gym.entities.UserEntity;
 
 import javax.sql.DataSource;
 
@@ -48,8 +50,9 @@ public class AuthDbConfig {
                 .packages(SessionLogEntity.class, AuthenticationViewEntity.class, UserEntity.class)
                 .build();
     }
+
     @Bean
-    public InstrumentationLoadTimeWeaver loadTimeWeaver()  throws Throwable {
+    public InstrumentationLoadTimeWeaver loadTimeWeaver() throws Throwable {
         InstrumentationLoadTimeWeaver loadTimeWeaver = new InstrumentationLoadTimeWeaver();
         return loadTimeWeaver;
     }

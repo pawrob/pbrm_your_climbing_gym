@@ -1,6 +1,7 @@
 package pl.ftims.ias.your_climbing_gym.auth.service;
 
 import io.jsonwebtoken.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.GrantedAuthority;
@@ -10,13 +11,17 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import pl.ftims.ias.your_climbing_gym.auth.repositories.AuthViewRepository;
+import pl.ftims.ias.your_climbing_gym.exceptions.UserNotFoundAppException;
 
 import java.util.*;
 
 @Service
-@Transactional(isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRES_NEW)
+@Transactional(transactionManager = "authTransactionManager", isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRES_NEW)
 public class JwtService {
 
+    @Autowired
+    private AuthViewRepository authViewRepository;
     private String secret;
     private int jwtExpirationInMs;
     private int jwtRefreshExpirationInMs;
@@ -72,9 +77,13 @@ public class JwtService {
                 .signWith(SignatureAlgorithm.HS512, secret).compact();
     }
 
-    public boolean validateToken(String authToken) {
+    public boolean validateToken(String authToken) throws UserNotFoundAppException {
         try {
             //todo potrzebne te claimsy?
+            //for username not found exception
+            if (authViewRepository.findByLogin(getUsernameFromToken(authToken)).get().isEmpty())
+                return false;
+
             Jws<Claims> claims = Jwts.parser().setSigningKey(secret).parseClaimsJws(authToken);
             return true;
         } catch (SignatureException | MalformedJwtException | UnsupportedJwtException | IllegalArgumentException ex) {

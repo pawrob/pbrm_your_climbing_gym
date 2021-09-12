@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-@Transactional(isolation = Isolation.READ_COMMITTED, propagation = Propagation.MANDATORY)
+@Transactional(transactionManager = "authTransactionManager", isolation = Isolation.READ_COMMITTED, propagation = Propagation.MANDATORY)
 public interface AuthViewRepository extends JpaRepository<AuthenticationViewEntity, Long> {
 
     Optional<List<AuthenticationViewEntity>> findByLogin(String login);

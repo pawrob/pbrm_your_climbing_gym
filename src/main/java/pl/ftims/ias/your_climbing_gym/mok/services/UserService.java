@@ -11,12 +11,11 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
+import pl.ftims.ias.your_climbing_gym.dto.PasswordDTO;
 import pl.ftims.ias.your_climbing_gym.entities.AccessLevelEntity;
 import pl.ftims.ias.your_climbing_gym.entities.PersonalDataEntity;
 import pl.ftims.ias.your_climbing_gym.entities.UserEntity;
-import pl.ftims.ias.your_climbing_gym.exceptions.AbstractAppException;
-import pl.ftims.ias.your_climbing_gym.exceptions.InvalidTokenException;
-import pl.ftims.ias.your_climbing_gym.exceptions.UserNotFoundAppException;
+import pl.ftims.ias.your_climbing_gym.exceptions.*;
 import pl.ftims.ias.your_climbing_gym.mok.repositories.PersonalDataMokRepository;
 import pl.ftims.ias.your_climbing_gym.mok.repositories.UserMokRepository;
 import pl.ftims.ias.your_climbing_gym.utils.HashGenerator;
@@ -85,14 +84,10 @@ public class UserService {
             throw InvalidTokenException.createInvalidTokenException(username);
         if (userEntity.getVerifyTokenTimestamp() == null)
             throw InvalidTokenException.createTokenExpiredException();
-
-        if (!userEntity.getVerifyToken().equals(token)) {
+        if (!userEntity.getVerifyToken().equals(token))
             throw InvalidTokenException.createInvalidTokenException(username);
-        }
-
-        if (userEntity.getVerifyTokenTimestamp().until(OffsetDateTime.now(), ChronoUnit.HOURS) > 24) {
+        if (userEntity.getVerifyTokenTimestamp().until(OffsetDateTime.now(), ChronoUnit.HOURS) > 24)
             throw InvalidTokenException.createTokenExpiredException();
-        }
 
 
         userEntity.setVerified(true);
@@ -112,9 +107,10 @@ public class UserService {
     }
 
     public UserEntity editUserData(PersonalDataEntity personalDataEntityFromDTO, long id) throws AbstractAppException {
-        UserEntity userEntity = userMokRepository.findById(id).orElseThrow(() -> UserNotFoundAppException.createUserWithProvidedIdNotFoundException(id));
+        UserEntity userEntity = userMokRepository.findById(id)
+                .orElseThrow(() -> UserNotFoundAppException.createUserWithProvidedIdNotFoundException(id));
 
-
+        //todo check who is editing
         PersonalDataEntity oldData = userEntity.getPersonalData();
         oldData.setName(personalDataEntityFromDTO.getName());
         oldData.setSurname(personalDataEntityFromDTO.getSurname());
@@ -131,5 +127,32 @@ public class UserService {
     }
 
 
+    public Boolean deleteUser(PasswordDTO password, long id) throws AbstractAppException {
+        UserEntity userEntity = userMokRepository.findById(id)
+                .orElseThrow(() -> UserNotFoundAppException.createUserWithProvidedIdNotFoundException(id));
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+        if (!userEntity.getLogin().equals(auth.getName()))
+            throw NotAllowedAppException.createNotAllowedException();
+
+        if (!HashGenerator.checkPassword(password.getPassword(), userEntity.getPassword())) {
+            throw InvalidCredentialsException.createInvalidPasswordException();
+        }
+
+        userEntity.setActive(false);
+        userEntity.setLogin("#" + userEntity.getLogin());
+        userEntity.setEmail("#" + userEntity.getEmail());
+
+        PersonalDataEntity personalDataEntity = userEntity.getPersonalData();
+
+        personalDataEntity.setName(null);
+        personalDataEntity.setSurname(null);
+        personalDataEntity.setPhoneNumber(null);
+        personalDataEntity.setLanguage("PL");
+        personalDataMokRepository.save(personalDataEntity);
+        userMokRepository.save(userEntity);
+
+        return true;
+    }
 }
 

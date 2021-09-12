@@ -55,9 +55,16 @@ public class AppExceptionHandler {
         ExceptionDTO exceptionDTO = new ExceptionDTO(e.getMessage(), HttpStatus.UNAUTHORIZED, ZonedDateTime.now(), "INVALID_CREDENTIALS");
         return new ResponseEntity<>(exceptionDTO, HttpStatus.UNAUTHORIZED);
     }
+
     @ExceptionHandler(value = OptimisticLockException.class)
     public ResponseEntity<Object> handleOptimisticLockException(OptimisticLockException e) {
         ExceptionDTO exceptionDTO = new ExceptionDTO(e.getMessage(), HttpStatus.CONFLICT, ZonedDateTime.now(), "OLE");
         return new ResponseEntity<>(exceptionDTO, HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(value = NotAllowedAppException.class)
+    public ResponseEntity<Object> handleNotAllowedAppException(NotAllowedAppException e) {
+        ExceptionDTO exceptionDTO = new ExceptionDTO(e.getMessage(), HttpStatus.FORBIDDEN, ZonedDateTime.now(), "NOT_ALLOWED");
+        return new ResponseEntity<>(exceptionDTO, HttpStatus.FORBIDDEN);
     }
 }

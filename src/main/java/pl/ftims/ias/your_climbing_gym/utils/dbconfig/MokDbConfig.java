@@ -12,7 +12,10 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.transaction.PlatformTransactionManager;
-import pl.ftims.ias.your_climbing_gym.entities.*;
+import pl.ftims.ias.your_climbing_gym.entities.AbstractEntity;
+import pl.ftims.ias.your_climbing_gym.entities.AccessLevelEntity;
+import pl.ftims.ias.your_climbing_gym.entities.PersonalDataEntity;
+import pl.ftims.ias.your_climbing_gym.entities.UserEntity;
 
 import javax.sql.DataSource;
 
@@ -23,7 +26,7 @@ import javax.sql.DataSource;
 )
 public class MokDbConfig {
 
-@Primary
+    @Primary
     @Bean
     @ConfigurationProperties("app.datasource.mok")
     public DataSourceProperties mokDataSourceProperties() {
@@ -46,7 +49,7 @@ public class MokDbConfig {
     public LocalContainerEntityManagerFactoryBean mokEntityManagerFactory(EntityManagerFactoryBuilder builder) {
         return builder
                 .dataSource(mokDataSource())
-                .packages( UserEntity.class, PersonalDataEntity.class, AccessLevelEntity.class, AbstractEntity.class)
+                .packages(UserEntity.class, PersonalDataEntity.class, AccessLevelEntity.class, AbstractEntity.class)
                 .build();
     }
 

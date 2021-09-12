@@ -9,6 +9,6 @@ import pl.ftims.ias.your_climbing_gym.entities.SessionLogEntity;
 
 
 @Repository
-@Transactional(isolation = Isolation.READ_COMMITTED, propagation = Propagation.MANDATORY)
+@Transactional(transactionManager = "authTransactionManager", isolation = Isolation.READ_COMMITTED, propagation = Propagation.MANDATORY)
 public interface SessionLogRepository extends JpaRepository<SessionLogEntity, Long> {
 }

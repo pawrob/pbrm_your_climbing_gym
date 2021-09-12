@@ -1,6 +1,10 @@
 package pl.ftims.ias.your_climbing_gym.entities;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
 
 @Data
@@ -26,7 +30,6 @@ public abstract class AbstractEntity {
     public Long getVersion() {
         return version;
     }
-
 
 
     public void setVersion(Long version) {

@@ -85,7 +85,7 @@
             <artifactId>javaee-api</artifactId>
             <version>8.0.1</version>
         </dependency>
-<!--        xml serializer for eclipselink-->
+        <!--        xml serializer for eclipselink-->
         <dependency>
             <groupId>jakarta.xml.bind</groupId>
             <artifactId>jakarta.xml.bind-api</artifactId>
@@ -120,10 +120,10 @@
             <artifactId>spring-boot-starter-validation</artifactId>
         </dependency>
         <!--        monitoring-->
-<!--        <dependency>-->
-<!--            <groupId>org.springframework.boot</groupId>-->
-<!--            <artifactId>spring-boot-starter-actuator</artifactId>-->
-<!--        </dependency>-->
+        <!--        <dependency>-->
+        <!--            <groupId>org.springframework.boot</groupId>-->
+        <!--            <artifactId>spring-boot-starter-actuator</artifactId>-->
+        <!--        </dependency>-->
         <!--        mailing-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
