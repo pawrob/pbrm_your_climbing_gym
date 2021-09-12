@@ -43,6 +43,7 @@ public class AppExceptionHandler {
         ExceptionDTO exceptionDTO = new ExceptionDTO(e.getAllErrors().get(0).getDefaultMessage(), HttpStatus.BAD_REQUEST, ZonedDateTime.now(), "INVALID_INPUT");
         return new ResponseEntity<>(exceptionDTO, HttpStatus.BAD_REQUEST);
     }
+
     @ExceptionHandler(value = UniqueConstraintAppException.class)
     public ResponseEntity<Object> handleUniqueConstraintAppException(UniqueConstraintAppException e) {
         ExceptionDTO exceptionDTO = new ExceptionDTO(e.getMessage(), HttpStatus.CONFLICT, ZonedDateTime.now(), "INVALID_LOGIN_OR_EMAIL");

@@ -26,7 +26,7 @@ public class ManagerService {
         this.userMokRepository = userMokRepository;
     }
 
-    public UserEntity createManagerAccountWithAccessLevel(UserEntity userEntity){
+    public UserEntity createManagerAccountWithAccessLevel(UserEntity userEntity) {
 
         userEntity.setPassword(HashGenerator.generateHash(userEntity.getPassword()));
         userEntity.setVerified(true);

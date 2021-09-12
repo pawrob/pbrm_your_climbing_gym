@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
+import pl.ftims.ias.your_climbing_gym.dto.ChangePasswordDTO;
 import pl.ftims.ias.your_climbing_gym.dto.PasswordDTO;
 import pl.ftims.ias.your_climbing_gym.entities.AccessLevelEntity;
 import pl.ftims.ias.your_climbing_gym.entities.PersonalDataEntity;
@@ -53,7 +54,7 @@ public class UserService {
         return userMokRepository.findById(id).orElseThrow(() -> UserNotFoundAppException.createUserWithProvidedIdNotFoundException(id));
     }
 
-    public UserEntity createUserAccountWithAccessLevel(UserEntity userEntity){
+    public UserEntity createUserAccountWithAccessLevel(UserEntity userEntity) {
         userEntity.setPassword(HashGenerator.generateHash(userEntity.getPassword()));
         userEntity.setVerifyToken(RandomStringUtils.randomAlphabetic(64));
         userEntity.setVerifyTokenTimestamp(OffsetDateTime.now());
@@ -170,6 +171,23 @@ public class UserService {
                 .orElseThrow(() -> UserNotFoundAppException.createUserWithProvidedIdNotFoundException(id));
 
         userEntity.setActive(true);
+        return userMokRepository.save(userEntity);
+    }
+
+    public UserEntity changePassword(ChangePasswordDTO changePasswordDTO) throws AbstractAppException {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+        UserEntity userEntity = userMokRepository.findByLogin(auth.getName())
+                .orElseThrow(() -> UserNotFoundAppException.createUserWithProvidedLoginNotFoundException(auth.getName()));
+
+        if (!HashGenerator.checkPassword(changePasswordDTO.getOldPassword(), userEntity.getPassword())) {
+            throw InvalidCredentialsException.createInvalidPasswordException();
+        }
+        if (HashGenerator.checkPassword(changePasswordDTO.getNewPassword(), userEntity.getPassword())) {
+            throw InvalidCredentialsException.createPasswordSameAsOldException();
+        }
+
+        userEntity.setPassword(HashGenerator.generateHash(changePasswordDTO.getNewPassword()));
         return userMokRepository.save(userEntity);
     }
 }

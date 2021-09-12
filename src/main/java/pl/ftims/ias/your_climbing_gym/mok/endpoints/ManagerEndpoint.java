@@ -15,15 +15,7 @@ import pl.ftims.ias.your_climbing_gym.exceptions.AbstractAppException;
 import pl.ftims.ias.your_climbing_gym.mok.services.ManagerService;
 import pl.ftims.ias.your_climbing_gym.utils.converters.UserConverter;
 
-import javax.ejb.AccessLocalException;
-import javax.ejb.EJBAccessException;
 import javax.validation.Valid;
-import javax.ws.rs.PUT;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 
 @RestController
 @RequestMapping("managers")
@@ -41,7 +33,7 @@ public class ManagerEndpoint {
 
     @Secured("ROLE_ADMINISTRATOR")
     @PostMapping("register")
-    public UserWithPersonalDataAccessLevelDTO registerManager(@RequestBody @Valid RegistrationDTO user){
+    public UserWithPersonalDataAccessLevelDTO registerManager(@RequestBody @Valid RegistrationDTO user) {
         return retry.execute(arg0 -> UserConverter.userWithPersonalDataAccessLevelDTOFromEntity(
                 managerService.createManagerAccountWithAccessLevel(UserConverter.createNewUserEntityFromDTO(user))));
 

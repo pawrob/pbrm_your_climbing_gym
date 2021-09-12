@@ -16,5 +16,6 @@ public interface UserMokRepository extends JpaRepository<UserEntity, Long> {
     Optional<UserEntity> findById(Long id);
 
     Optional<UserEntity> findByLogin(String login);
+
     Optional<UserEntity> findByEmail(String email);
 }

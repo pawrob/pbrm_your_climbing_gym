@@ -4,6 +4,7 @@ public class InvalidCredentialsException extends AbstractAppException {
 
     public static final String INVALID_CREDENTIALS = "Invalid credentials";
     public static final String INVALID_PASSWORD = "Password is incorrect";
+    public static final String PASSWORD_SAME_AS_OLD = "New password is same as old one";
 
     private InvalidCredentialsException(String message) {
         super(message);
@@ -18,10 +19,21 @@ public class InvalidCredentialsException extends AbstractAppException {
         return new InvalidCredentialsException.InvalidPasswordException(INVALID_PASSWORD);
     }
 
+    public static InvalidCredentialsException.PasswordSameAsOldException createPasswordSameAsOldException() {
+        return new InvalidCredentialsException.PasswordSameAsOldException(PASSWORD_SAME_AS_OLD);
+    }
+
 
     public static class InvalidLoginOrPasswordException extends InvalidCredentialsException {
 
         private InvalidLoginOrPasswordException(String message) {
+            super(message);
+        }
+    }
+
+    public static class PasswordSameAsOldException extends InvalidCredentialsException {
+
+        private PasswordSameAsOldException(String message) {
             super(message);
         }
     }

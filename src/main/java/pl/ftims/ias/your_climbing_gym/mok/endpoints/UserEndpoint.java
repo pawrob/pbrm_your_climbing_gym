@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+import pl.ftims.ias.your_climbing_gym.dto.ChangePasswordDTO;
 import pl.ftims.ias.your_climbing_gym.dto.PasswordDTO;
 import pl.ftims.ias.your_climbing_gym.dto.PersonalDataDTO;
 import pl.ftims.ias.your_climbing_gym.dto.user_dtos.*;
@@ -65,6 +66,13 @@ public class UserEndpoint {
     public UserWithPersonalDataDTO updateOwnUserPersonalData(@RequestBody @NotNull @Valid PersonalDataDTO newData, @PathVariable("id") long id) throws AbstractAppException {
         return retry.execute(arg0 -> UserConverter.userWithPersonalDataDTOFromEntity(
                 userService.editUserData(PersonalDataConverter.personalDataEntityFromDTO(newData), id)));
+    }
+
+    @Secured({"ROLE_ADMINISTRATOR", "ROLE_MANAGER", "ROLE_CLIMBER"})
+    @PutMapping("change_password")
+    public UserDTO changePassword(@RequestBody @NotNull @Valid ChangePasswordDTO changePasswordDTO) throws AbstractAppException {
+        return retry.execute(arg0 -> UserConverter.userEntityToDTO(
+                userService.changePassword(changePasswordDTO)));
     }
 
     @Secured({"ROLE_ADMINISTRATOR", "ROLE_MANAGER", "ROLE_CLIMBER"})
