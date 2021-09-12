@@ -11,10 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import pl.ftims.ias.your_climbing_gym.dto.PasswordDTO;
 import pl.ftims.ias.your_climbing_gym.dto.PersonalDataDTO;
-import pl.ftims.ias.your_climbing_gym.dto.user_dtos.RegistrationDTO;
-import pl.ftims.ias.your_climbing_gym.dto.user_dtos.UserWithAccessLevelDTO;
-import pl.ftims.ias.your_climbing_gym.dto.user_dtos.UserWithPersonalDataAccessLevelDTO;
-import pl.ftims.ias.your_climbing_gym.dto.user_dtos.UserWithPersonalDataDTO;
+import pl.ftims.ias.your_climbing_gym.dto.user_dtos.*;
 import pl.ftims.ias.your_climbing_gym.exceptions.AbstractAppException;
 import pl.ftims.ias.your_climbing_gym.mok.services.UserService;
 import pl.ftims.ias.your_climbing_gym.utils.converters.PersonalDataConverter;
@@ -65,16 +62,29 @@ public class UserEndpoint {
 
     @Secured({"ROLE_ADMINISTRATOR", "ROLE_MANAGER", "ROLE_CLIMBER"})
     @PutMapping("update/{id}")
-    public UserWithPersonalDataDTO updateUserPersonalData(@RequestBody @NotNull @Valid PersonalDataDTO newData, @PathVariable("id") long id) throws AbstractAppException {
+    public UserWithPersonalDataDTO updateOwnUserPersonalData(@RequestBody @NotNull @Valid PersonalDataDTO newData, @PathVariable("id") long id) throws AbstractAppException {
         return retry.execute(arg0 -> UserConverter.userWithPersonalDataDTOFromEntity(
                 userService.editUserData(PersonalDataConverter.personalDataEntityFromDTO(newData), id)));
     }
 
     @Secured({"ROLE_ADMINISTRATOR", "ROLE_MANAGER", "ROLE_CLIMBER"})
     @DeleteMapping("delete/{id}")
-    public ResponseEntity<Object> deleteUser(@RequestBody @NotNull @Valid PasswordDTO password, @PathVariable("id") long id) throws AbstractAppException {
+    public ResponseEntity<Object> deleteOwnUserAccount(@RequestBody @NotNull @Valid PasswordDTO password, @PathVariable("id") long id) throws AbstractAppException {
         retry.execute(arg0 -> userService.deleteUser(password, id));
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @Secured("ROLE_ADMINISTRATOR")
+    @PutMapping("deactivate/{id}")
+    public UserDTO deactivateUser(@PathVariable Long id) throws AbstractAppException {
+        return retry.execute(arg0 -> UserConverter.userWithAccessLevelDTOFromEntity(userService.deactivateUser(id)));
+
+    }
+
+    @Secured("ROLE_ADMINISTRATOR")
+    @PutMapping("activate/{id}")
+    public UserDTO activateUser(@PathVariable Long id) throws AbstractAppException {
+        return retry.execute(arg0 -> UserConverter.userWithAccessLevelDTOFromEntity(userService.activateUser(id)));
     }
 }
 

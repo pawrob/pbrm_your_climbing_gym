@@ -156,5 +156,21 @@ public class UserService {
 
         return true;
     }
+
+    public UserEntity deactivateUser(Long id) throws AbstractAppException {
+        UserEntity userEntity = userMokRepository.findById(id)
+                .orElseThrow(() -> UserNotFoundAppException.createUserWithProvidedIdNotFoundException(id));
+
+        userEntity.setActive(false);
+        return userMokRepository.save(userEntity);
+    }
+
+    public UserEntity activateUser(Long id) throws AbstractAppException {
+        UserEntity userEntity = userMokRepository.findById(id)
+                .orElseThrow(() -> UserNotFoundAppException.createUserWithProvidedIdNotFoundException(id));
+
+        userEntity.setActive(true);
+        return userMokRepository.save(userEntity);
+    }
 }
 

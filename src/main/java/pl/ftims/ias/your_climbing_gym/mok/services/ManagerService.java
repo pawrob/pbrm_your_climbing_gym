@@ -46,7 +46,7 @@ public class ManagerService {
                 .stream()
                 .filter(level -> level.getAccessLevel().equalsIgnoreCase("MANAGER"))
                 .forEach(level -> level.setActive(false));
-        return userEntity;
+        return userMokRepository.save(userEntity);
     }
 
     public UserEntity activateManager(Long id) throws AbstractAppException {
@@ -57,6 +57,6 @@ public class ManagerService {
                 .stream()
                 .filter(level -> level.getAccessLevel().equalsIgnoreCase("MANAGER"))
                 .forEach(level -> level.setActive(true));
-        return userEntity;
+        return userMokRepository.save(userEntity);
     }
 }
