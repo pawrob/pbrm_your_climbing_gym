@@ -26,7 +26,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 @Service
-@Transactional(isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRES_NEW)
+@Transactional(transactionManager = "mokTransactionManager", isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRES_NEW)
 public class UserService {
 
 
@@ -53,7 +53,7 @@ public class UserService {
         return userMokRepository.findById(id).orElseThrow(() -> UserNotFoundAppException.createUserWithProvidedIdNotFoundException(id));
     }
 
-    public UserEntity createUserAccountWithAccessLevel(UserEntity userEntity) throws AbstractAppException {
+    public UserEntity createUserAccountWithAccessLevel(UserEntity userEntity){
         userEntity.setPassword(HashGenerator.generateHash(userEntity.getPassword()));
         userEntity.setVerifyToken(RandomStringUtils.randomAlphabetic(64));
         userEntity.setVerifyTokenTimestamp(OffsetDateTime.now());

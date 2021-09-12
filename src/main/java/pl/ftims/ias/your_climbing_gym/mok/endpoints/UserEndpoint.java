@@ -52,7 +52,7 @@ public class UserEndpoint {
 
 
     @PostMapping("register")
-    public UserWithPersonalDataAccessLevelDTO addClient(@RequestBody @Valid RegistrationDTO user) throws AbstractAppException {
+    public UserWithPersonalDataAccessLevelDTO registerClient(@RequestBody @Valid RegistrationDTO user) throws AbstractAppException {
         return retry.execute(arg0 -> UserConverter.userWithPersonalDataAccessLevelDTOFromEntity(
                 userService.createUserAccountWithAccessLevel(UserConverter.createNewUserEntityFromDTO(user))));
 

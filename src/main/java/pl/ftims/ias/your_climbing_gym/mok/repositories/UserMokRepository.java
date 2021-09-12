@@ -10,7 +10,7 @@ import pl.ftims.ias.your_climbing_gym.entities.UserEntity;
 import java.util.Optional;
 
 @Repository
-@Transactional(isolation = Isolation.READ_COMMITTED, propagation = Propagation.MANDATORY)
+@Transactional(transactionManager = "mokTransactionManager", isolation = Isolation.READ_COMMITTED, propagation = Propagation.MANDATORY)
 public interface UserMokRepository extends JpaRepository<UserEntity, Long> {
 
     Optional<UserEntity> findById(Long id);
