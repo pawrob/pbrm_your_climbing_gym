@@ -9,10 +9,7 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
-import pl.ftims.ias.your_climbing_gym.dto.ChangePasswordDTO;
-import pl.ftims.ias.your_climbing_gym.dto.EmailDTO;
-import pl.ftims.ias.your_climbing_gym.dto.PasswordDTO;
-import pl.ftims.ias.your_climbing_gym.dto.PersonalDataDTO;
+import pl.ftims.ias.your_climbing_gym.dto.*;
 import pl.ftims.ias.your_climbing_gym.dto.user_dtos.*;
 import pl.ftims.ias.your_climbing_gym.exceptions.AbstractAppException;
 import pl.ftims.ias.your_climbing_gym.mok.services.UserService;
@@ -102,6 +99,16 @@ public class UserEndpoint {
     @GetMapping("change_email")
     public UserDTO requestChangeEmail(@NotNull @RequestParam("token") String token,@NotNull @RequestParam("email") String email) throws AbstractAppException {
         return retry.execute(arg0 -> UserConverter.userEntityToDTO(userService.changeEmail(token,email)));
+    }
+
+    @GetMapping("request_reset_password")
+    public UserDTO requestResetPassword(@RequestBody @NotNull @Valid EmailDTO emailDTO) throws AbstractAppException {
+        return retry.execute(arg0 -> UserConverter.userEntityToDTO(userService.requestResetPassword(emailDTO)));
+    }
+
+    @GetMapping("reset_password")
+    public UserDTO resetPassword(@NotNull @RequestParam("id") Long id,@NotNull @RequestParam("token") String token,@RequestBody @NotNull @Valid ResetPasswordDTO resetPasswordDTO) throws AbstractAppException {
+        return retry.execute(arg0 -> UserConverter.userEntityToDTO(userService.resetPassword(id,token,resetPasswordDTO)));
     }
 
 }

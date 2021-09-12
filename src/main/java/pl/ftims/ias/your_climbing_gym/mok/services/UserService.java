@@ -14,6 +14,7 @@ import org.thymeleaf.context.Context;
 import pl.ftims.ias.your_climbing_gym.dto.ChangePasswordDTO;
 import pl.ftims.ias.your_climbing_gym.dto.EmailDTO;
 import pl.ftims.ias.your_climbing_gym.dto.PasswordDTO;
+import pl.ftims.ias.your_climbing_gym.dto.ResetPasswordDTO;
 import pl.ftims.ias.your_climbing_gym.entities.AccessLevelEntity;
 import pl.ftims.ias.your_climbing_gym.entities.PersonalDataEntity;
 import pl.ftims.ias.your_climbing_gym.entities.UserEntity;
@@ -240,6 +241,54 @@ public class UserService {
         String body = templateEngine.process("template", context);
         emailSender.sendEmail("mrpawrob@gmail.com", "PerfectBeta - potwierdzenie zmiany adresu email", body);
 
+        return userMokRepository.save(userEntity);
+    }
+
+    public UserEntity requestResetPassword(EmailDTO emailDTO) throws AbstractAppException {
+
+        UserEntity userEntity = userMokRepository.findByEmail(emailDTO.getEmail())
+                .orElseThrow(() -> UserNotFoundAppException.createUserWithProvidedEmailNotFoundException(emailDTO.getEmail()));
+
+        userEntity.setPasswordResetToken(RandomStringUtils.randomAlphabetic(64));
+        userEntity.setPasswordResetTokenTimestamp(OffsetDateTime.now());
+
+        //mailing
+        Context context = new Context();
+        context.setVariable("header", "potwierdzenie zmiany hasła  w serwisie PerfectBeta");
+        context.setVariable("title", "Czas lepiej się poznac");
+        // todo set link to production host
+        context.setVariable("description", "https://localhost:8080/api/users/reset_password?id=" +userEntity.getId()
+                + "&token=" + URLEncoder.encode(userEntity.getPasswordResetToken(), StandardCharsets.UTF_8));
+        String body = templateEngine.process("template", context);
+        emailSender.sendEmail("mrpawrob@gmail.com", "PerfectBeta - potwierdzenie zmiany hasła", body);
+
+        return userMokRepository.save(userEntity);
+    }
+
+    public UserEntity resetPassword(Long id, String token, ResetPasswordDTO resetPasswordDTO) throws AbstractAppException {
+
+        UserEntity userEntity = userMokRepository.findById(id)
+                .orElseThrow(() -> UserNotFoundAppException.createUserWithProvidedIdNotFoundException(id));
+
+        if (userEntity.getPasswordResetToken() == null || userEntity.getPasswordResetTokenTimestamp()==null)
+            throw InvalidTokenException.createTokenExpiredException();
+        if (!userEntity.getPasswordResetToken().equals(token))
+            throw InvalidTokenException.createInvalidTokenException(userEntity.getLogin());
+        if (userEntity.getPasswordResetTokenTimestamp().until(OffsetDateTime.now(), ChronoUnit.MINUTES) > 20)
+            throw InvalidTokenException.createTokenExpiredException();
+
+
+        userEntity.setPasswordResetToken(null);
+        userEntity.setPasswordResetTokenTimestamp(null);
+
+        if (HashGenerator.checkPassword(resetPasswordDTO.getNewPassword(), userEntity.getPassword())) {
+            throw InvalidCredentialsException.createPasswordSameAsOldException();
+        }
+        if (!resetPasswordDTO.getNewPassword().equals(resetPasswordDTO.getNewPasswordConfirmation())) {
+            throw InvalidCredentialsException.createPasswordNotMatchException();
+        }
+
+        userEntity.setPassword(HashGenerator.generateHash(resetPasswordDTO.getNewPassword()));
         return userMokRepository.save(userEntity);
     }
 }

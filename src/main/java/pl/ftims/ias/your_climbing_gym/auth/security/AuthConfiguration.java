@@ -44,6 +44,9 @@ public class AuthConfiguration extends WebSecurityConfigurerAdapter {
     public void configure(HttpSecurity http) throws Exception {
         http.csrf().disable().authorizeRequests()
                 .antMatchers("/users/register").permitAll()
+                .antMatchers("/users/resetPassword").permitAll()
+                .antMatchers("/users/request_reset_password").permitAll()
+                .antMatchers("/users/reset_password").permitAll()
                 .antMatchers("/users/verify").permitAll()
                 .antMatchers("/auth/refreshtoken").hasAnyRole("CLIMBER", "MANAGER", "ADMINISTRATOR")
                 .antMatchers("/auth/authenticate").permitAll().anyRequest().authenticated()
