@@ -23,7 +23,9 @@ public class InvalidCredentialsException extends AbstractAppException {
     public static InvalidCredentialsException.PasswordSameAsOldException createPasswordSameAsOldException() {
         return new InvalidCredentialsException.PasswordSameAsOldException(PASSWORD_SAME_AS_OLD);
 
-    }    public static InvalidCredentialsException.PasswordNotMatchException createPasswordNotMatchException() {
+    }
+
+    public static InvalidCredentialsException.PasswordNotMatchException createPasswordNotMatchException() {
         return new InvalidCredentialsException.PasswordNotMatchException(PASSWORDS_NOT_MATCH);
     }
 
@@ -34,6 +36,7 @@ public class InvalidCredentialsException extends AbstractAppException {
             super(message);
         }
     }
+
     public static class PasswordNotMatchException extends InvalidCredentialsException {
 
         private PasswordNotMatchException(String message) {

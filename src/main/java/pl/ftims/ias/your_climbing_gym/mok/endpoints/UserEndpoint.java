@@ -47,7 +47,7 @@ public class UserEndpoint {
     }
 
     @PostMapping("register")
-    public UserWithPersonalDataAccessLevelDTO registerClient(@RequestBody @Valid RegistrationDTO user){
+    public UserWithPersonalDataAccessLevelDTO registerClient(@RequestBody @Valid RegistrationDTO user) {
         return retry.execute(arg0 -> UserConverter.userWithPersonalDataAccessLevelDTOFromEntity(
                 userService.createUserAccountWithAccessLevel(UserConverter.createNewUserEntityFromDTO(user))));
     }
@@ -90,15 +90,17 @@ public class UserEndpoint {
     public UserDTO activateUser(@PathVariable Long id) throws AbstractAppException {
         return retry.execute(arg0 -> UserConverter.userWithAccessLevelDTOFromEntity(userService.activateUser(id)));
     }
+
     @Secured({"ROLE_ADMINISTRATOR", "ROLE_MANAGER", "ROLE_CLIMBER"})
     @GetMapping("request_change_email")
     public UserDTO requestChangeEmail(@RequestBody @NotNull @Valid EmailDTO emailDTO) throws AbstractAppException {
         return retry.execute(arg0 -> UserConverter.userEntityToDTO(userService.requestChangeEmail(emailDTO)));
     }
+
     @Secured({"ROLE_ADMINISTRATOR", "ROLE_MANAGER", "ROLE_CLIMBER"})
     @GetMapping("change_email")
-    public UserDTO requestChangeEmail(@NotNull @RequestParam("token") String token,@NotNull @RequestParam("email") String email) throws AbstractAppException {
-        return retry.execute(arg0 -> UserConverter.userEntityToDTO(userService.changeEmail(token,email)));
+    public UserDTO requestChangeEmail(@NotNull @RequestParam("token") String token, @NotNull @RequestParam("email") String email) throws AbstractAppException {
+        return retry.execute(arg0 -> UserConverter.userEntityToDTO(userService.changeEmail(token, email)));
     }
 
     @GetMapping("request_reset_password")
@@ -107,8 +109,8 @@ public class UserEndpoint {
     }
 
     @GetMapping("reset_password")
-    public UserDTO resetPassword(@NotNull @RequestParam("id") Long id,@NotNull @RequestParam("token") String token,@RequestBody @NotNull @Valid ResetPasswordDTO resetPasswordDTO) throws AbstractAppException {
-        return retry.execute(arg0 -> UserConverter.userEntityToDTO(userService.resetPassword(id,token,resetPasswordDTO)));
+    public UserDTO resetPassword(@NotNull @RequestParam("id") Long id, @NotNull @RequestParam("token") String token, @RequestBody @NotNull @Valid ResetPasswordDTO resetPasswordDTO) throws AbstractAppException {
+        return retry.execute(arg0 -> UserConverter.userEntityToDTO(userService.resetPassword(id, token, resetPasswordDTO)));
     }
 
 }

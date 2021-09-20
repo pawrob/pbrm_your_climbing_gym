@@ -83,6 +83,47 @@ CREATE TABLE public.session_log
 );
 
 
+CREATE TABLE public.climbing_gym
+(
+    id       BIGSERIAL             NOT NULL,
+    gym_name CHARACTER VARYING(64) NOT NULL,
+    version  BIGINT                NOT NULL DEFAULT 1,
+    CONSTRAINT gym_name_key UNIQUE (gym_name),
+    CONSTRAINT climbing_gym_pkey PRIMARY KEY (id)
+
+);
+
+CREATE TABLE public.climbing_wall
+(
+    id              BIGSERIAL             NOT NULL,
+    climbing_gym_id BIGINT                NOT NULL,
+    boulder_name    CHARACTER VARYING(64) NOT NULL,
+    difficulty      CHARACTER VARYING(10),
+    version         BIGINT                NOT NULL DEFAULT 1,
+    CONSTRAINT boulder_name_key UNIQUE (boulder_name),
+    CONSTRAINT climbing_wall_pkey PRIMARY KEY (id),
+    CONSTRAINT climbing_gym_id_fkey FOREIGN KEY (climbing_gym_id)
+        REFERENCES public.climbing_gym (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+);
+
+CREATE TABLE public.climbing_wall_photo
+(
+    id                BIGSERIAL             NOT NULL,
+    climbing_wall_id  BIGINT                NOT NULL,
+    filename          CHARACTER VARYING(64) NOT NULL,
+    processing_status CHARACTER VARYING(64) NOT NULL,
+    version           BIGINT                NOT NULL DEFAULT 1,
+    CONSTRAINT filename_key UNIQUE (filename),
+    CONSTRAINT climbing_wall_photo_pkey PRIMARY KEY (id),
+    CONSTRAINT climbing_wall_id_fkey FOREIGN KEY (climbing_wall_id)
+        REFERENCES public.climbing_wall (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+);
+
+
 
 CREATE OR REPLACE VIEW public.authentication_view
 AS
@@ -116,6 +157,22 @@ CREATE
     INDEX access_level_user_id
     ON public.access_level_table USING btree
         (user_id ASC NULLS LAST)
+    TABLESPACE pg_default;
+
+DROP
+    INDEX IF EXISTS climbing_wall_gym_id;
+CREATE
+    INDEX climbing_wall_gym_id
+    ON public.climbing_wall USING btree
+        (climbing_gym_id ASC NULLS LAST)
+    TABLESPACE pg_default;
+
+DROP
+    INDEX IF EXISTS climbing_wall_photo_id;
+CREATE
+    INDEX climbing_wall_photo_id
+    ON public.climbing_wall_photo USING btree
+        (climbing_wall_id ASC NULLS LAST)
     TABLESPACE pg_default;
 
 

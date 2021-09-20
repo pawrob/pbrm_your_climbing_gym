@@ -26,7 +26,6 @@ import pl.ftims.ias.your_climbing_gym.utils.mailing.EmailSender;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
-import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
@@ -202,7 +201,7 @@ public class UserService {
         UserEntity userEntity = userMokRepository.findByLogin(auth.getName())
                 .orElseThrow(NotAllowedAppException::createNotAllowedException);
 
-        if (userEntity.getEmailResetToken() == null || userEntity.getEmailResetTokenTimestamp()==null)
+        if (userEntity.getEmailResetToken() == null || userEntity.getEmailResetTokenTimestamp() == null)
             throw InvalidTokenException.createTokenExpiredException();
         if (!userEntity.getEmailResetToken().equals(token))
             throw InvalidTokenException.createInvalidTokenException(userEntity.getLogin());
@@ -257,7 +256,7 @@ public class UserService {
         context.setVariable("header", "potwierdzenie zmiany hasła  w serwisie PerfectBeta");
         context.setVariable("title", "Czas lepiej się poznac");
         // todo set link to production host
-        context.setVariable("description", "https://localhost:8080/api/users/reset_password?id=" +userEntity.getId()
+        context.setVariable("description", "https://localhost:8080/api/users/reset_password?id=" + userEntity.getId()
                 + "&token=" + URLEncoder.encode(userEntity.getPasswordResetToken(), StandardCharsets.UTF_8));
         String body = templateEngine.process("template", context);
         emailSender.sendEmail("mrpawrob@gmail.com", "PerfectBeta - potwierdzenie zmiany hasła", body);
@@ -270,7 +269,7 @@ public class UserService {
         UserEntity userEntity = userMokRepository.findById(id)
                 .orElseThrow(() -> UserNotFoundAppException.createUserWithProvidedIdNotFoundException(id));
 
-        if (userEntity.getPasswordResetToken() == null || userEntity.getPasswordResetTokenTimestamp()==null)
+        if (userEntity.getPasswordResetToken() == null || userEntity.getPasswordResetTokenTimestamp() == null)
             throw InvalidTokenException.createTokenExpiredException();
         if (!userEntity.getPasswordResetToken().equals(token))
             throw InvalidTokenException.createInvalidTokenException(userEntity.getLogin());
