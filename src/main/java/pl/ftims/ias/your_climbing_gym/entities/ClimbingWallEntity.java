@@ -43,7 +43,7 @@ public class ClimbingWallEntity extends AbstractEntity implements Serializable {
         return climbingGym;
     }
 
-    @OneToMany(mappedBy = "climbingWall", cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "climbingWall", cascade = {CascadeType.ALL})
     public Collection<ClimbingWallPhotoEntity> getClimbingWallPhotos() {
         return climbingWallPhotos;
     }

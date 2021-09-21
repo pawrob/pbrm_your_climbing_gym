@@ -63,7 +63,7 @@ CREATE TABLE public.access_level_table
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
 );
-ALTER TABLE public."access_level_table"
+ALTER TABLE public.access_level_table
     OWNER TO perfectbeta_admin;
 
 CREATE TABLE public.session_log
@@ -78,7 +78,7 @@ CREATE TABLE public.session_log
                                              '^(([0-2]?[0-9]?[0-9])?\s?([.]||[:])){3,7}([0-2]?[0-9]?[0-9])?\s?$'),
     CONSTRAINT session_log_pkey PRIMARY KEY (id),
     CONSTRAINT session_log_user_id_fkey FOREIGN KEY (user_id)
-        REFERENCES public."user" (id) MATCH SIMPLE
+        REFERENCES public.user (id) MATCH SIMPLE
         ON UPDATE NO ACTION
 );
 
@@ -87,9 +87,14 @@ CREATE TABLE public.climbing_gym
 (
     id       BIGSERIAL             NOT NULL,
     gym_name CHARACTER VARYING(64) NOT NULL,
+    user_id  BIGINT                NOT NULL,
     version  BIGINT                NOT NULL DEFAULT 1,
     CONSTRAINT gym_name_key UNIQUE (gym_name),
-    CONSTRAINT climbing_gym_pkey PRIMARY KEY (id)
+    CONSTRAINT climbing_gym_pkey PRIMARY KEY (id),
+    CONSTRAINT climbing_gym_user_id_fkey FOREIGN KEY (user_id)
+        REFERENCES public.user (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
 
 );
 
@@ -142,6 +147,8 @@ WHERE u.is_active
 ALTER TABLE public."authentication_view"
     OWNER TO perfectbeta_admin;
 
+
+-- indexes
 DROP
     INDEX IF EXISTS personal_data_user_id;
 CREATE
@@ -150,12 +157,18 @@ CREATE
         (user_id ASC NULLS LAST)
     TABLESPACE pg_default;
 
-
 DROP
     INDEX IF EXISTS access_level_user_id;
 CREATE
     INDEX access_level_user_id
     ON public.access_level_table USING btree
+        (user_id ASC NULLS LAST)
+    TABLESPACE pg_default;
+DROP
+    INDEX IF EXISTS climbing_gym_user_id;
+CREATE
+    INDEX climbing_gym_user_id
+    ON public.climbing_gym USING btree
         (user_id ASC NULLS LAST)
     TABLESPACE pg_default;
 
@@ -181,6 +194,9 @@ GRANT USAGE ON SEQUENCE public.user_id_seq TO perfectbeta_mok;
 GRANT USAGE ON SEQUENCE public.access_level_table_id_seq TO perfectbeta_mok;
 GRANT USAGE ON SEQUENCE public.personal_data_id_seq TO perfectbeta_mok;
 GRANT USAGE ON SEQUENCE public.session_log_id_seq TO perfectbeta_auth;
+GRANT USAGE ON SEQUENCE public.climbing_gym_id_seq TO perfectbeta_mos;
+GRANT USAGE ON SEQUENCE public.climbing_wall_id_seq TO perfectbeta_mos;
+GRANT USAGE ON SEQUENCE public.climbing_wall_photo_id_seq TO perfectbeta_mos;
 
 -- auth
 GRANT SELECT ON TABLE public.authentication_view TO perfectbeta_auth;
@@ -199,3 +215,6 @@ GRANT INSERT, UPDATE, SELECT, DELETE ON TABLE public.personal_data TO perfectbet
 GRANT SELECT, UPDATE ON TABLE public.access_level_table TO perfectbeta_mos;
 GRANT SELECT ON TABLE public."user" TO perfectbeta_mos;
 GRANT SELECT ON TABLE public.personal_data TO perfectbeta_mos;
+GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE public.climbing_gym TO perfectbeta_mos;
+GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE public.climbing_wall TO perfectbeta_mos;
+GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE public.climbing_wall_photo TO perfectbeta_mos;

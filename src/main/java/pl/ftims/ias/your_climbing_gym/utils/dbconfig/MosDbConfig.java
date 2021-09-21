@@ -8,7 +8,6 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.orm.jpa.EntityManagerFactoryBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
@@ -27,14 +26,13 @@ import javax.sql.DataSource;
 )
 public class MosDbConfig {
 
-    @Primary
+
     @Bean
     @ConfigurationProperties("app.datasource.mos")
     public DataSourceProperties mosDataSourceProperties() {
         return new DataSourceProperties();
     }
 
-    @Primary
 
     @Bean
     @ConfigurationProperties("app.datasource.mos.configuration")
@@ -44,8 +42,6 @@ public class MosDbConfig {
     }
 
 
-    @Primary
-
     @Bean(name = "mosEntityManagerFactory")
     public LocalContainerEntityManagerFactoryBean mosEntityManagerFactory(EntityManagerFactoryBuilder builder) {
         return builder
@@ -54,8 +50,6 @@ public class MosDbConfig {
                 .build();
     }
 
-
-    @Primary
     @Bean
     public PlatformTransactionManager mosTransactionManager(
             final @Qualifier("mosEntityManagerFactory") LocalContainerEntityManagerFactoryBean mosEntityManagerFactory) {

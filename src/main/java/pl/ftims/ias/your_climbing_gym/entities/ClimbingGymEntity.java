@@ -21,6 +21,13 @@ public class ClimbingGymEntity extends AbstractEntity implements Serializable {
 
     private String gymName;
     private Collection<ClimbingWallEntity> climbingWalls = new ArrayList<>();
+    private UserEntity owner;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
+    public UserEntity getOwner() {
+        return owner;
+    }
 
     @Basic
     @Column(name = "gym_name")
@@ -28,8 +35,13 @@ public class ClimbingGymEntity extends AbstractEntity implements Serializable {
         return gymName;
     }
 
-    @OneToMany(mappedBy = "climbingGym", cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "climbingGym", cascade = {CascadeType.ALL})
     public Collection<ClimbingWallEntity> getClimbingWalls() {
         return climbingWalls;
+    }
+
+    public ClimbingGymEntity(String gymName, UserEntity owner) {
+        this.gymName = gymName;
+        this.owner = owner;
     }
 }
