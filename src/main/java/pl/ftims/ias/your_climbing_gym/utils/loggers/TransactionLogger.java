@@ -16,6 +16,7 @@ public class TransactionLogger {
     }
 
     public TransactionLogger() {
+        //todo generate random for every tx
         prefix = UUID.randomUUID().toString();
         logger = LogManager.getLogger(this.getClass());
     }

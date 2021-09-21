@@ -47,4 +47,10 @@ public class ClimbingWallEntity extends AbstractEntity implements Serializable {
     public Collection<ClimbingWallPhotoEntity> getClimbingWallPhotos() {
         return climbingWallPhotos;
     }
+
+    public ClimbingWallEntity(String boulderName, String difficulty, ClimbingGymEntity climbingGym) {
+        this.boulderName = boulderName;
+        this.difficulty = difficulty;
+        this.climbingGym = climbingGym;
+    }
 }
