@@ -15,6 +15,7 @@ import pl.ftims.ias.your_climbing_gym.mos.services.ClimbingGymService;
 import pl.ftims.ias.your_climbing_gym.utils.converters.ClimbingGymConverter;
 
 import javax.validation.Valid;
+import java.util.List;
 
 
 @RestController
@@ -31,7 +32,21 @@ public class ClimbingGymEndpoint {
         this.climbingGymService = climbingGymService;
         this.retry = retry;
     }
+    @GetMapping
+    public List<ClimbingGymDTO> listAllVerified() throws AbstractAppException {
+        return retry.execute(arg0 -> ClimbingGymConverter.createGymListDTOFromEntity(climbingGymService.listVerifiedGyms()));
+    }
 
+    @Secured("ROLE_MANAGER")
+    @GetMapping("owned_gyms")
+    public List<ClimbingGymDTO> listOwnedGyms() throws AbstractAppException {
+        return retry.execute(arg0 -> ClimbingGymConverter.createGymListDTOFromEntity(climbingGymService.listOwnedGyms()));
+    }
+    @Secured("ROLE_ADMINISTRATOR")
+    @GetMapping("all")
+    public List<ClimbingGymDTO> listAllGyms() throws AbstractAppException {
+        return retry.execute(arg0 -> ClimbingGymConverter.createGymListDTOFromEntity(climbingGymService.listAllGyms()));
+    }
 
     @Secured("ROLE_MANAGER")
     @PostMapping("register/{gymName}")

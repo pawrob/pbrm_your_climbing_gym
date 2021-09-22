@@ -10,6 +10,7 @@ import javax.ejb.ApplicationException;
 public class GymNotFoundException extends AbstractAppException {
 
     public static final String GYM_WITH_ID_NOT_EXISTS = "Gym with identifier: %s does not exist";
+    public static final String GYM_WITH_OWNER_NOT_EXISTS = "Gym with owner: %s does not exist";
 
     private GymNotFoundException(String message) {
         super(message);
@@ -17,5 +18,8 @@ public class GymNotFoundException extends AbstractAppException {
 
     public static GymNotFoundException createGymWithProvidedIdNotFoundException(long id) {
         return new GymNotFoundException(String.format(GYM_WITH_ID_NOT_EXISTS, id));
+    }
+    public static GymNotFoundException createGymWithProvidedOwnerNotFoundException(String ownerLogin) {
+        return new GymNotFoundException(String.format(GYM_WITH_OWNER_NOT_EXISTS, ownerLogin));
     }
 }
