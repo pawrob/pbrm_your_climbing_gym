@@ -32,9 +32,13 @@ public class ClimbingGymEndpoint {
         this.climbingGymService = climbingGymService;
         this.retry = retry;
     }
-    @GetMapping
+    @GetMapping("verified/all")
     public List<ClimbingGymDTO> listAllVerified() throws AbstractAppException {
         return retry.execute(arg0 -> ClimbingGymConverter.createGymListDTOFromEntity(climbingGymService.listVerifiedGyms()));
+    }
+    @GetMapping("verified/{id}")
+    public ClimbingGymWithDetailsDTO findVerifiedById(@PathVariable Long id) throws AbstractAppException {
+        return retry.execute(arg0 -> ClimbingGymConverter.climbingGymWithDetailsEntityToDTO(climbingGymService.findVerifiedById(id)));
     }
 
     @Secured("ROLE_MANAGER")
@@ -46,6 +50,11 @@ public class ClimbingGymEndpoint {
     @GetMapping("all")
     public List<ClimbingGymDTO> listAllGyms() throws AbstractAppException {
         return retry.execute(arg0 -> ClimbingGymConverter.createGymListDTOFromEntity(climbingGymService.listAllGyms()));
+    }
+    @Secured("ROLE_ADMINISTRATOR")
+    @GetMapping("{id}")
+    public ClimbingGymWithDetailsDTO findById(@PathVariable Long id) throws AbstractAppException {
+        return retry.execute(arg0 -> ClimbingGymConverter.climbingGymWithDetailsEntityToDTO(climbingGymService.findById(id)));
     }
 
     @Secured("ROLE_MANAGER")

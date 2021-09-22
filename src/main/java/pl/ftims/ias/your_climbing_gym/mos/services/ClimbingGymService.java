@@ -19,7 +19,6 @@ import pl.ftims.ias.your_climbing_gym.exceptions.UserNotFoundAppException;
 import pl.ftims.ias.your_climbing_gym.mos.repositories.ClimbingGymRepository;
 import pl.ftims.ias.your_climbing_gym.mos.repositories.UserMosRepository;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -40,12 +39,20 @@ public class ClimbingGymService {
     public List<ClimbingGymEntity> listOwnedGyms() throws AbstractAppException {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         UserEntity owner = userMosRepository.findByLogin(auth.getName()).orElseThrow(() -> UserNotFoundAppException.createUserWithProvidedLoginNotFoundException(auth.getName()));
-        return  climbingGymRepository.findByOwner(owner).orElseThrow(() -> GymNotFoundException.createGymWithProvidedOwnerNotFoundException(owner.getLogin()));
+        return climbingGymRepository.findByOwner(owner).orElseThrow(() -> GymNotFoundException.createGymWithProvidedOwnerNotFoundException(owner.getLogin()));
     }
+
     public List<ClimbingGymEntity> listAllGyms() {
         return climbingGymRepository.findAll();
     }
 
+    public ClimbingGymEntity findById(Long id) throws AbstractAppException {
+        return climbingGymRepository.findById(id).orElseThrow(() -> GymNotFoundException.createGymWithProvidedIdNotFoundException(id));
+    }
+
+    public ClimbingGymEntity findVerifiedById(Long id) throws AbstractAppException {
+        return climbingGymRepository.findVerifiedById(id).orElseThrow(() -> GymNotFoundException.createGymWithProvidedIdNotFoundException(id));
+    }
 
     public List<ClimbingGymEntity> listVerifiedGyms() {
         return climbingGymRepository.findAllVerified();

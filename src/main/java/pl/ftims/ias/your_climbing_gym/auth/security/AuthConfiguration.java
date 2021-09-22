@@ -45,7 +45,7 @@ public class AuthConfiguration extends WebSecurityConfigurerAdapter {
         http.csrf().disable().authorizeRequests()
                 .antMatchers("/users/register").permitAll()
                 .antMatchers("/image/**").permitAll()
-                .antMatchers("/gym").permitAll()
+                .antMatchers("/gym/verified/**").permitAll()
                 .antMatchers("/users/resetPassword").permitAll()
                 .antMatchers("/users/request_reset_password").permitAll()
                 .antMatchers("/users/reset_password").permitAll()
