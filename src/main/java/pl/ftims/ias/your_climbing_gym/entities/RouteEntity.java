@@ -16,19 +16,19 @@ import java.util.Collection;
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "climbing_wall", schema = "public")
-public class ClimbingWallEntity extends AbstractEntity implements Serializable {
+@Table(name = "route", schema = "public")
+public class RouteEntity extends AbstractEntity implements Serializable {
 
-    private String boulderName;
+    private String routeName;
     private String difficulty;
     private ClimbingGymEntity climbingGym;
-    private Collection<ClimbingWallPhotoEntity> climbingWallPhotos = new ArrayList<>();
+    private Collection<RoutePhotoEntity> routePhotos = new ArrayList<>();
 
 
     @Basic
-    @Column(name = "boulder_name")
-    public String getBoulderName() {
-        return boulderName;
+    @Column(name = "route_name")
+    public String getRouteName() {
+        return routeName;
     }
 
     @Basic
@@ -43,13 +43,13 @@ public class ClimbingWallEntity extends AbstractEntity implements Serializable {
         return climbingGym;
     }
 
-    @OneToMany(mappedBy = "climbingWall", cascade = {CascadeType.ALL})
-    public Collection<ClimbingWallPhotoEntity> getClimbingWallPhotos() {
-        return climbingWallPhotos;
+    @OneToMany(mappedBy = "route", cascade = {CascadeType.ALL})
+    public Collection<RoutePhotoEntity> getRoutePhotos() {
+        return routePhotos;
     }
 
-    public ClimbingWallEntity(String boulderName, String difficulty, ClimbingGymEntity climbingGym) {
-        this.boulderName = boulderName;
+    public RouteEntity(String routeName, String difficulty, ClimbingGymEntity climbingGym) {
+        this.routeName = routeName;
         this.difficulty = difficulty;
         this.climbingGym = climbingGym;
     }

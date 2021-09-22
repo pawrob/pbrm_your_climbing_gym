@@ -1,7 +1,8 @@
-package pl.ftims.ias.your_climbing_gym.dto;
+package pl.ftims.ias.your_climbing_gym.dto.routes_dtos;
 
 
 import lombok.*;
+import pl.ftims.ias.your_climbing_gym.dto.AbstractDTO;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -11,11 +12,11 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class ClimbingWallDTO extends AbstractDTO {
+public class RouteDTO extends AbstractDTO {
 
     @NotBlank
     @NotNull
-    private String boulderName;
+    private String routeName;
     @NotBlank
     @NotNull
     private String difficulty;
@@ -23,9 +24,9 @@ public class ClimbingWallDTO extends AbstractDTO {
     @NotNull
     private Long climbingGymId;
 
-    public ClimbingWallDTO(long id, Long version, String boulderName, String difficulty, Long climbingGymId) {
+    public RouteDTO(long id, Long version, String routeName, String difficulty, Long climbingGymId) {
         super(id, version);
-        this.boulderName = boulderName;
+        this.routeName = routeName;
         this.difficulty = difficulty;
         this.climbingGymId = climbingGymId;
     }

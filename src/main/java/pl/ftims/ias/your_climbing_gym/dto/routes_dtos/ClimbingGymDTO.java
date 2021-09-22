@@ -1,6 +1,8 @@
-package pl.ftims.ias.your_climbing_gym.dto;
+package pl.ftims.ias.your_climbing_gym.dto.routes_dtos;
 
 import lombok.*;
+import pl.ftims.ias.your_climbing_gym.dto.AbstractDTO;
+import pl.ftims.ias.your_climbing_gym.entities.enums.GymStatusEnum;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -18,10 +20,14 @@ public class ClimbingGymDTO extends AbstractDTO {
     @NotBlank
     @NotNull
     public String gymName;
+    @NotBlank
+    @NotNull
+    public GymStatusEnum status;
 
-    public ClimbingGymDTO(long id, Long version, Long ownerId, String gymName) {
+    public ClimbingGymDTO(long id, Long version, Long ownerId, String gymName, GymStatusEnum statusEnum) {
         super(id, version);
         this.ownerId = ownerId;
         this.gymName = gymName;
+        this.status = statusEnum;
     }
 }

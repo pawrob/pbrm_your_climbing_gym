@@ -87,6 +87,7 @@ CREATE TABLE public.climbing_gym
 (
     id       BIGSERIAL             NOT NULL,
     gym_name CHARACTER VARYING(64) NOT NULL,
+    status   CHARACTER VARYING(64) NOT NULL DEFAULT 'UNVERIFIED',
     user_id  BIGINT                NOT NULL,
     version  BIGINT                NOT NULL DEFAULT 1,
     CONSTRAINT gym_name_key UNIQUE (gym_name),
@@ -98,32 +99,53 @@ CREATE TABLE public.climbing_gym
 
 );
 
-CREATE TABLE public.climbing_wall
+CREATE TABLE public.climbing_gym_details
+(
+    id              BIGSERIAL NOT NULL,
+    version         BIGINT    NOT NULL DEFAULT 1,
+    climbing_gym_id BIGINT    NOT NULL,
+    country         CHARACTER VARYING(64),
+    city            CHARACTER VARYING(64),
+    street          CHARACTER VARYING(64),
+    number          CHARACTER VARYING(64),
+    description     CHARACTER VARYING(2048),
+
+
+    CONSTRAINT climbing_gym_details_pkey PRIMARY KEY (id),
+    CONSTRAINT climbing_gym_id_fkey FOREIGN KEY (climbing_gym_id)
+        REFERENCES public.climbing_gym (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+
+);
+
+
+CREATE TABLE public.route
 (
     id              BIGSERIAL             NOT NULL,
     climbing_gym_id BIGINT                NOT NULL,
-    boulder_name    CHARACTER VARYING(64) NOT NULL,
+    route_name      CHARACTER VARYING(64) NOT NULL,
     difficulty      CHARACTER VARYING(10),
     version         BIGINT                NOT NULL DEFAULT 1,
-    CONSTRAINT boulder_name_key UNIQUE (boulder_name),
-    CONSTRAINT climbing_wall_pkey PRIMARY KEY (id),
+    CONSTRAINT route_name_key UNIQUE (route_name),
+    CONSTRAINT route_pkey PRIMARY KEY (id),
     CONSTRAINT climbing_gym_id_fkey FOREIGN KEY (climbing_gym_id)
         REFERENCES public.climbing_gym (id) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
 );
 
-CREATE TABLE public.climbing_wall_photo
+CREATE TABLE public.route_photo
 (
     id                BIGSERIAL             NOT NULL,
-    climbing_wall_id  BIGINT                NOT NULL,
+    route_id          BIGINT                NOT NULL,
     filename          CHARACTER VARYING(64) NOT NULL,
     processing_status CHARACTER VARYING(64) NOT NULL,
     version           BIGINT                NOT NULL DEFAULT 1,
     CONSTRAINT filename_key UNIQUE (filename),
-    CONSTRAINT climbing_wall_photo_pkey PRIMARY KEY (id),
-    CONSTRAINT climbing_wall_id_fkey FOREIGN KEY (climbing_wall_id)
-        REFERENCES public.climbing_wall (id) MATCH SIMPLE
+    CONSTRAINT route_photo_pkey PRIMARY KEY (id),
+    CONSTRAINT route_id_fkey FOREIGN KEY (route_id)
+        REFERENCES public.route (id) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
 );
@@ -173,19 +195,27 @@ CREATE
     TABLESPACE pg_default;
 
 DROP
-    INDEX IF EXISTS climbing_wall_gym_id;
+    INDEX IF EXISTS climbing_gym_details_gym_id;
 CREATE
-    INDEX climbing_wall_gym_id
-    ON public.climbing_wall USING btree
+    INDEX climbing_gym_details_gym_id
+    ON public.climbing_gym_details USING btree
         (climbing_gym_id ASC NULLS LAST)
     TABLESPACE pg_default;
 
 DROP
-    INDEX IF EXISTS climbing_wall_photo_id;
+    INDEX IF EXISTS route_gym_id;
 CREATE
-    INDEX climbing_wall_photo_id
-    ON public.climbing_wall_photo USING btree
-        (climbing_wall_id ASC NULLS LAST)
+    INDEX route_gym_id
+    ON public.route USING btree
+        (climbing_gym_id ASC NULLS LAST)
+    TABLESPACE pg_default;
+
+DROP
+    INDEX IF EXISTS route_photo_id;
+CREATE
+    INDEX route_photo_id
+    ON public.route_photo USING btree
+        (route_id ASC NULLS LAST)
     TABLESPACE pg_default;
 
 
@@ -195,8 +225,9 @@ GRANT USAGE ON SEQUENCE public.access_level_table_id_seq TO perfectbeta_mok;
 GRANT USAGE ON SEQUENCE public.personal_data_id_seq TO perfectbeta_mok;
 GRANT USAGE ON SEQUENCE public.session_log_id_seq TO perfectbeta_auth;
 GRANT USAGE ON SEQUENCE public.climbing_gym_id_seq TO perfectbeta_mos;
-GRANT USAGE ON SEQUENCE public.climbing_wall_id_seq TO perfectbeta_mos;
-GRANT USAGE ON SEQUENCE public.climbing_wall_photo_id_seq TO perfectbeta_mos;
+GRANT USAGE ON SEQUENCE public.route_id_seq TO perfectbeta_mos;
+GRANT USAGE ON SEQUENCE public.route_photo_id_seq TO perfectbeta_mos;
+GRANT USAGE ON SEQUENCE public.climbing_gym_details_id_seq TO perfectbeta_mos;
 
 -- auth
 GRANT SELECT ON TABLE public.authentication_view TO perfectbeta_auth;
@@ -216,5 +247,6 @@ GRANT SELECT, UPDATE ON TABLE public.access_level_table TO perfectbeta_mos;
 GRANT SELECT ON TABLE public."user" TO perfectbeta_mos;
 GRANT SELECT ON TABLE public.personal_data TO perfectbeta_mos;
 GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE public.climbing_gym TO perfectbeta_mos;
-GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE public.climbing_wall TO perfectbeta_mos;
-GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE public.climbing_wall_photo TO perfectbeta_mos;
+GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE public.route TO perfectbeta_mos;
+GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE public.route_photo TO perfectbeta_mos;
+GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE public.climbing_gym_details TO perfectbeta_mos;

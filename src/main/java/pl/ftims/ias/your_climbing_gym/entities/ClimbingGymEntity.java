@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import pl.ftims.ias.your_climbing_gym.entities.enums.GymStatusEnum;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -20,8 +21,10 @@ import java.util.Collection;
 public class ClimbingGymEntity extends AbstractEntity implements Serializable {
 
     private String gymName;
-    private Collection<ClimbingWallEntity> climbingWalls = new ArrayList<>();
+    private GymStatusEnum status;
+    private Collection<RouteEntity> routes = new ArrayList<>();
     private UserEntity owner;
+    private GymDetailsEntity gymDetails;
 
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
@@ -35,13 +38,28 @@ public class ClimbingGymEntity extends AbstractEntity implements Serializable {
         return gymName;
     }
 
+    @Basic
+    @Column(name = "status")
+    @Enumerated(EnumType.STRING)
+    public GymStatusEnum getStatus() {
+        return status;
+    }
+
     @OneToMany(mappedBy = "climbingGym", cascade = {CascadeType.ALL})
-    public Collection<ClimbingWallEntity> getClimbingWalls() {
-        return climbingWalls;
+    public Collection<RouteEntity> getRoutes() {
+        return routes;
+    }
+
+    @OneToOne(mappedBy = "gym", cascade = {CascadeType.ALL})
+    public GymDetailsEntity getGymDetails() {
+        return gymDetails;
     }
 
     public ClimbingGymEntity(String gymName, UserEntity owner) {
         this.gymName = gymName;
         this.owner = owner;
+        this.status = GymStatusEnum.UNVERIFIED;
     }
+
+
 }

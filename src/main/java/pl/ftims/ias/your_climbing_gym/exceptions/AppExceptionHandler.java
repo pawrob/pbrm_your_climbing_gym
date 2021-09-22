@@ -73,6 +73,7 @@ public class AppExceptionHandler {
         ExceptionDTO exceptionDTO = new ExceptionDTO(e.getMessage(), HttpStatus.FORBIDDEN, ZonedDateTime.now(), "NOT_ALLOWED");
         return new ResponseEntity<>(exceptionDTO, HttpStatus.FORBIDDEN);
     }
+
     @ExceptionHandler(value = GymNotFoundException.class)
     public ResponseEntity<Object> handleGymNotFoundException(GymNotFoundException e) {
         ExceptionDTO exceptionDTO = new ExceptionDTO(e.getMessage(), HttpStatus.NOT_FOUND, ZonedDateTime.now(), "GYM_NOT_FOUND");

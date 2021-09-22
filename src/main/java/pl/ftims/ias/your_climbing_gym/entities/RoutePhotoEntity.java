@@ -13,11 +13,11 @@ import java.io.Serializable;
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "climbing_wall_photo", schema = "public")
-public class ClimbingWallPhotoEntity extends AbstractEntity implements Serializable {
+@Table(name = "route_photo", schema = "public")
+public class RoutePhotoEntity extends AbstractEntity implements Serializable {
 
 
-    private ClimbingWallEntity climbingWall;
+    private RouteEntity route;
     private String filename;
     private String processingStatus;
 
@@ -34,9 +34,9 @@ public class ClimbingWallPhotoEntity extends AbstractEntity implements Serializa
     }
 
     @ManyToOne
-    @JoinColumn(name = "climbing_wall_id", referencedColumnName = "id", nullable = false)
-    public ClimbingWallEntity getClimbingWall() {
-        return climbingWall;
+    @JoinColumn(name = "route_id", referencedColumnName = "id", nullable = false)
+    public RouteEntity getRoute() {
+        return route;
     }
 
 }
