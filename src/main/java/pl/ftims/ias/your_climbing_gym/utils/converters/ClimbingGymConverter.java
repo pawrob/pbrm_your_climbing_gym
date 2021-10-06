@@ -1,12 +1,9 @@
 package pl.ftims.ias.your_climbing_gym.utils.converters;
 
-import pl.ftims.ias.your_climbing_gym.dto.routes_dtos.ClimbingGymDTO;
-import pl.ftims.ias.your_climbing_gym.dto.routes_dtos.ClimbingGymWithDetailsDTO;
-import pl.ftims.ias.your_climbing_gym.dto.routes_dtos.GymDetailsDTO;
-import pl.ftims.ias.your_climbing_gym.dto.user_dtos.UserDTO;
+import pl.ftims.ias.your_climbing_gym.dto.routes_dtos.*;
 import pl.ftims.ias.your_climbing_gym.entities.ClimbingGymEntity;
 import pl.ftims.ias.your_climbing_gym.entities.GymDetailsEntity;
-import pl.ftims.ias.your_climbing_gym.entities.UserEntity;
+import pl.ftims.ias.your_climbing_gym.entities.GymMaintainerEntity;
 
 import java.util.Collection;
 import java.util.List;
@@ -31,6 +28,21 @@ public class ClimbingGymConverter {
         return null == gymEntities ? null : gymEntities.stream()
                 .filter(Objects::nonNull)
                 .map(ClimbingGymConverter::climbingGymEntityToDTO)
+                .collect(Collectors.toList());
+    }
+
+    public static ClimbingGymWithMaintainersDTO climbingGymEntityWithMaintainersEntityToDTO(ClimbingGymEntity entity) {
+        return new ClimbingGymWithMaintainersDTO(entity.getId(), entity.getVersion(), entity.getOwner().getId(), entity.getGymName(), entity.getStatus(), gymMaintainerDTOListFromEntities(entity.getMaintainers()));
+    }
+
+    public static GymMaintainerDTO gymMaintainerDTOFromEntity(GymMaintainerEntity entity) {
+        return new GymMaintainerDTO(entity.getId(), entity.getVersion(), entity.getUser().getId(), entity.getMaintainedGym().getId(), entity.getActive());
+    }
+
+    public static List<GymMaintainerDTO> gymMaintainerDTOListFromEntities(Collection<GymMaintainerEntity> entities) {
+        return null == entities ? null : entities.stream()
+                .filter(Objects::nonNull)
+                .map(ClimbingGymConverter::gymMaintainerDTOFromEntity)
                 .collect(Collectors.toList());
     }
 }

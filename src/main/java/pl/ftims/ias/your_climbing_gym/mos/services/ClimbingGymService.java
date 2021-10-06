@@ -8,9 +8,7 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import pl.ftims.ias.your_climbing_gym.dto.routes_dtos.GymDetailsDTO;
-import pl.ftims.ias.your_climbing_gym.entities.ClimbingGymEntity;
-import pl.ftims.ias.your_climbing_gym.entities.GymDetailsEntity;
-import pl.ftims.ias.your_climbing_gym.entities.UserEntity;
+import pl.ftims.ias.your_climbing_gym.entities.*;
 import pl.ftims.ias.your_climbing_gym.entities.enums.GymStatusEnum;
 import pl.ftims.ias.your_climbing_gym.exceptions.AbstractAppException;
 import pl.ftims.ias.your_climbing_gym.exceptions.GymNotFoundException;
@@ -19,6 +17,7 @@ import pl.ftims.ias.your_climbing_gym.exceptions.UserNotFoundAppException;
 import pl.ftims.ias.your_climbing_gym.mos.repositories.ClimbingGymRepository;
 import pl.ftims.ias.your_climbing_gym.mos.repositories.UserMosRepository;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -102,4 +101,29 @@ public class ClimbingGymService {
     }
 
 
+    public ClimbingGymEntity addMaintainer(Long gymId, Long userId) throws AbstractAppException {
+        ClimbingGymEntity gym = climbingGymRepository.findById(gymId)
+                .orElseThrow(() -> GymNotFoundException.createGymWithProvidedIdNotFoundException(gymId));
+
+        if (!gym.getOwner().getLogin().equals(SecurityContextHolder.getContext().getAuthentication().getName())) {
+            throw NotAllowedAppException.createNotAllowedException();
+        }
+        UserEntity maintainer = userMosRepository.findById(userId)
+                .orElseThrow(() -> UserNotFoundAppException.createUserWithProvidedIdNotFoundException(userId));
+        if (!checkIfManager(maintainer)) {
+            throw NotAllowedAppException.createNotAllowedException();
+        }
+        gym.getMaintainers().add(new GymMaintainerEntity(gym, maintainer, true));
+        return climbingGymRepository.save(gym);
+    }
+
+    private boolean checkIfManager(UserEntity user) {
+        Collection<AccessLevelEntity> accessLevels = user.getAccessLevels();
+        for (AccessLevelEntity accessLevel : accessLevels) {
+            if (accessLevel.getAccessLevel().equals("MANAGER")) {
+                return Boolean.TRUE;
+            }
+        }
+        return Boolean.FALSE;
+    }
 }

@@ -21,8 +21,7 @@ CREATE TABLE public."user"
     CONSTRAINT user_password_bcrypt_form CHECK ( password ~*
                                                  '^[$]2[abxy][$](?:0[4-9]|[12][0-9]|3[01])[$][./0-9a-zA-Z]{53}$')
 );
-ALTER TABLE public."user"
-    OWNER TO perfectbeta_admin;
+
 
 
 CREATE TABLE public.personal_data
@@ -44,8 +43,7 @@ CREATE TABLE public.personal_data
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
 );
-ALTER TABLE public."personal_data"
-    OWNER TO perfectbeta_admin;
+
 
 CREATE TABLE public.access_level_table
 (
@@ -63,8 +61,6 @@ CREATE TABLE public.access_level_table
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
 );
-ALTER TABLE public.access_level_table
-    OWNER TO perfectbeta_admin;
 
 CREATE TABLE public.session_log
 (
@@ -119,6 +115,24 @@ CREATE TABLE public.climbing_gym_details
 
 );
 
+CREATE TABLE public.gym_maintainer
+(
+    id              BIGSERIAL NOT NULL,
+    climbing_gym_id BIGINT    NOT NULL,
+    user_id         BIGINT    NOT NULL,
+    is_active       BOOLEAN   NOT NULL DEFAULT TRUE,
+    version         BIGINT    NOT NULL DEFAULT 1,
+    CONSTRAINT gym_maintainer_pkey PRIMARY KEY (id),
+    CONSTRAINT gym_maintainer_user_id_fkey FOREIGN KEY (user_id)
+        REFERENCES public.user (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+    CONSTRAINT gym_maintainer_gym_id_fkey FOREIGN KEY (climbing_gym_id)
+        REFERENCES public.climbing_gym (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+);
+
 
 CREATE TABLE public.route
 (
@@ -166,9 +180,6 @@ WHERE u.is_active
   AND u.verify_token IS NULL
   AND al.is_active;
 
-ALTER TABLE public."authentication_view"
-    OWNER TO perfectbeta_admin;
-
 
 -- indexes
 DROP
@@ -193,6 +204,22 @@ CREATE
     ON public.climbing_gym USING btree
         (user_id ASC NULLS LAST)
     TABLESPACE pg_default;
+
+DROP
+    INDEX IF EXISTS gym_maintainer_user_id;
+CREATE
+    INDEX gym_maintainer_user_id
+    ON public.gym_maintainer USING btree
+        (user_id ASC NULLS LAST)
+    TABLESPACE pg_default;
+DROP
+    INDEX IF EXISTS gym_maintainer_gym_id;
+CREATE
+    INDEX gym_maintainer_gym_id
+    ON public.gym_maintainer USING btree
+        (climbing_gym_id ASC NULLS LAST)
+    TABLESPACE pg_default;
+
 
 DROP
     INDEX IF EXISTS climbing_gym_details_gym_id;
@@ -228,6 +255,7 @@ GRANT USAGE ON SEQUENCE public.climbing_gym_id_seq TO perfectbeta_mos;
 GRANT USAGE ON SEQUENCE public.route_id_seq TO perfectbeta_mos;
 GRANT USAGE ON SEQUENCE public.route_photo_id_seq TO perfectbeta_mos;
 GRANT USAGE ON SEQUENCE public.climbing_gym_details_id_seq TO perfectbeta_mos;
+GRANT USAGE ON SEQUENCE public.gym_maintainer_id_seq TO perfectbeta_mos;
 
 -- auth
 GRANT SELECT ON TABLE public.authentication_view TO perfectbeta_auth;
@@ -250,3 +278,4 @@ GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE public.climbing_gym TO perfectbeta
 GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE public.route TO perfectbeta_mos;
 GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE public.route_photo TO perfectbeta_mos;
 GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE public.climbing_gym_details TO perfectbeta_mos;
+GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE public.gym_maintainer TO perfectbeta_mos;

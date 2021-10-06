@@ -18,10 +18,12 @@ import java.util.Optional;
 public interface ClimbingGymRepository extends JpaRepository<ClimbingGymEntity, Long> {
 
     Optional<ClimbingGymEntity> findById(Long id);
+
     Optional<List<ClimbingGymEntity>> findByOwner(UserEntity owner);
 
     @Query("SELECT g FROM ClimbingGymEntity g where g.status='VERIFIED'")
     List<ClimbingGymEntity> findAllVerified();
+
     @Query("SELECT g FROM ClimbingGymEntity g where g.status='VERIFIED' and g.id=:id")
-    Optional<ClimbingGymEntity>  findVerifiedById(@Param("id") Long id);
+    Optional<ClimbingGymEntity> findVerifiedById(@Param("id") Long id);
 }

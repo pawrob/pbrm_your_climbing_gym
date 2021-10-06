@@ -5,12 +5,14 @@ import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import pl.ftims.ias.your_climbing_gym.entities.enums.GymStatusEnum;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.List;
 
 @Entity
 @Setter
@@ -22,7 +24,8 @@ public class ClimbingGymEntity extends AbstractEntity implements Serializable {
 
     private String gymName;
     private GymStatusEnum status;
-    private Collection<RouteEntity> routes = new ArrayList<>();
+    private List<RouteEntity> routes = new ArrayList<>();
+    private List<GymMaintainerEntity> maintainers = new ArrayList<>();
     private UserEntity owner;
     private GymDetailsEntity gymDetails;
 
@@ -46,8 +49,14 @@ public class ClimbingGymEntity extends AbstractEntity implements Serializable {
     }
 
     @OneToMany(mappedBy = "climbingGym", cascade = {CascadeType.ALL})
-    public Collection<RouteEntity> getRoutes() {
+    public List<RouteEntity> getRoutes() {
         return routes;
+    }
+
+    @OneToMany(mappedBy = "maintainedGym", cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
+    @Fetch(value = FetchMode.SUBSELECT)
+    public List<GymMaintainerEntity> getMaintainers() {
+        return maintainers;
     }
 
     @OneToOne(mappedBy = "gym", cascade = {CascadeType.ALL})

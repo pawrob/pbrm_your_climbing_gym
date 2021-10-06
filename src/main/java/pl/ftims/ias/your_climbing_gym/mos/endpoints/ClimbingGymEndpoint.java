@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import pl.ftims.ias.your_climbing_gym.dto.routes_dtos.ClimbingGymDTO;
 import pl.ftims.ias.your_climbing_gym.dto.routes_dtos.ClimbingGymWithDetailsDTO;
+import pl.ftims.ias.your_climbing_gym.dto.routes_dtos.ClimbingGymWithMaintainersDTO;
 import pl.ftims.ias.your_climbing_gym.dto.routes_dtos.GymDetailsDTO;
 import pl.ftims.ias.your_climbing_gym.exceptions.AbstractAppException;
 import pl.ftims.ias.your_climbing_gym.mos.services.ClimbingGymService;
@@ -32,10 +33,12 @@ public class ClimbingGymEndpoint {
         this.climbingGymService = climbingGymService;
         this.retry = retry;
     }
+
     @GetMapping("verified/all")
     public List<ClimbingGymDTO> listAllVerified() throws AbstractAppException {
         return retry.execute(arg0 -> ClimbingGymConverter.createGymListDTOFromEntity(climbingGymService.listVerifiedGyms()));
     }
+
     @GetMapping("verified/{id}")
     public ClimbingGymWithDetailsDTO findVerifiedById(@PathVariable Long id) throws AbstractAppException {
         return retry.execute(arg0 -> ClimbingGymConverter.climbingGymWithDetailsEntityToDTO(climbingGymService.findVerifiedById(id)));
@@ -46,11 +49,13 @@ public class ClimbingGymEndpoint {
     public List<ClimbingGymDTO> listOwnedGyms() throws AbstractAppException {
         return retry.execute(arg0 -> ClimbingGymConverter.createGymListDTOFromEntity(climbingGymService.listOwnedGyms()));
     }
+
     @Secured("ROLE_ADMINISTRATOR")
     @GetMapping("all")
     public List<ClimbingGymDTO> listAllGyms() throws AbstractAppException {
         return retry.execute(arg0 -> ClimbingGymConverter.createGymListDTOFromEntity(climbingGymService.listAllGyms()));
     }
+
     @Secured("ROLE_ADMINISTRATOR")
     @GetMapping("{id}")
     public ClimbingGymWithDetailsDTO findById(@PathVariable Long id) throws AbstractAppException {
@@ -61,6 +66,12 @@ public class ClimbingGymEndpoint {
     @PostMapping("register/{gymName}")
     public ClimbingGymWithDetailsDTO registerClient(@PathVariable String gymName) {
         return retry.execute(arg0 -> ClimbingGymConverter.climbingGymWithDetailsEntityToDTO(climbingGymService.registerNewClimbingGym(gymName)));
+    }
+
+    @Secured("ROLE_MANAGER")
+    @PutMapping("{gymId}/add_maintainer/{userId}")
+    public ClimbingGymWithMaintainersDTO addMaintainer(@PathVariable Long gymId, @PathVariable Long userId) throws AbstractAppException {
+        return retry.execute(arg0 -> ClimbingGymConverter.climbingGymEntityWithMaintainersEntityToDTO(climbingGymService.addMaintainer(gymId, userId)));
     }
 
     @Secured("ROLE_ADMINISTRATOR")
