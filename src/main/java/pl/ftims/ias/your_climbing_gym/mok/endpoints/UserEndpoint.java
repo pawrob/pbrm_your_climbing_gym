@@ -99,7 +99,7 @@ public class UserEndpoint {
 
     @Secured({"ROLE_ADMINISTRATOR", "ROLE_MANAGER", "ROLE_CLIMBER"})
     @GetMapping("change_email")
-    public UserDTO requestChangeEmail(@NotNull @RequestParam("token") String token, @NotNull @RequestParam("email") String email) throws AbstractAppException {
+    public UserDTO changeEmail(@NotNull @RequestParam("token") String token, @NotNull @RequestParam("email") String email) throws AbstractAppException {
         return retry.execute(arg0 -> UserConverter.userEntityToDTO(userService.changeEmail(token, email)));
     }
 
