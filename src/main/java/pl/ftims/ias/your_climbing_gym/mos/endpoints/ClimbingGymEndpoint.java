@@ -58,7 +58,7 @@ public class ClimbingGymEndpoint {
 
     @Secured("ROLE_ADMINISTRATOR")
     @GetMapping("{id}")
-    public ClimbingGymWithDetailsDTO findById(@PathVariable Long id) throws AbstractAppException {
+    public ClimbingGymWithDetailsDTO findGymById(@PathVariable Long id) throws AbstractAppException {
         return retry.execute(arg0 -> ClimbingGymConverter.climbingGymWithDetailsEntityToDTO(climbingGymService.findById(id)));
     }
 
@@ -67,23 +67,22 @@ public class ClimbingGymEndpoint {
     public ClimbingGymWithDetailsDTO registerClient(@PathVariable String gymName) {
         return retry.execute(arg0 -> ClimbingGymConverter.climbingGymWithDetailsEntityToDTO(climbingGymService.registerNewClimbingGym(gymName)));
     }
-
-    @Secured("ROLE_MANAGER")
-    @PutMapping("{gymId}/add_maintainer/{userId}")
-    public ClimbingGymWithMaintainersDTO addMaintainer(@PathVariable Long gymId, @PathVariable Long userId) throws AbstractAppException {
-        return retry.execute(arg0 -> ClimbingGymConverter.climbingGymEntityWithMaintainersEntityToDTO(climbingGymService.addMaintainer(gymId, userId)));
-    }
-
     @Secured("ROLE_ADMINISTRATOR")
     @PutMapping("verify/{id}")
     public ClimbingGymDTO verifyGym(@PathVariable Long id) throws AbstractAppException {
-        return retry.execute(arg0 -> ClimbingGymConverter.climbingGymEntityToDTO(climbingGymService.verifyRoute(id)));
+        return retry.execute(arg0 -> ClimbingGymConverter.climbingGymEntityToDTO(climbingGymService.verifyGym(id)));
     }
 
     @Secured("ROLE_ADMINISTRATOR")
     @PutMapping("close/{id}")
     public ClimbingGymDTO closeGym(@PathVariable Long id) throws AbstractAppException {
         return retry.execute(arg0 -> ClimbingGymConverter.climbingGymEntityToDTO(climbingGymService.closeGym(id)));
+    }
+
+    @Secured("ROLE_MANAGER")
+    @PutMapping("{gymId}/add_maintainer/{userId}")
+    public ClimbingGymWithMaintainersDTO addMaintainer(@PathVariable Long gymId, @PathVariable Long userId) throws AbstractAppException {
+        return retry.execute(arg0 -> ClimbingGymConverter.climbingGymEntityWithMaintainersEntityToDTO(climbingGymService.addMaintainer(gymId, userId)));
     }
 
     @Secured("ROLE_MANAGER")

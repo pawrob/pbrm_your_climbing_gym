@@ -66,7 +66,7 @@ public class ClimbingGymService {
         return climbingGymRepository.save(gym);
     }
 
-    public ClimbingGymEntity verifyRoute(Long id) throws AbstractAppException {
+    public ClimbingGymEntity verifyGym(Long id) throws AbstractAppException {
         ClimbingGymEntity gym = climbingGymRepository.findById(id)
                 .orElseThrow(() -> GymNotFoundException.createGymWithProvidedIdNotFoundException(id));
 
@@ -120,7 +120,7 @@ public class ClimbingGymService {
     private boolean checkIfManager(UserEntity user) {
         Collection<AccessLevelEntity> accessLevels = user.getAccessLevels();
         for (AccessLevelEntity accessLevel : accessLevels) {
-            if (accessLevel.getAccessLevel().equals("MANAGER")) {
+            if (accessLevel.getAccessLevel().equals("MANAGER") && accessLevel.getActive().equals(Boolean.TRUE)) {
                 return Boolean.TRUE;
             }
         }

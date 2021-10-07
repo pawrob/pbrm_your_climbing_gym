@@ -33,7 +33,7 @@ public class RouteEndpoint {
 
     @Secured("ROLE_MANAGER")
     @PostMapping("add")
-    public RouteDTO registerClient(@RequestBody @Valid RouteDTO wallDTO) throws AbstractAppException {
+    public RouteDTO addRoute(@RequestBody @Valid RouteDTO wallDTO) throws AbstractAppException {
         return retry.execute(arg0 -> RouteConverter.climbingWallEntityToDTO(routeService.addRoute(wallDTO)));
     }
 
