@@ -15,8 +15,10 @@ import pl.ftims.ias.your_climbing_gym.exceptions.GymNotFoundException;
 import pl.ftims.ias.your_climbing_gym.exceptions.NotAllowedAppException;
 import pl.ftims.ias.your_climbing_gym.exceptions.UserNotFoundAppException;
 import pl.ftims.ias.your_climbing_gym.mos.repositories.ClimbingGymRepository;
+import pl.ftims.ias.your_climbing_gym.mos.repositories.GymMaintainerRepository;
 import pl.ftims.ias.your_climbing_gym.mos.repositories.UserMosRepository;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
@@ -27,11 +29,13 @@ public class ClimbingGymService {
 
     ClimbingGymRepository climbingGymRepository;
     UserMosRepository userMosRepository;
+    GymMaintainerRepository gymMaintainerRepository;
 
     @Autowired
-    public ClimbingGymService(ClimbingGymRepository climbingGymRepository, UserMosRepository userMosRepository) {
+    public ClimbingGymService(ClimbingGymRepository climbingGymRepository, UserMosRepository userMosRepository, GymMaintainerRepository gymMaintainerRepository) {
         this.climbingGymRepository = climbingGymRepository;
         this.userMosRepository = userMosRepository;
+        this.gymMaintainerRepository = gymMaintainerRepository;
     }
 
 
@@ -39,6 +43,17 @@ public class ClimbingGymService {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         UserEntity owner = userMosRepository.findByLogin(auth.getName()).orElseThrow(() -> UserNotFoundAppException.createUserWithProvidedLoginNotFoundException(auth.getName()));
         return climbingGymRepository.findByOwner(owner).orElseThrow(() -> GymNotFoundException.createGymWithProvidedOwnerNotFoundException(owner.getLogin()));
+    }
+
+    public List<ClimbingGymEntity> listMaintainedGyms() throws AbstractAppException {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        UserEntity owner = userMosRepository.findByLogin(auth.getName()).orElseThrow(() -> UserNotFoundAppException.createUserWithProvidedLoginNotFoundException(auth.getName()));
+        List<GymMaintainerEntity> gymMaintainerEntities = gymMaintainerRepository.findByUser(owner);
+        List<ClimbingGymEntity> climbingGymEntities = new ArrayList<>();
+        for (GymMaintainerEntity g : gymMaintainerEntities) {
+            climbingGymEntities.add(g.getMaintainedGym());
+        }
+        return climbingGymEntities;
     }
 
     public List<ClimbingGymEntity> listAllGyms() {
@@ -126,4 +141,6 @@ public class ClimbingGymService {
         }
         return Boolean.FALSE;
     }
+
+
 }

@@ -1,15 +1,13 @@
 package pl.ftims.ias.your_climbing_gym.mos.endpoints;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.retry.support.RetryTemplate;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import pl.ftims.ias.your_climbing_gym.dto.routes_dtos.RouteDTO;
 import pl.ftims.ias.your_climbing_gym.exceptions.AbstractAppException;
 import pl.ftims.ias.your_climbing_gym.mos.services.RouteService;
@@ -36,6 +34,15 @@ public class RouteEndpoint {
     public RouteDTO addRoute(@RequestBody @Valid RouteDTO wallDTO) throws AbstractAppException {
         return retry.execute(arg0 -> RouteConverter.climbingWallEntityToDTO(routeService.addRoute(wallDTO)));
     }
-
+    @Secured("ROLE_MANAGER")
+    @DeleteMapping("{gym_id}/remove/{route_id}")
+    public ResponseEntity addRoute(@PathVariable Long gym_id, @PathVariable Long route_id) throws AbstractAppException {
+         return  retry.execute(arg0 -> routeService.removeRoute(gym_id, route_id));
+    }
+    @Secured("ROLE_MANAGER")
+    @PutMapping("{gym_id}/edit/{route_id}")
+    public RouteDTO editRouteDetails(@PathVariable Long gym_id, @PathVariable Long route_id, @RequestBody @Valid RouteDTO routeDTO) throws AbstractAppException {
+        return retry.execute(arg0 -> RouteConverter.climbingWallEntityToDTO(routeService.editRouteDetails(gym_id, route_id ,routeDTO)));
+    }
 
 }

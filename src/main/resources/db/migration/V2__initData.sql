@@ -63,20 +63,29 @@ VALUES (-25, -5, 'CLIMBER', false);
 INSERT INTO public.access_level_table (id, user_id, access_level, is_active)
 VALUES (-35, -5, 'MANAGER', false);
 
-INSERT INTO public.climbing_gym (id, gym_name,status,user_id,version)
-VALUES (-1,'testGym_unverified','UNVERIFIED',-1,0);
-INSERT INTO public.climbing_gym (id, gym_name,status,user_id,version)
-VALUES (-2,'testGym_toVerify','UNVERIFIED',-1,0);
-INSERT INTO public.climbing_gym (id, gym_name,status,user_id,version)
-VALUES (-3,'testGym_verified','VERIFIED',-1,0);
-INSERT INTO public.climbing_gym (id, gym_name,status,user_id,version)
-VALUES (-4,'testGym_closed','CLOSED',-1,0);
+INSERT INTO public.climbing_gym (id, gym_name, status, user_id, version)
+VALUES (-1, 'testGym_unverified', 'UNVERIFIED', -1, 0);
+INSERT INTO public.climbing_gym (id, gym_name, status, user_id, version)
+VALUES (-2, 'testGym_toVerify', 'UNVERIFIED', -1, 0);
+INSERT INTO public.climbing_gym (id, gym_name, status, user_id, version)
+VALUES (-3, 'testGym_verified', 'VERIFIED', -1, 0);
+INSERT INTO public.climbing_gym (id, gym_name, status, user_id, version)
+VALUES (-4, 'testGym_closed', 'CLOSED', -1, 0);
 
-INSERT INTO public.climbing_gym_details (id,version,climbing_gym_id,country,city, street, number,description)
-VALUES (-1,0,-1,'POLAND','LODZ','al. Politechniki','1','zatoka sportu');
-INSERT INTO public.climbing_gym_details (id,version,climbing_gym_id,country,city, street, number,description)
-VALUES (-2,0,-2,'POLAND','WARSZAWA','al. Jerozolimskie','160','mural spot');
-INSERT INTO public.climbing_gym_details (id,version,climbing_gym_id,country,city, street, number,description)
-VALUES (-3,0,-3,'POLAND','KRAKOW','Stare Miasto','21','Krakus boulder');
-INSERT INTO public.climbing_gym_details (id,version,climbing_gym_id,country,city, street, number,description)
-VALUES (-4,0,-4,'POLAND','WROCLAW','ul. Piernikowa','37','climbing wall');
+INSERT INTO public.climbing_gym_details (id, version, climbing_gym_id, country, city, street, number, description)
+VALUES (-1, 0, -1, 'POLAND', 'LODZ', 'al. Politechniki', '1', 'zatoka sportu');
+INSERT INTO public.climbing_gym_details (id, version, climbing_gym_id, country, city, street, number, description)
+VALUES (-2, 0, -2, 'POLAND', 'WARSZAWA', 'al. Jerozolimskie', '160', 'mural spot');
+INSERT INTO public.climbing_gym_details (id, version, climbing_gym_id, country, city, street, number, description)
+VALUES (-3, 0, -3, 'POLAND', 'KRAKOW', 'Stare Miasto', '21', 'Krakus boulder');
+INSERT INTO public.climbing_gym_details (id, version, climbing_gym_id, country, city, street, number, description)
+VALUES (-4, 0, -4, 'POLAND', 'WROCLAW', 'ul. Piernikowa', '37', 'climbing wall');
+
+INSERT INTO public.gym_maintainer (id, climbing_gym_id, user_id, is_active, version)
+VALUES (-1, -3, -3, true, 0);
+INSERT INTO public.route (id, climbing_gym_id, route_name, difficulty, version)
+VALUES (-1, -3, 'init route', '8c+', 0);
+INSERT INTO public.route (id, climbing_gym_id, route_name, difficulty, version)
+VALUES (-2, -3, 'init route 2', '6b', 0);
+INSERT INTO public.route (id, climbing_gym_id, route_name, difficulty, version)
+VALUES (-3, -3, 'init route 3', '4a', 0);

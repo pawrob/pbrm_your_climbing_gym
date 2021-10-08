@@ -1,6 +1,5 @@
 package pl.ftims.ias.your_climbing_gym;
 
-import io.restassured.http.ContentType;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -207,6 +206,7 @@ class UserEndpointTests {
 
 
     }
+
     @Test
     public void testUpdateOtherUserPersonalData() {
 
@@ -223,10 +223,11 @@ class UserEndpointTests {
 
 
     }
+
     @Test
     public void testChangePassword() {
 
-        ChangePasswordDTO changePasswordDTO = new ChangePasswordDTO("Test123!","Pbucki123!");
+        ChangePasswordDTO changePasswordDTO = new ChangePasswordDTO("Test123!", "Pbucki123!");
         ChangePasswordDTO changePasswordDTORollback = new ChangePasswordDTO("Pbucki123!", "Test123!");
         given().headers(
                 "Authorization",
@@ -249,10 +250,11 @@ class UserEndpointTests {
                 .statusCode(200);
 
     }
+
     @Test
     public void testChangePasswordBadPassword() {
 
-        ChangePasswordDTO badPassword = new ChangePasswordDTO("Test123!","Pbucki1234!");
+        ChangePasswordDTO badPassword = new ChangePasswordDTO("Test123!", "Pbucki1234!");
         ChangePasswordDTO passwordSameAsBefore = new ChangePasswordDTO("Pbucki123!", "Pbucki123!");
         given().headers(
                 "Authorization",
@@ -277,7 +279,7 @@ class UserEndpointTests {
     }
 
     @Test
-    public void testDeleteOwnAccount(){
+    public void testDeleteOwnAccount() {
         given().headers(
                 "Authorization",
                 "Bearer " + getToken("anowak", "Nowak123!"))
@@ -328,7 +330,7 @@ class UserEndpointTests {
     }
 
     @Test
-    public void testDeactivateOrActivateAccount(){
+    public void testDeactivateOrActivateAccount() {
         UserWithAccessLevelDTO user = given().headers(
                 "Authorization",
                 "Bearer " + getToken("pbucki", "Pbucki123!"))
@@ -341,7 +343,7 @@ class UserEndpointTests {
                 .extract()
                 .body().as(UserWithAccessLevelDTO.class);
 
-        assertEquals(user.getIsActive(),false);
+        assertEquals(user.getIsActive(), false);
 
         UserWithAccessLevelDTO userActivated = given().headers(
                 "Authorization",
@@ -355,11 +357,11 @@ class UserEndpointTests {
                 .extract()
                 .body().as(UserWithAccessLevelDTO.class);
 
-        assertEquals(userActivated.getIsActive(),true);
+        assertEquals(userActivated.getIsActive(), true);
     }
 
     @Test
-    public void testDeactivateOrActivateAccountFail(){
+    public void testDeactivateOrActivateAccountFail() {
         given().headers(
                 "Authorization",
                 "Bearer " + getToken("pbucki", "Pbucki123!"))
@@ -378,6 +380,7 @@ class UserEndpointTests {
                 .then()
                 .statusCode(404);
     }
+
     @Test
     @Transactional(transactionManager = "mokTransactionManager", isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRES_NEW)
     public void testChangeEmail() throws UserNotFoundAppException {
@@ -402,15 +405,16 @@ class UserEndpointTests {
                 "Bearer " + getToken("pbucki", "Pbucki123!"))
                 .contentType("application/json")
                 .when()
-                .get("https://localhost:8080/api/users/change_email?token="+ userEntity.getEmailResetToken()+"&email=pbuckichange@example.com")
+                .get("https://localhost:8080/api/users/change_email?token=" + userEntity.getEmailResetToken() + "&email=pbuckichange@example.com")
                 .then()
                 .statusCode(200)
                 .contentType(JSON)
                 .extract()
                 .body().as(UserDTO.class);
 
-        assertEquals(userAfterChange.getEmail(),"pbuckichange@example.com");
+        assertEquals(userAfterChange.getEmail(), "pbuckichange@example.com");
     }
+
     @Test
     @Transactional(transactionManager = "mokTransactionManager", isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRES_NEW)
     public void testResetPassword() throws UserNotFoundAppException {
@@ -440,9 +444,9 @@ class UserEndpointTests {
 
         UserDTO userAfterChange = given()
                 .contentType("application/json")
-                .body(new ResetPasswordDTO("Test1234!","Test1234!"))
+                .body(new ResetPasswordDTO("Test1234!", "Test1234!"))
                 .when()
-                .get("https://localhost:8080/api/users/reset_password?id=-5&token="+userEntity.getPasswordResetToken())
+                .get("https://localhost:8080/api/users/reset_password?id=-5&token=" + userEntity.getPasswordResetToken())
                 .then()
                 .statusCode(200)
                 .contentType(JSON)

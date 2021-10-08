@@ -15,14 +15,10 @@ import pl.ftims.ias.your_climbing_gym.dto.routes_dtos.ClimbingGymDTO;
 import pl.ftims.ias.your_climbing_gym.dto.routes_dtos.ClimbingGymWithDetailsDTO;
 import pl.ftims.ias.your_climbing_gym.dto.routes_dtos.ClimbingGymWithMaintainersDTO;
 import pl.ftims.ias.your_climbing_gym.dto.routes_dtos.GymDetailsDTO;
-import pl.ftims.ias.your_climbing_gym.dto.user_dtos.UserWithPersonalDataAccessLevelDTO;
-import pl.ftims.ias.your_climbing_gym.entities.UserEntity;
-import pl.ftims.ias.your_climbing_gym.exceptions.UserNotFoundAppException;
 import pl.ftims.ias.your_climbing_gym.mok.repositories.UserMokRepository;
 import pl.ftims.ias.your_climbing_gym.mos.repositories.ClimbingGymRepository;
 
 import java.util.List;
-import java.util.Optional;
 
 import static io.restassured.RestAssured.given;
 import static io.restassured.http.ContentType.JSON;
@@ -37,7 +33,7 @@ class ClimbingGymEndpointTest {
     UserMokRepository userMokRepository;
 
     @Autowired
-    public ClimbingGymEndpointTest(ClimbingGymRepository gym,UserMokRepository userMokRepository) {
+    public ClimbingGymEndpointTest(ClimbingGymRepository gym, UserMokRepository userMokRepository) {
         this.gym = gym;
         this.userMokRepository = userMokRepository;
     }
@@ -53,6 +49,7 @@ class ClimbingGymEndpointTest {
                 .statusCode(200).extract().body().as(TokenDTO.class);
         return token.getToken();
     }
+
     @Test
     @Transactional(transactionManager = "mosTransactionManager", isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRES_NEW)
     public void testGetVerifiedGyms() {
@@ -68,6 +65,7 @@ class ClimbingGymEndpointTest {
                 .body().jsonPath().getList(".", ClimbingGymDTO.class);
         assertEquals(gym.findAllVerified().size(), gyms.size());
     }
+
     @Test
     public void testGetVerifiedGymById() {
 
@@ -79,10 +77,11 @@ class ClimbingGymEndpointTest {
                 .statusCode(200)
                 .contentType(JSON)
                 .extract()
-                .body().as( ClimbingGymWithDetailsDTO.class);
+                .body().as(ClimbingGymWithDetailsDTO.class);
 
-        assertEquals(gym.getGymName(),"testGym_verified");
+        assertEquals(gym.getGymName(), "testGym_verified");
     }
+
     @Test
     public void testGetVerifiedGymByIdFail() {
 
@@ -95,7 +94,7 @@ class ClimbingGymEndpointTest {
     }
 
     @Test
-    public void testGetOwnedGyms(){
+    public void testGetOwnedGyms() {
 
         List<ClimbingGymDTO> gyms = given().headers(
                 "Authorization",
@@ -110,9 +109,10 @@ class ClimbingGymEndpointTest {
                 .body().jsonPath().getList(".", ClimbingGymDTO.class);
         assertEquals(4, gyms.size());
     }
+
     @Test
     @Transactional(transactionManager = "mosTransactionManager", isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRES_NEW)
-    public void testGetAllGyms(){
+    public void testGetAllGyms() {
 
         List<ClimbingGymDTO> gyms = given().headers(
                 "Authorization",
@@ -141,10 +141,11 @@ class ClimbingGymEndpointTest {
                 .statusCode(200)
                 .contentType(JSON)
                 .extract()
-                .body().as( ClimbingGymWithDetailsDTO.class);
+                .body().as(ClimbingGymWithDetailsDTO.class);
 
-        assertEquals(gym.getGymName(),"testGym_toVerify");
+        assertEquals(gym.getGymName(), "testGym_toVerify");
     }
+
     @Test
     public void testGetGymByIdFail() {
 
@@ -159,7 +160,7 @@ class ClimbingGymEndpointTest {
     }
 
     @Test
-    public void testRegisterGymAndVerifyGymThenCloseGym(){
+    public void testRegisterGymAndVerifyGymThenCloseGym() {
 
         ClimbingGymWithDetailsDTO gym = given().headers(
                 "Authorization",
@@ -247,10 +248,11 @@ class ClimbingGymEndpointTest {
                 .statusCode(200)
                 .contentType(JSON)
                 .extract()
-                .body().as( ClimbingGymWithMaintainersDTO.class);
+                .body().as(ClimbingGymWithMaintainersDTO.class);
 
         assertEquals(gymWithMaintainersDTO.getMaintainerDTO().get(0).getMaintainerId(), Long.valueOf(-3));
     }
+
     @Test
     public void testAddMaintainerFail() {
 
@@ -281,9 +283,10 @@ class ClimbingGymEndpointTest {
                 .then()
                 .statusCode(403);
     }
+
     @Test
     public void testEditGymDetails() {
-        GymDetailsDTO details = new GymDetailsDTO ("ENGLAND","LONDON","Main Street","7312","Best London Gym");
+        GymDetailsDTO details = new GymDetailsDTO("ENGLAND", "LONDON", "Main Street", "7312", "Best London Gym");
         ClimbingGymWithDetailsDTO gymWithDetailsDTO = given().headers(
                 "Authorization",
                 "Bearer " + getToken("jkowalski", "Kowal123!"))
@@ -295,7 +298,7 @@ class ClimbingGymEndpointTest {
                 .statusCode(200)
                 .contentType(JSON)
                 .extract()
-                .body().as( ClimbingGymWithDetailsDTO.class);
+                .body().as(ClimbingGymWithDetailsDTO.class);
 
         assertEquals(gymWithDetailsDTO.getGymDetailsDTO().getDescription(), "Best London Gym");
         assertEquals(gymWithDetailsDTO.getGymDetailsDTO().getCity(), "LONDON");
@@ -306,7 +309,7 @@ class ClimbingGymEndpointTest {
 
     @Test
     public void testEditGymDetailsFail() {
-        GymDetailsDTO details = new GymDetailsDTO ("ENGLAND","LONDON","Main Street","7312","Best London Gym");
+        GymDetailsDTO details = new GymDetailsDTO("ENGLAND", "LONDON", "Main Street", "7312", "Best London Gym");
         given().headers(
                 "Authorization",
                 "Bearer " + getToken("jkowalski", "Kowal123!"))
@@ -327,5 +330,30 @@ class ClimbingGymEndpointTest {
                 .put("https://localhost:8080/api/gym/edit_gym_details/-2")
                 .then()
                 .statusCode(403);
+    }
+
+    @Test
+    public void testGetMaintainedGyms() {
+        List<ClimbingGymDTO> maintainerDTOList = given().headers(
+                "Authorization",
+                "Bearer " + getToken("pbucki", "Pbucki123!"))
+                .contentType("application/json")
+                .when()
+                .get("https://localhost:8080/api/gym/maintained_gyms")
+                .then()
+                .statusCode(200)
+                .extract()
+                .body().jsonPath().getList(".", ClimbingGymDTO.class);
+
+        List<ClimbingGymDTO> maintainerDTOListEmpty = given().headers(
+                "Authorization",
+                "Bearer " + getToken("jkowalski", "Kowal123!"))
+                .contentType("application/json")
+                .when()
+                .get("https://localhost:8080/api/gym/maintained_gyms")
+                .then()
+                .statusCode(200)
+                .extract()
+                .body().jsonPath().getList(".", ClimbingGymDTO.class);
     }
 }

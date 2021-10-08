@@ -1,6 +1,5 @@
 package pl.ftims.ias.your_climbing_gym;
 
-import io.restassured.http.ContentType;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -14,9 +13,7 @@ import pl.ftims.ias.your_climbing_gym.dto.TokenDTO;
 import pl.ftims.ias.your_climbing_gym.dto.user_dtos.RegistrationDTO;
 import pl.ftims.ias.your_climbing_gym.dto.user_dtos.UserWithAccessLevelDTO;
 import pl.ftims.ias.your_climbing_gym.dto.user_dtos.UserWithPersonalDataAccessLevelDTO;
-import pl.ftims.ias.your_climbing_gym.entities.UserEntity;
 import pl.ftims.ias.your_climbing_gym.exceptions.AbstractAppException;
-import pl.ftims.ias.your_climbing_gym.exceptions.UserNotFoundAppException;
 
 import static io.restassured.RestAssured.given;
 import static io.restassured.http.ContentType.JSON;
@@ -62,11 +59,12 @@ class ManagerEndpointTest {
         assertEquals(user.getIsVerified(), true);
         assertEquals(user.getAccessLevels().get(0).getAccessLevel(), "MANAGER");
 
-        System.out.println(getToken("new_manager","Test123!"));
+        System.out.println(getToken("new_manager", "Test123!"));
 
     }
+
     @Test
-    public void testDeactivateOrActivateManager(){
+    public void testDeactivateOrActivateManager() {
         UserWithAccessLevelDTO user = given().headers(
                 "Authorization",
                 "Bearer " + getToken("pbucki", "Pbucki123!"))
@@ -79,7 +77,7 @@ class ManagerEndpointTest {
                 .extract()
                 .body().as(UserWithAccessLevelDTO.class);
 
-        assertEquals(user.getAccessLevels().get(0).getIsActive(),false);
+        assertEquals(user.getAccessLevels().get(0).getIsActive(), false);
 
         UserWithAccessLevelDTO userActivated = given().headers(
                 "Authorization",
@@ -93,10 +91,11 @@ class ManagerEndpointTest {
                 .extract()
                 .body().as(UserWithAccessLevelDTO.class);
 
-        assertEquals(userActivated.getAccessLevels().get(0).getIsActive(),true);
+        assertEquals(userActivated.getAccessLevels().get(0).getIsActive(), true);
     }
+
     @Test
-    public void testDeactivateOrActivateManagerFail(){
+    public void testDeactivateOrActivateManagerFail() {
         given().headers(
                 "Authorization",
                 "Bearer " + getToken("pbucki", "Pbucki123!"))

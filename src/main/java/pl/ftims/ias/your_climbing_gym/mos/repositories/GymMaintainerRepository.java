@@ -5,14 +5,14 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import pl.ftims.ias.your_climbing_gym.entities.RouteEntity;
+import pl.ftims.ias.your_climbing_gym.entities.GymMaintainerEntity;
+import pl.ftims.ias.your_climbing_gym.entities.UserEntity;
 
-import java.util.Optional;
+import java.util.List;
 
 @Repository
 @Transactional(transactionManager = "mosTransactionManager", isolation = Isolation.READ_COMMITTED, propagation = Propagation.MANDATORY)
-public interface RouteRepository extends JpaRepository<RouteEntity, Long> {
+public interface GymMaintainerRepository extends JpaRepository<GymMaintainerEntity, Long> {
 
-    @Override
-    Optional<RouteEntity> findById(Long aLong);
+    List<GymMaintainerEntity> findByUser(UserEntity user);
 }

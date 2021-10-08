@@ -3,21 +3,18 @@ package pl.ftims.ias.your_climbing_gym.utils.loggers;
 import lombok.Getter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import java.util.UUID;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 public class TransactionLogger {
     @Getter
     private final Logger logger;
-    private String prefix = "";
 
     private String prepareLog(String log) {
-        return "[" + prefix + "] " + log;
+        return "[" + TransactionAspectSupport.currentTransactionStatus().hashCode() + "] " + log;
     }
 
     public TransactionLogger() {
-        //todo generate random for every tx
-        prefix = UUID.randomUUID().toString();
+
         logger = LogManager.getLogger(this.getClass());
     }
 

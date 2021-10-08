@@ -50,6 +50,12 @@ public class ClimbingGymEndpoint {
         return retry.execute(arg0 -> ClimbingGymConverter.createGymListDTOFromEntity(climbingGymService.listOwnedGyms()));
     }
 
+    @Secured("ROLE_MANAGER")
+    @GetMapping("maintained_gyms")
+    public List<ClimbingGymDTO> listMaintainedGyms() throws AbstractAppException {
+        return retry.execute(arg0 -> ClimbingGymConverter.createGymListDTOFromEntity(climbingGymService.listMaintainedGyms()));
+    }
+
     @Secured("ROLE_ADMINISTRATOR")
     @GetMapping("all")
     public List<ClimbingGymDTO> listAllGyms() throws AbstractAppException {
@@ -67,6 +73,7 @@ public class ClimbingGymEndpoint {
     public ClimbingGymWithDetailsDTO registerClient(@PathVariable String gymName) {
         return retry.execute(arg0 -> ClimbingGymConverter.climbingGymWithDetailsEntityToDTO(climbingGymService.registerNewClimbingGym(gymName)));
     }
+
     @Secured("ROLE_ADMINISTRATOR")
     @PutMapping("verify/{id}")
     public ClimbingGymDTO verifyGym(@PathVariable Long id) throws AbstractAppException {
