@@ -1,15 +1,14 @@
 package pl.ftims.ias.your_climbing_gym;
 
 
-import com.amazonaws.services.ec2.model.Route;
-import org.junit.Test;
+
+import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import pl.ftims.ias.your_climbing_gym.dto.CredentialsDTO;
 import pl.ftims.ias.your_climbing_gym.dto.TokenDTO;
-import pl.ftims.ias.your_climbing_gym.dto.routes_dtos.ClimbingGymWithDetailsDTO;
 import pl.ftims.ias.your_climbing_gym.dto.routes_dtos.RouteDTO;
 
 import static io.restassured.RestAssured.given;
@@ -30,6 +29,9 @@ class RouteEndpointTest {
                 .then()
                 .statusCode(200).extract().body().as(TokenDTO.class);
         return token.getToken();
+    }
+
+    public RouteEndpointTest() {
     }
 
     @Test
