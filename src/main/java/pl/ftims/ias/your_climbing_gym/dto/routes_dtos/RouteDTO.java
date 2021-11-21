@@ -20,14 +20,27 @@ public class RouteDTO extends AbstractDTO {
     @NotBlank
     @NotNull
     private String difficulty;
+    @NotBlank
+    @NotNull
+    private String photoWithBoxesLink;
+    @NotBlank
+    @NotNull
+    private String photoWithNumbersLink;
+    @NotBlank
+    @NotNull
+    private String holdsDetails;
 
     @NotNull
     private Long climbingGymId;
 
-    public RouteDTO(long id, Long version, String routeName, String difficulty, Long climbingGymId) {
+
+    public RouteDTO(long id, Long version, String routeName, String difficulty, String photoWithBoxesLink, String photoWithNumbersLink, String holdsDetails, Long climbingGymId) {
         super(id, version);
         this.routeName = routeName;
         this.difficulty = difficulty;
+        this.photoWithBoxesLink = photoWithBoxesLink;
+        this.photoWithNumbersLink = photoWithNumbersLink;
+        this.holdsDetails = holdsDetails;
         this.climbingGymId = climbingGymId;
     }
 }

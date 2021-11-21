@@ -31,8 +31,8 @@ public class RouteEndpoint {
 
     @Secured("ROLE_MANAGER")
     @PostMapping("add")
-    public RouteDTO addRoute(@RequestBody @Valid RouteDTO wallDTO) throws AbstractAppException {
-        return retry.execute(arg0 -> RouteConverter.climbingWallEntityToDTO(routeService.addRoute(wallDTO)));
+    public RouteDTO addRoute(@RequestBody @Valid RouteDTO routeDTO) throws AbstractAppException {
+        return retry.execute(arg0 -> RouteConverter.climbingWallEntityToDTO(routeService.addRoute(routeDTO)));
     }
     @Secured("ROLE_MANAGER")
     @DeleteMapping("{gym_id}/remove/{route_id}")

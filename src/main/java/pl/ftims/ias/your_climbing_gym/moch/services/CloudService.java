@@ -30,9 +30,9 @@ public class CloudService {
     public String uploadFile(MultipartFile file) {
         File fileObj = convertMultiPartFileToFile(file);
         String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
-        client.putObject(new PutObjectRequest(bucketName, fileName, fileObj));
+        client.putObject(new PutObjectRequest(bucketName, "photos/" + fileName, fileObj));
         fileObj.delete();
-        return "File uploaded : " + fileName;
+        return client.getUrl(bucketName, "photos/"+ fileName).toString();
     }
 
     public byte[] downloadFile(String fileName) {

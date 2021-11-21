@@ -47,7 +47,7 @@ public class RouteService {
             throw NotAllowedAppException.createGymNotVerifiedException();
         }
 
-        RouteEntity route = new RouteEntity(wallDTO.getRouteName(), wallDTO.getDifficulty(), gym);
+        RouteEntity route = new RouteEntity(wallDTO.getRouteName(),  wallDTO.getPhotoWithBoxesLink(), wallDTO.getPhotoWithNumbersLink(), wallDTO.getHoldsDetails(), wallDTO.getDifficulty(),gym);
         routeRepository.save(route);
         return route;
     }

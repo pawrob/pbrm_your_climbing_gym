@@ -136,11 +136,14 @@ CREATE TABLE public.gym_maintainer
 
 CREATE TABLE public.route
 (
-    id              BIGSERIAL             NOT NULL,
-    climbing_gym_id BIGINT                NOT NULL,
-    route_name      CHARACTER VARYING(64) NOT NULL,
-    difficulty      CHARACTER VARYING(10),
-    version         BIGINT                NOT NULL DEFAULT 1,
+    id                      BIGSERIAL             NOT NULL,
+    climbing_gym_id         BIGINT                NOT NULL,
+    route_name              CHARACTER VARYING(64) NOT NULL,
+    photo_with_boxes_link   CHARACTER VARYING     NOT NULL,
+    photo_with_numbers_link CHARACTER VARYING     NOT NULL,
+    holds_details           CHARACTER VARYING     NOT NULL,
+    difficulty              CHARACTER VARYING(10),
+    version                 BIGINT                NOT NULL DEFAULT 1,
     CONSTRAINT route_name_key UNIQUE (route_name),
     CONSTRAINT route_pkey PRIMARY KEY (id),
     CONSTRAINT climbing_gym_id_fkey FOREIGN KEY (climbing_gym_id)
@@ -148,22 +151,6 @@ CREATE TABLE public.route
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
 );
-
-CREATE TABLE public.route_photo
-(
-    id                BIGSERIAL             NOT NULL,
-    route_id          BIGINT                NOT NULL,
-    filename          CHARACTER VARYING(64) NOT NULL,
-    processing_status CHARACTER VARYING(64) NOT NULL,
-    version           BIGINT                NOT NULL DEFAULT 1,
-    CONSTRAINT filename_key UNIQUE (filename),
-    CONSTRAINT route_photo_pkey PRIMARY KEY (id),
-    CONSTRAINT route_id_fkey FOREIGN KEY (route_id)
-        REFERENCES public.route (id) MATCH SIMPLE
-        ON UPDATE NO ACTION
-        ON DELETE NO ACTION
-);
-
 
 
 CREATE OR REPLACE VIEW public.authentication_view
@@ -237,13 +224,7 @@ CREATE
         (climbing_gym_id ASC NULLS LAST)
     TABLESPACE pg_default;
 
-DROP
-    INDEX IF EXISTS route_photo_id;
-CREATE
-    INDEX route_photo_id
-    ON public.route_photo USING btree
-        (route_id ASC NULLS LAST)
-    TABLESPACE pg_default;
+
 
 
 -- grants
@@ -253,7 +234,6 @@ GRANT USAGE ON SEQUENCE public.personal_data_id_seq TO perfectbeta_mok;
 GRANT USAGE ON SEQUENCE public.session_log_id_seq TO perfectbeta_auth;
 GRANT USAGE ON SEQUENCE public.climbing_gym_id_seq TO perfectbeta_mos;
 GRANT USAGE ON SEQUENCE public.route_id_seq TO perfectbeta_mos;
-GRANT USAGE ON SEQUENCE public.route_photo_id_seq TO perfectbeta_mos;
 GRANT USAGE ON SEQUENCE public.climbing_gym_details_id_seq TO perfectbeta_mos;
 GRANT USAGE ON SEQUENCE public.gym_maintainer_id_seq TO perfectbeta_mos;
 
@@ -276,6 +256,5 @@ GRANT SELECT ON TABLE public."user" TO perfectbeta_mos;
 GRANT SELECT ON TABLE public.personal_data TO perfectbeta_mos;
 GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE public.climbing_gym TO perfectbeta_mos;
 GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE public.route TO perfectbeta_mos;
-GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE public.route_photo TO perfectbeta_mos;
 GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE public.climbing_gym_details TO perfectbeta_mos;
 GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE public.gym_maintainer TO perfectbeta_mos;

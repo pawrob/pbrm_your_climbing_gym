@@ -42,7 +42,7 @@ class RouteEndpointTest {
                 "Authorization",
                 "Bearer " + getToken("pbucki", "Pbucki123!"))
                 .contentType("application/json")
-                .body(new RouteDTO("test route maintainer","5a",-3L))
+                .body(new RouteDTO("test route maintainer","5a","link to photo with boxes","link to photo with numbers","json",-3L))
                 .when()
                 .post("http://localhost:8080/api/route/add")
                 .then()
@@ -54,7 +54,7 @@ class RouteEndpointTest {
                 "Authorization",
                 "Bearer " + getToken("jkowalski", "Kowal123!"))
                 .contentType("application/json")
-                .body(new RouteDTO("test route owner","5a",-3L))
+                .body(new RouteDTO("test route owner","5a","link to photo with boxes","link to photo with numbers","json",-3L))
                 .when()
                 .post("http://localhost:8080/api/route/add")
                 .then()
@@ -71,7 +71,7 @@ class RouteEndpointTest {
                 "Authorization",
                 "Bearer " + getToken("pbucki", "Pbucki123!"))
                 .contentType("application/json")
-                .body(new RouteDTO("test route maintainer","5a",-2L))
+                .body(new RouteDTO("test route maintainer","5a","link to photo with boxes","link to photo with numbers","json",-2L))
                 .when()
                 .post("http://localhost:8080/api/route/add")
                 .then()
@@ -81,7 +81,7 @@ class RouteEndpointTest {
                 "Authorization",
                 "Bearer " + getToken("jkowalski", "Kowal123!"))
                 .contentType("application/json")
-                .body(new RouteDTO("test route owner","5a",-2L))
+                .body(new RouteDTO("test route owner","5a","link to photo with boxes","link to photo with numbers","json",-2L))
                 .when()
                 .post("http://localhost:8080/api/route/add")
                 .then()
@@ -149,7 +149,7 @@ class RouteEndpointTest {
                 "Authorization",
                 "Bearer " + getToken("pbucki", "Pbucki123!"))
                 .contentType("application/json")
-                .body(new RouteDTO("test edit maintainer","5c",-3L))
+                .body(new RouteDTO("test edit maintainer","5a","link to photo with boxes","link to photo with numbers","json",-3L))
                 .when()
                 .put("http://localhost:8080/api/route/-3/edit/-3")
                 .then()
@@ -161,7 +161,7 @@ class RouteEndpointTest {
                 "Authorization",
                 "Bearer " + getToken("jkowalski", "Kowal123!"))
                 .contentType("application/json")
-                .body(new RouteDTO("test edit owner","5b",-3L))
+                .body(new RouteDTO("test edit owner","5b","link to photo with boxes","link to photo with numbers","json",-3L))
                 .when()
                 .put("http://localhost:8080/api/route/-3/edit/-3")
                 .then()
@@ -177,7 +177,7 @@ class RouteEndpointTest {
                 "Authorization",
                 "Bearer " + getToken("pbucki", "Pbucki123!"))
                 .contentType("application/json")
-                .body(new RouteDTO("test edit maintainer","5c",-3L))
+                .body(new RouteDTO("test edit maintainer","5c","link to photo with boxes","link to photo with numbers","json",-3L))
                 .when()
                 .put("http://localhost:8080/api/route/-100/edit/-2")
                 .then()
@@ -186,7 +186,7 @@ class RouteEndpointTest {
                 "Authorization",
                 "Bearer " + getToken("pbucki", "Pbucki123!"))
                 .contentType("application/json")
-                .body(new RouteDTO("test edit maintainer","5c",-3L))
+                .body(new RouteDTO("test edit maintainer","5c","link to photo with boxes","link to photo with numbers","json",-3L))
                 .when()
                 .put("http://localhost:8080/api/route/-3/edit/-100")
                 .then()
@@ -195,7 +195,7 @@ class RouteEndpointTest {
                 "Authorization",
                 "Bearer " + getToken("pbucki", "Pbucki123!"))
                 .contentType("application/json")
-                .body(new RouteDTO("test edit maintainer","5c",-3L))
+                .body(new RouteDTO("test edit maintainer","5c","link to photo with boxes","link to photo with numbers","json",-3L))
                 .when()
                 .put("http://localhost:8080/api/route/-2/edit/-2")
                 .then()

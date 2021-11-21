@@ -20,15 +20,35 @@ import java.util.Collection;
 public class RouteEntity extends AbstractEntity implements Serializable {
 
     private String routeName;
+    private String photoWithBoxesLink;
+    private String photoWithNumbersLink;
+    private String holdsDetails;
     private String difficulty;
     private ClimbingGymEntity climbingGym;
-    private Collection<RoutePhotoEntity> routePhotos = new ArrayList<>();
 
 
     @Basic
     @Column(name = "route_name")
     public String getRouteName() {
         return routeName;
+    }
+
+    @Basic
+    @Column(name = "photo_with_boxes_link")
+    public String getPhotoWithBoxesLink() {
+        return photoWithBoxesLink;
+    }
+
+    @Basic
+    @Column(name = "photo_with_numbers_link")
+    public String getPhotoWithNumbersLink() {
+        return photoWithNumbersLink;
+    }
+
+    @Basic
+    @Column(name = "holds_details")
+    public String getHoldsDetails() {
+        return holdsDetails;
     }
 
     @Basic
@@ -43,10 +63,6 @@ public class RouteEntity extends AbstractEntity implements Serializable {
         return climbingGym;
     }
 
-    @OneToMany(mappedBy = "route", cascade = {CascadeType.ALL})
-    public Collection<RoutePhotoEntity> getRoutePhotos() {
-        return routePhotos;
-    }
 
     public RouteEntity(String routeName, String difficulty, ClimbingGymEntity climbingGym) {
         this.routeName = routeName;
