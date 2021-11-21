@@ -54,8 +54,8 @@ class UserEndpointTests {
     public void testGetAllUsers() {
 
         List<UserWithPersonalDataAccessLevelDTO> users = given().headers(
-                "Authorization",
-                "Bearer " + getToken("pbucki", "Pbucki123!"))
+                        "Authorization",
+                        "Bearer " + getToken("pbucki", "Pbucki123!"))
                 .contentType("application/json")
                 .when()
                 .get("http://localhost:8080/api/users")
@@ -71,8 +71,8 @@ class UserEndpointTests {
     public void testGetUserByIdButIdNotFound() {
 
         given().headers(
-                "Authorization",
-                "Bearer " + getToken("pbucki", "Pbucki123!"))
+                        "Authorization",
+                        "Bearer " + getToken("pbucki", "Pbucki123!"))
                 .contentType("application/json")
                 .when()
                 .get("http://localhost:8080/api/users/-10")
@@ -84,8 +84,8 @@ class UserEndpointTests {
     public void testGetUserById() {
 
         UserWithPersonalDataAccessLevelDTO user = given().headers(
-                "Authorization",
-                "Bearer " + getToken("pbucki", "Pbucki123!"))
+                        "Authorization",
+                        "Bearer " + getToken("pbucki", "Pbucki123!"))
                 .contentType("application/json")
                 .when()
                 .get("http://localhost:8080/api/users/-1")
@@ -187,8 +187,8 @@ class UserEndpointTests {
 
         PersonalDataDTO personalDataDTO = new PersonalDataDTO("Paweł", "Bucki", "111222333", "PL", true);
         UserWithPersonalDataDTO user = given().headers(
-                "Authorization",
-                "Bearer " + getToken("pbucki", "Pbucki123!"))
+                        "Authorization",
+                        "Bearer " + getToken("pbucki", "Pbucki123!"))
                 .contentType("application/json")
                 .body(personalDataDTO)
                 .when()
@@ -212,8 +212,8 @@ class UserEndpointTests {
 
         PersonalDataDTO personalDataDTO = new PersonalDataDTO("Paweł", "Bucki", "111222333", "PL", true);
         given().headers(
-                "Authorization",
-                "Bearer " + getToken("pbucki", "Pbucki123!"))
+                        "Authorization",
+                        "Bearer " + getToken("pbucki", "Pbucki123!"))
                 .contentType("application/json")
                 .body(personalDataDTO)
                 .when()
@@ -230,8 +230,8 @@ class UserEndpointTests {
         ChangePasswordDTO changePasswordDTO = new ChangePasswordDTO("Test123!", "Pbucki123!");
         ChangePasswordDTO changePasswordDTORollback = new ChangePasswordDTO("Pbucki123!", "Test123!");
         given().headers(
-                "Authorization",
-                "Bearer " + getToken("pbucki", "Pbucki123!"))
+                        "Authorization",
+                        "Bearer " + getToken("pbucki", "Pbucki123!"))
                 .contentType("application/json")
                 .body(changePasswordDTO)
                 .when()
@@ -240,8 +240,8 @@ class UserEndpointTests {
                 .statusCode(200);
 
         given().headers(
-                "Authorization",
-                "Bearer " + getToken("pbucki", "Test123!"))
+                        "Authorization",
+                        "Bearer " + getToken("pbucki", "Test123!"))
                 .contentType("application/json")
                 .body(changePasswordDTORollback)
                 .when()
@@ -257,8 +257,8 @@ class UserEndpointTests {
         ChangePasswordDTO badPassword = new ChangePasswordDTO("Test123!", "Pbucki1234!");
         ChangePasswordDTO passwordSameAsBefore = new ChangePasswordDTO("Pbucki123!", "Pbucki123!");
         given().headers(
-                "Authorization",
-                "Bearer " + getToken("pbucki", "Pbucki123!"))
+                        "Authorization",
+                        "Bearer " + getToken("pbucki", "Pbucki123!"))
                 .contentType("application/json")
                 .body(badPassword)
                 .when()
@@ -267,8 +267,8 @@ class UserEndpointTests {
                 .statusCode(401);
 
         given().headers(
-                "Authorization",
-                "Bearer " + getToken("pbucki", "Pbucki123!"))
+                        "Authorization",
+                        "Bearer " + getToken("pbucki", "Pbucki123!"))
                 .contentType("application/json")
                 .body(passwordSameAsBefore)
                 .when()
@@ -281,8 +281,8 @@ class UserEndpointTests {
     @Test
     public void testDeleteOwnAccount() {
         given().headers(
-                "Authorization",
-                "Bearer " + getToken("anowak", "Nowak123!"))
+                        "Authorization",
+                        "Bearer " + getToken("anowak", "Nowak123!"))
                 .contentType("application/json")
                 .body(new PasswordDTO("Nowak123!"))
                 .when()
@@ -291,8 +291,8 @@ class UserEndpointTests {
                 .statusCode(200);
 
         UserWithPersonalDataAccessLevelDTO user = given().headers(
-                "Authorization",
-                "Bearer " + getToken("pbucki", "Pbucki123!"))
+                        "Authorization",
+                        "Bearer " + getToken("pbucki", "Pbucki123!"))
                 .contentType("application/json")
                 .when()
                 .get("http://localhost:8080/api/users/-2")
@@ -309,8 +309,8 @@ class UserEndpointTests {
     @Test
     public void testDeleteOwnAccountFail() {
         given().headers(
-                "Authorization",
-                "Bearer " + getToken("jkowalski", "Kowal123!"))
+                        "Authorization",
+                        "Bearer " + getToken("jkowalski", "Kowal123!"))
                 .contentType("application/json")
                 .body(new PasswordDTO("Kowal1234!"))
                 .when()
@@ -319,8 +319,8 @@ class UserEndpointTests {
                 .statusCode(401);
 
         given().headers(
-                "Authorization",
-                "Bearer " + getToken("jkowalski", "Kowal123!"))
+                        "Authorization",
+                        "Bearer " + getToken("jkowalski", "Kowal123!"))
                 .contentType("application/json")
                 .body(new PasswordDTO("Nowak123!"))
                 .when()
@@ -332,8 +332,8 @@ class UserEndpointTests {
     @Test
     public void testDeactivateOrActivateAccount() {
         UserWithAccessLevelDTO user = given().headers(
-                "Authorization",
-                "Bearer " + getToken("pbucki", "Pbucki123!"))
+                        "Authorization",
+                        "Bearer " + getToken("pbucki", "Pbucki123!"))
                 .contentType("application/json")
                 .when()
                 .put("http://localhost:8080/api/users/deactivate/-4")
@@ -346,8 +346,8 @@ class UserEndpointTests {
         assertEquals(user.getIsActive(), false);
 
         UserWithAccessLevelDTO userActivated = given().headers(
-                "Authorization",
-                "Bearer " + getToken("pbucki", "Pbucki123!"))
+                        "Authorization",
+                        "Bearer " + getToken("pbucki", "Pbucki123!"))
                 .contentType("application/json")
                 .when()
                 .put("http://localhost:8080/api/users/activate/-4")
@@ -363,8 +363,8 @@ class UserEndpointTests {
     @Test
     public void testDeactivateOrActivateAccountFail() {
         given().headers(
-                "Authorization",
-                "Bearer " + getToken("pbucki", "Pbucki123!"))
+                        "Authorization",
+                        "Bearer " + getToken("pbucki", "Pbucki123!"))
                 .contentType("application/json")
                 .when()
                 .put("http://localhost:8080/api/users/deactivate/100")
@@ -372,8 +372,8 @@ class UserEndpointTests {
                 .statusCode(404);
 
         given().headers(
-                "Authorization",
-                "Bearer " + getToken("pbucki", "Pbucki123!"))
+                        "Authorization",
+                        "Bearer " + getToken("pbucki", "Pbucki123!"))
                 .contentType("application/json")
                 .when()
                 .put("http://localhost:8080/api/users/activate/100")
@@ -385,8 +385,8 @@ class UserEndpointTests {
     @Transactional(transactionManager = "mokTransactionManager", isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRES_NEW)
     public void testChangeEmail() throws UserNotFoundAppException {
         UserDTO user = given().headers(
-                "Authorization",
-                "Bearer " + getToken("pbucki", "Pbucki123!"))
+                        "Authorization",
+                        "Bearer " + getToken("pbucki", "Pbucki123!"))
                 .contentType("application/json")
                 .body(new EmailDTO("pbuckichange@example.com"))
                 .when()
@@ -401,8 +401,8 @@ class UserEndpointTests {
                 .orElseThrow(() -> UserNotFoundAppException.createUserWithProvidedLoginNotFoundException("pbucki"));
 
         UserDTO userAfterChange = given().headers(
-                "Authorization",
-                "Bearer " + getToken("pbucki", "Pbucki123!"))
+                        "Authorization",
+                        "Bearer " + getToken("pbucki", "Pbucki123!"))
                 .contentType("application/json")
                 .when()
                 .get("http://localhost:8080/api/users/change_email?token=" + userEntity.getEmailResetToken() + "&email=pbuckichange@example.com")

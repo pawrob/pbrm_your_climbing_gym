@@ -225,8 +225,6 @@ CREATE
     TABLESPACE pg_default;
 
 
-
-
 -- grants
 GRANT USAGE ON SEQUENCE public.user_id_seq TO perfectbeta_mok;
 GRANT USAGE ON SEQUENCE public.access_level_table_id_seq TO perfectbeta_mok;

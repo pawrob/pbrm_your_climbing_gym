@@ -97,8 +97,8 @@ class ClimbingGymEndpointTest {
     public void testGetOwnedGyms() {
 
         List<ClimbingGymDTO> gyms = given().headers(
-                "Authorization",
-                "Bearer " + getToken("jkowalski", "Kowal123!"))
+                        "Authorization",
+                        "Bearer " + getToken("jkowalski", "Kowal123!"))
                 .contentType("application/json")
                 .when()
                 .get("http://localhost:8080/api/gym/owned_gyms")
@@ -115,8 +115,8 @@ class ClimbingGymEndpointTest {
     public void testGetAllGyms() {
 
         List<ClimbingGymDTO> gyms = given().headers(
-                "Authorization",
-                "Bearer " + getToken("pbucki", "Pbucki123!"))
+                        "Authorization",
+                        "Bearer " + getToken("pbucki", "Pbucki123!"))
                 .contentType("application/json")
                 .when()
                 .get("http://localhost:8080/api/gym/all")
@@ -132,8 +132,8 @@ class ClimbingGymEndpointTest {
     public void testGetGymById() {
 
         ClimbingGymWithDetailsDTO gym = given().headers(
-                "Authorization",
-                "Bearer " + getToken("pbucki", "Pbucki123!"))
+                        "Authorization",
+                        "Bearer " + getToken("pbucki", "Pbucki123!"))
                 .contentType("application/json")
                 .when()
                 .get("http://localhost:8080/api/gym/-2")
@@ -150,8 +150,8 @@ class ClimbingGymEndpointTest {
     public void testGetGymByIdFail() {
 
         given().headers(
-                "Authorization",
-                "Bearer " + getToken("pbucki", "Pbucki123!"))
+                        "Authorization",
+                        "Bearer " + getToken("pbucki", "Pbucki123!"))
                 .contentType("application/json")
                 .when()
                 .get("http://localhost:8080/api/gym/-100")
@@ -163,8 +163,8 @@ class ClimbingGymEndpointTest {
     public void testRegisterGymAndVerifyGymThenCloseGym() {
 
         ClimbingGymWithDetailsDTO gym = given().headers(
-                "Authorization",
-                "Bearer " + getToken("pbucki", "Pbucki123!"))
+                        "Authorization",
+                        "Bearer " + getToken("pbucki", "Pbucki123!"))
                 .contentType("application/json")
                 .when()
                 .post("http://localhost:8080/api/gym/register/gym_registrationTest")
@@ -178,8 +178,8 @@ class ClimbingGymEndpointTest {
         assertEquals(gym.getStatus().toString(), "UNVERIFIED");
 
         ClimbingGymDTO gymAfterVerify = given().headers(
-                "Authorization",
-                "Bearer " + getToken("pbucki", "Pbucki123!"))
+                        "Authorization",
+                        "Bearer " + getToken("pbucki", "Pbucki123!"))
                 .contentType("application/json")
                 .when()
                 .put("http://localhost:8080/api/gym/verify/1")
@@ -193,8 +193,8 @@ class ClimbingGymEndpointTest {
         assertEquals(gymAfterVerify.getStatus().toString(), "VERIFIED");
 
         ClimbingGymDTO gymAfterClose = given().headers(
-                "Authorization",
-                "Bearer " + getToken("pbucki", "Pbucki123!"))
+                        "Authorization",
+                        "Bearer " + getToken("pbucki", "Pbucki123!"))
                 .contentType("application/json")
                 .when()
                 .put("http://localhost:8080/api/gym/close/1")
@@ -208,8 +208,8 @@ class ClimbingGymEndpointTest {
         assertEquals(gymAfterClose.getStatus().toString(), "CLOSED");
 
         given().headers(
-                "Authorization",
-                "Bearer " + getToken("pbucki", "Pbucki123!"))
+                        "Authorization",
+                        "Bearer " + getToken("pbucki", "Pbucki123!"))
                 .contentType("application/json")
                 .when()
                 .post("http://localhost:8080/api/gym/register/gym_registrationTest")
@@ -217,16 +217,16 @@ class ClimbingGymEndpointTest {
                 .statusCode(400);
 
         given().headers(
-                "Authorization",
-                "Bearer " + getToken("pbucki", "Pbucki123!"))
+                        "Authorization",
+                        "Bearer " + getToken("pbucki", "Pbucki123!"))
                 .contentType("application/json")
                 .when()
                 .put("http://localhost:8080/api/gym/verify/-100")
                 .then()
                 .statusCode(404);
         given().headers(
-                "Authorization",
-                "Bearer " + getToken("pbucki", "Pbucki123!"))
+                        "Authorization",
+                        "Bearer " + getToken("pbucki", "Pbucki123!"))
                 .contentType("application/json")
                 .when()
                 .put("http://localhost:8080/api/gym/close/-100")
@@ -239,8 +239,8 @@ class ClimbingGymEndpointTest {
     public void testAddMaintainer() {
 
         ClimbingGymWithMaintainersDTO gymWithMaintainersDTO = given().headers(
-                "Authorization",
-                "Bearer " + getToken("jkowalski", "Kowal123!"))
+                        "Authorization",
+                        "Bearer " + getToken("jkowalski", "Kowal123!"))
                 .contentType("application/json")
                 .when()
                 .put("http://localhost:8080/api/gym/-2/add_maintainer/-3")
@@ -257,8 +257,8 @@ class ClimbingGymEndpointTest {
     public void testAddMaintainerFail() {
 
         given().headers(
-                "Authorization",
-                "Bearer " + getToken("jkowalski", "Kowal123!"))
+                        "Authorization",
+                        "Bearer " + getToken("jkowalski", "Kowal123!"))
                 .contentType("application/json")
                 .when()
                 .put("http://localhost:8080/api/gym/-100/add_maintainer/-3")
@@ -266,8 +266,8 @@ class ClimbingGymEndpointTest {
                 .statusCode(404);
 
         given().headers(
-                "Authorization",
-                "Bearer " + getToken("pbucki", "Pbucki123!"))
+                        "Authorization",
+                        "Bearer " + getToken("pbucki", "Pbucki123!"))
                 .contentType("application/json")
                 .when()
                 .put("http://localhost:8080/api/gym/-2/add_maintainer/-3")
@@ -275,8 +275,8 @@ class ClimbingGymEndpointTest {
                 .statusCode(403);
 
         given().headers(
-                "Authorization",
-                "Bearer " + getToken("jkowalski", "Kowal123!"))
+                        "Authorization",
+                        "Bearer " + getToken("jkowalski", "Kowal123!"))
                 .contentType("application/json")
                 .when()
                 .put("http://localhost:8080/api/gym/-2/add_maintainer/-4")
@@ -288,8 +288,8 @@ class ClimbingGymEndpointTest {
     public void testEditGymDetails() {
         GymDetailsDTO details = new GymDetailsDTO("ENGLAND", "LONDON", "Main Street", "7312", "Best London Gym");
         ClimbingGymWithDetailsDTO gymWithDetailsDTO = given().headers(
-                "Authorization",
-                "Bearer " + getToken("jkowalski", "Kowal123!"))
+                        "Authorization",
+                        "Bearer " + getToken("jkowalski", "Kowal123!"))
                 .contentType("application/json")
                 .body(details)
                 .when()
@@ -311,8 +311,8 @@ class ClimbingGymEndpointTest {
     public void testEditGymDetailsFail() {
         GymDetailsDTO details = new GymDetailsDTO("ENGLAND", "LONDON", "Main Street", "7312", "Best London Gym");
         given().headers(
-                "Authorization",
-                "Bearer " + getToken("jkowalski", "Kowal123!"))
+                        "Authorization",
+                        "Bearer " + getToken("jkowalski", "Kowal123!"))
                 .contentType("application/json")
                 .body(details)
                 .when()
@@ -322,8 +322,8 @@ class ClimbingGymEndpointTest {
 
 
         given().headers(
-                "Authorization",
-                "Bearer " + getToken("pbucki", "Pbucki123!"))
+                        "Authorization",
+                        "Bearer " + getToken("pbucki", "Pbucki123!"))
                 .contentType("application/json")
                 .body(details)
                 .when()
@@ -335,8 +335,8 @@ class ClimbingGymEndpointTest {
     @Test
     public void testGetMaintainedGyms() {
         List<ClimbingGymDTO> maintainerDTOList = given().headers(
-                "Authorization",
-                "Bearer " + getToken("pbucki", "Pbucki123!"))
+                        "Authorization",
+                        "Bearer " + getToken("pbucki", "Pbucki123!"))
                 .contentType("application/json")
                 .when()
                 .get("http://localhost:8080/api/gym/maintained_gyms")
@@ -346,8 +346,8 @@ class ClimbingGymEndpointTest {
                 .body().jsonPath().getList(".", ClimbingGymDTO.class);
 
         List<ClimbingGymDTO> maintainerDTOListEmpty = given().headers(
-                "Authorization",
-                "Bearer " + getToken("jkowalski", "Kowal123!"))
+                        "Authorization",
+                        "Bearer " + getToken("jkowalski", "Kowal123!"))
                 .contentType("application/json")
                 .when()
                 .get("http://localhost:8080/api/gym/maintained_gyms")

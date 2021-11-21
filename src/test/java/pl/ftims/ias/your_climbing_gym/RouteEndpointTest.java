@@ -1,7 +1,6 @@
 package pl.ftims.ias.your_climbing_gym;
 
 
-
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -35,14 +34,14 @@ class RouteEndpointTest {
     }
 
     @Test
-    public void addRouteTest(){
+    public void addRouteTest() {
 
 
         RouteDTO routeByMaintainer = given().headers(
-                "Authorization",
-                "Bearer " + getToken("pbucki", "Pbucki123!"))
+                        "Authorization",
+                        "Bearer " + getToken("pbucki", "Pbucki123!"))
                 .contentType("application/json")
-                .body(new RouteDTO("test route maintainer","5a","link to photo with boxes","link to photo with numbers","json",-3L))
+                .body(new RouteDTO("test route maintainer", "5a", "link to photo with boxes", "link to photo with numbers", "json", -3L))
                 .when()
                 .post("http://localhost:8080/api/route/add")
                 .then()
@@ -51,10 +50,10 @@ class RouteEndpointTest {
                 .extract()
                 .body().as(RouteDTO.class);
         RouteDTO routeByOwner = given().headers(
-                "Authorization",
-                "Bearer " + getToken("jkowalski", "Kowal123!"))
+                        "Authorization",
+                        "Bearer " + getToken("jkowalski", "Kowal123!"))
                 .contentType("application/json")
-                .body(new RouteDTO("test route owner","5a","link to photo with boxes","link to photo with numbers","json",-3L))
+                .body(new RouteDTO("test route owner", "5a", "link to photo with boxes", "link to photo with numbers", "json", -3L))
                 .when()
                 .post("http://localhost:8080/api/route/add")
                 .then()
@@ -63,25 +62,26 @@ class RouteEndpointTest {
                 .extract()
                 .body().as(RouteDTO.class);
     }
+
     @Test
-    public void addRouteTestFail(){
+    public void addRouteTestFail() {
 
 
         given().headers(
-                "Authorization",
-                "Bearer " + getToken("pbucki", "Pbucki123!"))
+                        "Authorization",
+                        "Bearer " + getToken("pbucki", "Pbucki123!"))
                 .contentType("application/json")
-                .body(new RouteDTO("test route maintainer","5a","link to photo with boxes","link to photo with numbers","json",-2L))
+                .body(new RouteDTO("test route maintainer", "5a", "link to photo with boxes", "link to photo with numbers", "json", -2L))
                 .when()
                 .post("http://localhost:8080/api/route/add")
                 .then()
                 .statusCode(403);
 
         given().headers(
-                "Authorization",
-                "Bearer " + getToken("jkowalski", "Kowal123!"))
+                        "Authorization",
+                        "Bearer " + getToken("jkowalski", "Kowal123!"))
                 .contentType("application/json")
-                .body(new RouteDTO("test route owner","5a","link to photo with boxes","link to photo with numbers","json",-2L))
+                .body(new RouteDTO("test route owner", "5a", "link to photo with boxes", "link to photo with numbers", "json", -2L))
                 .when()
                 .post("http://localhost:8080/api/route/add")
                 .then()
@@ -89,13 +89,13 @@ class RouteEndpointTest {
     }
 
     @Test
-    public void removeRouteTest(){
+    public void removeRouteTest() {
 
 
         given()
                 .headers(
-                "Authorization",
-                "Bearer " + getToken("pbucki", "Pbucki123!"))
+                        "Authorization",
+                        "Bearer " + getToken("pbucki", "Pbucki123!"))
                 .contentType("application/json")
                 .when()
                 .delete("http://localhost:8080/api/route/-3/remove/-2")
@@ -103,16 +103,17 @@ class RouteEndpointTest {
                 .statusCode(200);
         given()
                 .headers(
-                "Authorization",
-                "Bearer " + getToken("jkowalski", "Kowal123!"))
+                        "Authorization",
+                        "Bearer " + getToken("jkowalski", "Kowal123!"))
                 .contentType("application/json")
                 .when()
                 .delete("http://localhost:8080/api/route/-3/remove/-1")
                 .then()
                 .statusCode(200);
     }
+
     @Test
-    public void removeRouteTestFail(){
+    public void removeRouteTestFail() {
 
 
         given()
@@ -143,13 +144,14 @@ class RouteEndpointTest {
                 .then()
                 .statusCode(404);
     }
+
     @Test
-    public void editRouteTest(){
+    public void editRouteTest() {
         RouteDTO routeByMaintainer = given().headers(
-                "Authorization",
-                "Bearer " + getToken("pbucki", "Pbucki123!"))
+                        "Authorization",
+                        "Bearer " + getToken("pbucki", "Pbucki123!"))
                 .contentType("application/json")
-                .body(new RouteDTO("test edit maintainer","5a","link to photo with boxes","link to photo with numbers","json",-3L))
+                .body(new RouteDTO("test edit maintainer", "5a", "link to photo with boxes", "link to photo with numbers", "json", -3L))
                 .when()
                 .put("http://localhost:8080/api/route/-3/edit/-3")
                 .then()
@@ -158,10 +160,10 @@ class RouteEndpointTest {
                 .extract()
                 .body().as(RouteDTO.class);
         RouteDTO routeByOwner = given().headers(
-                "Authorization",
-                "Bearer " + getToken("jkowalski", "Kowal123!"))
+                        "Authorization",
+                        "Bearer " + getToken("jkowalski", "Kowal123!"))
                 .contentType("application/json")
-                .body(new RouteDTO("test edit owner","5b","link to photo with boxes","link to photo with numbers","json",-3L))
+                .body(new RouteDTO("test edit owner", "5b", "link to photo with boxes", "link to photo with numbers", "json", -3L))
                 .when()
                 .put("http://localhost:8080/api/route/-3/edit/-3")
                 .then()
@@ -172,30 +174,30 @@ class RouteEndpointTest {
     }
 
     @Test
-    public void editRouteTestFail(){
+    public void editRouteTestFail() {
         given().headers(
-                "Authorization",
-                "Bearer " + getToken("pbucki", "Pbucki123!"))
+                        "Authorization",
+                        "Bearer " + getToken("pbucki", "Pbucki123!"))
                 .contentType("application/json")
-                .body(new RouteDTO("test edit maintainer","5c","link to photo with boxes","link to photo with numbers","json",-3L))
+                .body(new RouteDTO("test edit maintainer", "5c", "link to photo with boxes", "link to photo with numbers", "json", -3L))
                 .when()
                 .put("http://localhost:8080/api/route/-100/edit/-2")
                 .then()
                 .statusCode(404);
         given().headers(
-                "Authorization",
-                "Bearer " + getToken("pbucki", "Pbucki123!"))
+                        "Authorization",
+                        "Bearer " + getToken("pbucki", "Pbucki123!"))
                 .contentType("application/json")
-                .body(new RouteDTO("test edit maintainer","5c","link to photo with boxes","link to photo with numbers","json",-3L))
+                .body(new RouteDTO("test edit maintainer", "5c", "link to photo with boxes", "link to photo with numbers", "json", -3L))
                 .when()
                 .put("http://localhost:8080/api/route/-3/edit/-100")
                 .then()
                 .statusCode(404);
         given().headers(
-                "Authorization",
-                "Bearer " + getToken("pbucki", "Pbucki123!"))
+                        "Authorization",
+                        "Bearer " + getToken("pbucki", "Pbucki123!"))
                 .contentType("application/json")
-                .body(new RouteDTO("test edit maintainer","5c","link to photo with boxes","link to photo with numbers","json",-3L))
+                .body(new RouteDTO("test edit maintainer", "5c", "link to photo with boxes", "link to photo with numbers", "json", -3L))
                 .when()
                 .put("http://localhost:8080/api/route/-2/edit/-2")
                 .then()

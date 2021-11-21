@@ -34,15 +34,17 @@ public class RouteEndpoint {
     public RouteDTO addRoute(@RequestBody @Valid RouteDTO routeDTO) throws AbstractAppException {
         return retry.execute(arg0 -> RouteConverter.climbingWallEntityToDTO(routeService.addRoute(routeDTO)));
     }
+
     @Secured("ROLE_MANAGER")
     @DeleteMapping("{gym_id}/remove/{route_id}")
     public ResponseEntity addRoute(@PathVariable Long gym_id, @PathVariable Long route_id) throws AbstractAppException {
-         return  retry.execute(arg0 -> routeService.removeRoute(gym_id, route_id));
+        return retry.execute(arg0 -> routeService.removeRoute(gym_id, route_id));
     }
+
     @Secured("ROLE_MANAGER")
     @PutMapping("{gym_id}/edit/{route_id}")
     public RouteDTO editRouteDetails(@PathVariable Long gym_id, @PathVariable Long route_id, @RequestBody @Valid RouteDTO routeDTO) throws AbstractAppException {
-        return retry.execute(arg0 -> RouteConverter.climbingWallEntityToDTO(routeService.editRouteDetails(gym_id, route_id ,routeDTO)));
+        return retry.execute(arg0 -> RouteConverter.climbingWallEntityToDTO(routeService.editRouteDetails(gym_id, route_id, routeDTO)));
     }
 
 }

@@ -6,7 +6,7 @@ import pl.ftims.ias.your_climbing_gym.entities.RouteEntity;
 public class RouteConverter {
 
     public static RouteDTO climbingWallEntityToDTO(RouteEntity entity) {
-        return new RouteDTO(entity.getId(), entity.getVersion(), entity.getRouteName(), entity.getDifficulty(),entity.getPhotoWithBoxesLink(), entity.getPhotoWithNumbersLink(), entity.getHoldsDetails(), entity.getClimbingGym().getId());
+        return new RouteDTO(entity.getId(), entity.getVersion(), entity.getRouteName(), entity.getDifficulty(), entity.getPhotoWithBoxesLink(), entity.getPhotoWithNumbersLink(), entity.getHoldsDetails(), entity.getClimbingGym().getId());
     }
 
 }

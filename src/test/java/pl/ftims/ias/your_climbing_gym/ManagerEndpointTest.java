@@ -42,8 +42,8 @@ class ManagerEndpointTest {
         RegistrationDTO registrationDTO = new RegistrationDTO("new_manager", "new_manager@example.com", "Test123!");
 
         UserWithPersonalDataAccessLevelDTO user = given().headers(
-                "Authorization",
-                "Bearer " + getToken("pbucki", "Pbucki123!"))
+                        "Authorization",
+                        "Bearer " + getToken("pbucki", "Pbucki123!"))
                 .contentType("application/json")
                 .body(registrationDTO)
                 .when()
@@ -66,8 +66,8 @@ class ManagerEndpointTest {
     @Test
     public void testDeactivateOrActivateManager() {
         UserWithAccessLevelDTO user = given().headers(
-                "Authorization",
-                "Bearer " + getToken("pbucki", "Pbucki123!"))
+                        "Authorization",
+                        "Bearer " + getToken("pbucki", "Pbucki123!"))
                 .contentType("application/json")
                 .when()
                 .put("http://localhost:8080/api/managers/deactivate/-1")
@@ -80,8 +80,8 @@ class ManagerEndpointTest {
         assertEquals(user.getAccessLevels().get(0).getIsActive(), false);
 
         UserWithAccessLevelDTO userActivated = given().headers(
-                "Authorization",
-                "Bearer " + getToken("pbucki", "Pbucki123!"))
+                        "Authorization",
+                        "Bearer " + getToken("pbucki", "Pbucki123!"))
                 .contentType("application/json")
                 .when()
                 .put("http://localhost:8080/api/managers/activate/-1")
@@ -97,8 +97,8 @@ class ManagerEndpointTest {
     @Test
     public void testDeactivateOrActivateManagerFail() {
         given().headers(
-                "Authorization",
-                "Bearer " + getToken("pbucki", "Pbucki123!"))
+                        "Authorization",
+                        "Bearer " + getToken("pbucki", "Pbucki123!"))
                 .contentType("application/json")
                 .when()
                 .put("http://localhost:8080/api/managers/deactivate/-100")
@@ -106,8 +106,8 @@ class ManagerEndpointTest {
                 .statusCode(404);
 
         given().headers(
-                "Authorization",
-                "Bearer " + getToken("pbucki", "Pbucki123!"))
+                        "Authorization",
+                        "Bearer " + getToken("pbucki", "Pbucki123!"))
                 .contentType("application/json")
                 .when()
                 .put("http://localhost:8080/api/managers/activate/-100")

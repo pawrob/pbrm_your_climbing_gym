@@ -79,6 +79,7 @@ public class AppExceptionHandler {
         ExceptionDTO exceptionDTO = new ExceptionDTO(e.getMessage(), HttpStatus.NOT_FOUND, ZonedDateTime.now(), "GYM_NOT_FOUND");
         return new ResponseEntity<>(exceptionDTO, HttpStatus.NOT_FOUND);
     }
+
     @ExceptionHandler(value = RouteNotFoundException.class)
     public ResponseEntity<Object> handleRouteNotFoundException(RouteNotFoundException e) {
         ExceptionDTO exceptionDTO = new ExceptionDTO(e.getMessage(), HttpStatus.NOT_FOUND, ZonedDateTime.now(), "ROUTE_NOT_FOUND");
