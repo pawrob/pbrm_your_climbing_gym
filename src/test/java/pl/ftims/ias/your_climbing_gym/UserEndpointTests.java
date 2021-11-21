@@ -42,7 +42,7 @@ class UserEndpointTests {
                 .contentType("application/json")
                 .body(credentialsDTO)
                 .when()
-                .post("https://localhost:8080/api/auth/authenticate")
+                .post("http://localhost:8080/api/auth/authenticate")
                 .then()
                 .statusCode(200).extract().body().as(TokenDTO.class);
         return token.getToken();
@@ -58,7 +58,7 @@ class UserEndpointTests {
                 "Bearer " + getToken("pbucki", "Pbucki123!"))
                 .contentType("application/json")
                 .when()
-                .get("https://localhost:8080/api/users")
+                .get("http://localhost:8080/api/users")
                 .then()
                 .statusCode(200)
                 .contentType(JSON)
@@ -75,7 +75,7 @@ class UserEndpointTests {
                 "Bearer " + getToken("pbucki", "Pbucki123!"))
                 .contentType("application/json")
                 .when()
-                .get("https://localhost:8080/api/users/-10")
+                .get("http://localhost:8080/api/users/-10")
                 .then()
                 .statusCode(404);
     }
@@ -88,7 +88,7 @@ class UserEndpointTests {
                 "Bearer " + getToken("pbucki", "Pbucki123!"))
                 .contentType("application/json")
                 .when()
-                .get("https://localhost:8080/api/users/-1")
+                .get("http://localhost:8080/api/users/-1")
                 .then()
                 .statusCode(200)
                 .contentType(JSON)
@@ -113,7 +113,7 @@ class UserEndpointTests {
                 .contentType("application/json")
                 .body(registrationDTO)
                 .when()
-                .post("https://localhost:8080/api/users/register")
+                .post("http://localhost:8080/api/users/register")
                 .then()
                 .statusCode(200)
                 .contentType(JSON)
@@ -131,7 +131,7 @@ class UserEndpointTests {
         UserWithAccessLevelDTO userWithAccessLevelDTO = given()
                 .contentType("application/json")
                 .when()
-                .put("https://localhost:8080/api/users/verify?username=mrpawrob&token=" + userEntity.getVerifyToken())
+                .put("http://localhost:8080/api/users/verify?username=mrpawrob&token=" + userEntity.getVerifyToken())
                 .then()
                 .statusCode(200)
                 .contentType(JSON)
@@ -145,14 +145,14 @@ class UserEndpointTests {
         given()
                 .contentType("application/json")
                 .when()
-                .put("https://localhost:8080/api/users/verify?username=notexist&token=" + userEntity.getVerifyToken())
+                .put("http://localhost:8080/api/users/verify?username=notexist&token=" + userEntity.getVerifyToken())
                 .then()
                 .statusCode(404);
 
         given()
                 .contentType("application/json")
                 .when()
-                .put("https://localhost:8080/api/users/verify?username=mrpawrob&token=" + userEntity.getVerifyToken())
+                .put("http://localhost:8080/api/users/verify?username=mrpawrob&token=" + userEntity.getVerifyToken())
                 .then()
                 .statusCode(409);
 
@@ -160,7 +160,7 @@ class UserEndpointTests {
                 .contentType("application/json")
                 .body(loginTaken)
                 .when()
-                .post("https://localhost:8080/api/users/register")
+                .post("http://localhost:8080/api/users/register")
                 .then()
                 .statusCode(400);
 
@@ -169,7 +169,7 @@ class UserEndpointTests {
                 .contentType("application/json")
                 .body(emailTaken)
                 .when()
-                .post("https://localhost:8080/api/users/register")
+                .post("http://localhost:8080/api/users/register")
                 .then()
                 .statusCode(400);
 
@@ -177,7 +177,7 @@ class UserEndpointTests {
                 .contentType("application/json")
                 .body(tooShortPassword)
                 .when()
-                .post("https://localhost:8080/api/users/register")
+                .post("http://localhost:8080/api/users/register")
                 .then()
                 .statusCode(400);
     }
@@ -192,7 +192,7 @@ class UserEndpointTests {
                 .contentType("application/json")
                 .body(personalDataDTO)
                 .when()
-                .put("https://localhost:8080/api/users/update/-3")
+                .put("http://localhost:8080/api/users/update/-3")
                 .then()
                 .statusCode(200)
                 .contentType(JSON)
@@ -217,7 +217,7 @@ class UserEndpointTests {
                 .contentType("application/json")
                 .body(personalDataDTO)
                 .when()
-                .put("https://localhost:8080/api/users/update/-4")
+                .put("http://localhost:8080/api/users/update/-4")
                 .then()
                 .statusCode(403);
 
@@ -235,7 +235,7 @@ class UserEndpointTests {
                 .contentType("application/json")
                 .body(changePasswordDTO)
                 .when()
-                .put("https://localhost:8080/api/users/change_password")
+                .put("http://localhost:8080/api/users/change_password")
                 .then()
                 .statusCode(200);
 
@@ -245,7 +245,7 @@ class UserEndpointTests {
                 .contentType("application/json")
                 .body(changePasswordDTORollback)
                 .when()
-                .put("https://localhost:8080/api/users/change_password")
+                .put("http://localhost:8080/api/users/change_password")
                 .then()
                 .statusCode(200);
 
@@ -262,7 +262,7 @@ class UserEndpointTests {
                 .contentType("application/json")
                 .body(badPassword)
                 .when()
-                .put("https://localhost:8080/api/users/change_password")
+                .put("http://localhost:8080/api/users/change_password")
                 .then()
                 .statusCode(401);
 
@@ -272,7 +272,7 @@ class UserEndpointTests {
                 .contentType("application/json")
                 .body(passwordSameAsBefore)
                 .when()
-                .put("https://localhost:8080/api/users/change_password")
+                .put("http://localhost:8080/api/users/change_password")
                 .then()
                 .statusCode(401);
 
@@ -286,7 +286,7 @@ class UserEndpointTests {
                 .contentType("application/json")
                 .body(new PasswordDTO("Nowak123!"))
                 .when()
-                .delete("https://localhost:8080/api/users/delete/-2")
+                .delete("http://localhost:8080/api/users/delete/-2")
                 .then()
                 .statusCode(200);
 
@@ -295,7 +295,7 @@ class UserEndpointTests {
                 "Bearer " + getToken("pbucki", "Pbucki123!"))
                 .contentType("application/json")
                 .when()
-                .get("https://localhost:8080/api/users/-2")
+                .get("http://localhost:8080/api/users/-2")
                 .then()
                 .statusCode(200)
                 .contentType(JSON)
@@ -314,7 +314,7 @@ class UserEndpointTests {
                 .contentType("application/json")
                 .body(new PasswordDTO("Kowal1234!"))
                 .when()
-                .delete("https://localhost:8080/api/users/delete/-1")
+                .delete("http://localhost:8080/api/users/delete/-1")
                 .then()
                 .statusCode(401);
 
@@ -324,7 +324,7 @@ class UserEndpointTests {
                 .contentType("application/json")
                 .body(new PasswordDTO("Nowak123!"))
                 .when()
-                .delete("https://localhost:8080/api/users/delete/-3")
+                .delete("http://localhost:8080/api/users/delete/-3")
                 .then()
                 .statusCode(403);
     }
@@ -336,7 +336,7 @@ class UserEndpointTests {
                 "Bearer " + getToken("pbucki", "Pbucki123!"))
                 .contentType("application/json")
                 .when()
-                .put("https://localhost:8080/api/users/deactivate/-4")
+                .put("http://localhost:8080/api/users/deactivate/-4")
                 .then()
                 .statusCode(200)
                 .contentType(JSON)
@@ -350,7 +350,7 @@ class UserEndpointTests {
                 "Bearer " + getToken("pbucki", "Pbucki123!"))
                 .contentType("application/json")
                 .when()
-                .put("https://localhost:8080/api/users/activate/-4")
+                .put("http://localhost:8080/api/users/activate/-4")
                 .then()
                 .statusCode(200)
                 .contentType(JSON)
@@ -367,7 +367,7 @@ class UserEndpointTests {
                 "Bearer " + getToken("pbucki", "Pbucki123!"))
                 .contentType("application/json")
                 .when()
-                .put("https://localhost:8080/api/users/deactivate/100")
+                .put("http://localhost:8080/api/users/deactivate/100")
                 .then()
                 .statusCode(404);
 
@@ -376,7 +376,7 @@ class UserEndpointTests {
                 "Bearer " + getToken("pbucki", "Pbucki123!"))
                 .contentType("application/json")
                 .when()
-                .put("https://localhost:8080/api/users/activate/100")
+                .put("http://localhost:8080/api/users/activate/100")
                 .then()
                 .statusCode(404);
     }
@@ -390,7 +390,7 @@ class UserEndpointTests {
                 .contentType("application/json")
                 .body(new EmailDTO("pbuckichange@example.com"))
                 .when()
-                .get("https://localhost:8080/api/users/request_change_email")
+                .get("http://localhost:8080/api/users/request_change_email")
                 .then()
                 .statusCode(200)
                 .contentType(JSON)
@@ -405,7 +405,7 @@ class UserEndpointTests {
                 "Bearer " + getToken("pbucki", "Pbucki123!"))
                 .contentType("application/json")
                 .when()
-                .get("https://localhost:8080/api/users/change_email?token=" + userEntity.getEmailResetToken() + "&email=pbuckichange@example.com")
+                .get("http://localhost:8080/api/users/change_email?token=" + userEntity.getEmailResetToken() + "&email=pbuckichange@example.com")
                 .then()
                 .statusCode(200)
                 .contentType(JSON)
@@ -422,7 +422,7 @@ class UserEndpointTests {
                 .contentType("application/json")
                 .body(new EmailDTO("jdoe@example.com"))
                 .when()
-                .get("https://localhost:8080/api/users/request_reset_password")
+                .get("http://localhost:8080/api/users/request_reset_password")
                 .then()
                 .statusCode(200)
                 .contentType(JSON)
@@ -434,7 +434,7 @@ class UserEndpointTests {
                 .contentType("application/json")
                 .body(credentialsDTO)
                 .when()
-                .post("https://localhost:8080/api/auth/authenticate")
+                .post("http://localhost:8080/api/auth/authenticate")
                 .then()
                 .statusCode(200);
 
@@ -446,7 +446,7 @@ class UserEndpointTests {
                 .contentType("application/json")
                 .body(new ResetPasswordDTO("Test1234!", "Test1234!"))
                 .when()
-                .get("https://localhost:8080/api/users/reset_password?id=-5&token=" + userEntity.getPasswordResetToken())
+                .get("http://localhost:8080/api/users/reset_password?id=-5&token=" + userEntity.getPasswordResetToken())
                 .then()
                 .statusCode(200)
                 .contentType(JSON)
@@ -458,7 +458,7 @@ class UserEndpointTests {
                 .contentType("application/json")
                 .body(credentialsDTO2)
                 .when()
-                .post("https://localhost:8080/api/auth/authenticate")
+                .post("http://localhost:8080/api/auth/authenticate")
                 .then()
                 .statusCode(200);
     }

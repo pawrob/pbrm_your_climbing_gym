@@ -44,7 +44,7 @@ class ClimbingGymEndpointTest {
                 .contentType("application/json")
                 .body(credentialsDTO)
                 .when()
-                .post("https://localhost:8080/api/auth/authenticate")
+                .post("http://localhost:8080/api/auth/authenticate")
                 .then()
                 .statusCode(200).extract().body().as(TokenDTO.class);
         return token.getToken();
@@ -57,7 +57,7 @@ class ClimbingGymEndpointTest {
         List<ClimbingGymDTO> gyms = given()
                 .contentType("application/json")
                 .when()
-                .get("https://localhost:8080/api/gym/verified/all")
+                .get("http://localhost:8080/api/gym/verified/all")
                 .then()
                 .statusCode(200)
                 .contentType(JSON)
@@ -72,7 +72,7 @@ class ClimbingGymEndpointTest {
         ClimbingGymWithDetailsDTO gym = given()
                 .contentType("application/json")
                 .when()
-                .get("https://localhost:8080/api/gym/verified/-3")
+                .get("http://localhost:8080/api/gym/verified/-3")
                 .then()
                 .statusCode(200)
                 .contentType(JSON)
@@ -88,7 +88,7 @@ class ClimbingGymEndpointTest {
         given()
                 .contentType("application/json")
                 .when()
-                .get("https://localhost:8080/api/gym/verified/-100")
+                .get("http://localhost:8080/api/gym/verified/-100")
                 .then()
                 .statusCode(404);
     }
@@ -101,7 +101,7 @@ class ClimbingGymEndpointTest {
                 "Bearer " + getToken("jkowalski", "Kowal123!"))
                 .contentType("application/json")
                 .when()
-                .get("https://localhost:8080/api/gym/owned_gyms")
+                .get("http://localhost:8080/api/gym/owned_gyms")
                 .then()
                 .statusCode(200)
                 .contentType(JSON)
@@ -119,7 +119,7 @@ class ClimbingGymEndpointTest {
                 "Bearer " + getToken("pbucki", "Pbucki123!"))
                 .contentType("application/json")
                 .when()
-                .get("https://localhost:8080/api/gym/all")
+                .get("http://localhost:8080/api/gym/all")
                 .then()
                 .statusCode(200)
                 .contentType(JSON)
@@ -136,7 +136,7 @@ class ClimbingGymEndpointTest {
                 "Bearer " + getToken("pbucki", "Pbucki123!"))
                 .contentType("application/json")
                 .when()
-                .get("https://localhost:8080/api/gym/-2")
+                .get("http://localhost:8080/api/gym/-2")
                 .then()
                 .statusCode(200)
                 .contentType(JSON)
@@ -154,7 +154,7 @@ class ClimbingGymEndpointTest {
                 "Bearer " + getToken("pbucki", "Pbucki123!"))
                 .contentType("application/json")
                 .when()
-                .get("https://localhost:8080/api/gym/-100")
+                .get("http://localhost:8080/api/gym/-100")
                 .then()
                 .statusCode(404);
     }
@@ -167,7 +167,7 @@ class ClimbingGymEndpointTest {
                 "Bearer " + getToken("pbucki", "Pbucki123!"))
                 .contentType("application/json")
                 .when()
-                .post("https://localhost:8080/api/gym/register/gym_registrationTest")
+                .post("http://localhost:8080/api/gym/register/gym_registrationTest")
                 .then()
                 .statusCode(200)
                 .contentType(JSON)
@@ -182,7 +182,7 @@ class ClimbingGymEndpointTest {
                 "Bearer " + getToken("pbucki", "Pbucki123!"))
                 .contentType("application/json")
                 .when()
-                .put("https://localhost:8080/api/gym/verify/1")
+                .put("http://localhost:8080/api/gym/verify/1")
                 .then()
                 .statusCode(200)
                 .contentType(JSON)
@@ -197,7 +197,7 @@ class ClimbingGymEndpointTest {
                 "Bearer " + getToken("pbucki", "Pbucki123!"))
                 .contentType("application/json")
                 .when()
-                .put("https://localhost:8080/api/gym/close/1")
+                .put("http://localhost:8080/api/gym/close/1")
                 .then()
                 .statusCode(200)
                 .contentType(JSON)
@@ -212,7 +212,7 @@ class ClimbingGymEndpointTest {
                 "Bearer " + getToken("pbucki", "Pbucki123!"))
                 .contentType("application/json")
                 .when()
-                .post("https://localhost:8080/api/gym/register/gym_registrationTest")
+                .post("http://localhost:8080/api/gym/register/gym_registrationTest")
                 .then()
                 .statusCode(400);
 
@@ -221,7 +221,7 @@ class ClimbingGymEndpointTest {
                 "Bearer " + getToken("pbucki", "Pbucki123!"))
                 .contentType("application/json")
                 .when()
-                .put("https://localhost:8080/api/gym/verify/-100")
+                .put("http://localhost:8080/api/gym/verify/-100")
                 .then()
                 .statusCode(404);
         given().headers(
@@ -229,7 +229,7 @@ class ClimbingGymEndpointTest {
                 "Bearer " + getToken("pbucki", "Pbucki123!"))
                 .contentType("application/json")
                 .when()
-                .put("https://localhost:8080/api/gym/close/-100")
+                .put("http://localhost:8080/api/gym/close/-100")
                 .then()
                 .statusCode(404);
 
@@ -243,7 +243,7 @@ class ClimbingGymEndpointTest {
                 "Bearer " + getToken("jkowalski", "Kowal123!"))
                 .contentType("application/json")
                 .when()
-                .put("https://localhost:8080/api/gym/-2/add_maintainer/-3")
+                .put("http://localhost:8080/api/gym/-2/add_maintainer/-3")
                 .then()
                 .statusCode(200)
                 .contentType(JSON)
@@ -261,7 +261,7 @@ class ClimbingGymEndpointTest {
                 "Bearer " + getToken("jkowalski", "Kowal123!"))
                 .contentType("application/json")
                 .when()
-                .put("https://localhost:8080/api/gym/-100/add_maintainer/-3")
+                .put("http://localhost:8080/api/gym/-100/add_maintainer/-3")
                 .then()
                 .statusCode(404);
 
@@ -270,7 +270,7 @@ class ClimbingGymEndpointTest {
                 "Bearer " + getToken("pbucki", "Pbucki123!"))
                 .contentType("application/json")
                 .when()
-                .put("https://localhost:8080/api/gym/-2/add_maintainer/-3")
+                .put("http://localhost:8080/api/gym/-2/add_maintainer/-3")
                 .then()
                 .statusCode(403);
 
@@ -279,7 +279,7 @@ class ClimbingGymEndpointTest {
                 "Bearer " + getToken("jkowalski", "Kowal123!"))
                 .contentType("application/json")
                 .when()
-                .put("https://localhost:8080/api/gym/-2/add_maintainer/-4")
+                .put("http://localhost:8080/api/gym/-2/add_maintainer/-4")
                 .then()
                 .statusCode(403);
     }
@@ -293,7 +293,7 @@ class ClimbingGymEndpointTest {
                 .contentType("application/json")
                 .body(details)
                 .when()
-                .put("https://localhost:8080/api/gym/edit_gym_details/-2")
+                .put("http://localhost:8080/api/gym/edit_gym_details/-2")
                 .then()
                 .statusCode(200)
                 .contentType(JSON)
@@ -316,7 +316,7 @@ class ClimbingGymEndpointTest {
                 .contentType("application/json")
                 .body(details)
                 .when()
-                .put("https://localhost:8080/api/gym/edit_gym_details/-100")
+                .put("http://localhost:8080/api/gym/edit_gym_details/-100")
                 .then()
                 .statusCode(404);
 
@@ -327,7 +327,7 @@ class ClimbingGymEndpointTest {
                 .contentType("application/json")
                 .body(details)
                 .when()
-                .put("https://localhost:8080/api/gym/edit_gym_details/-2")
+                .put("http://localhost:8080/api/gym/edit_gym_details/-2")
                 .then()
                 .statusCode(403);
     }
@@ -339,7 +339,7 @@ class ClimbingGymEndpointTest {
                 "Bearer " + getToken("pbucki", "Pbucki123!"))
                 .contentType("application/json")
                 .when()
-                .get("https://localhost:8080/api/gym/maintained_gyms")
+                .get("http://localhost:8080/api/gym/maintained_gyms")
                 .then()
                 .statusCode(200)
                 .extract()
@@ -350,7 +350,7 @@ class ClimbingGymEndpointTest {
                 "Bearer " + getToken("jkowalski", "Kowal123!"))
                 .contentType("application/json")
                 .when()
-                .get("https://localhost:8080/api/gym/maintained_gyms")
+                .get("http://localhost:8080/api/gym/maintained_gyms")
                 .then()
                 .statusCode(200)
                 .extract()

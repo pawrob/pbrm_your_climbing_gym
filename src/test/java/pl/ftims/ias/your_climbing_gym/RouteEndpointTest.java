@@ -25,7 +25,7 @@ class RouteEndpointTest {
                 .contentType("application/json")
                 .body(credentialsDTO)
                 .when()
-                .post("https://localhost:8080/api/auth/authenticate")
+                .post("http://localhost:8080/api/auth/authenticate")
                 .then()
                 .statusCode(200).extract().body().as(TokenDTO.class);
         return token.getToken();
@@ -44,7 +44,7 @@ class RouteEndpointTest {
                 .contentType("application/json")
                 .body(new RouteDTO("test route maintainer","5a",-3L))
                 .when()
-                .post("https://localhost:8080/api/route/add")
+                .post("http://localhost:8080/api/route/add")
                 .then()
                 .statusCode(200)
                 .contentType(JSON)
@@ -56,7 +56,7 @@ class RouteEndpointTest {
                 .contentType("application/json")
                 .body(new RouteDTO("test route owner","5a",-3L))
                 .when()
-                .post("https://localhost:8080/api/route/add")
+                .post("http://localhost:8080/api/route/add")
                 .then()
                 .statusCode(200)
                 .contentType(JSON)
@@ -73,7 +73,7 @@ class RouteEndpointTest {
                 .contentType("application/json")
                 .body(new RouteDTO("test route maintainer","5a",-2L))
                 .when()
-                .post("https://localhost:8080/api/route/add")
+                .post("http://localhost:8080/api/route/add")
                 .then()
                 .statusCode(403);
 
@@ -83,7 +83,7 @@ class RouteEndpointTest {
                 .contentType("application/json")
                 .body(new RouteDTO("test route owner","5a",-2L))
                 .when()
-                .post("https://localhost:8080/api/route/add")
+                .post("http://localhost:8080/api/route/add")
                 .then()
                 .statusCode(403);
     }
@@ -98,7 +98,7 @@ class RouteEndpointTest {
                 "Bearer " + getToken("pbucki", "Pbucki123!"))
                 .contentType("application/json")
                 .when()
-                .delete("https://localhost:8080/api/route/-3/remove/-2")
+                .delete("http://localhost:8080/api/route/-3/remove/-2")
                 .then()
                 .statusCode(200);
         given()
@@ -107,7 +107,7 @@ class RouteEndpointTest {
                 "Bearer " + getToken("jkowalski", "Kowal123!"))
                 .contentType("application/json")
                 .when()
-                .delete("https://localhost:8080/api/route/-3/remove/-1")
+                .delete("http://localhost:8080/api/route/-3/remove/-1")
                 .then()
                 .statusCode(200);
     }
@@ -121,7 +121,7 @@ class RouteEndpointTest {
                         "Bearer " + getToken("pbucki", "Pbucki123!"))
                 .contentType("application/json")
                 .when()
-                .delete("https://localhost:8080/api/route/-2/remove/-2")
+                .delete("http://localhost:8080/api/route/-2/remove/-2")
                 .then()
                 .statusCode(403);
         given()
@@ -130,7 +130,7 @@ class RouteEndpointTest {
                         "Bearer " + getToken("jkowalski", "Kowal123!"))
                 .contentType("application/json")
                 .when()
-                .delete("https://localhost:8080/api/route/-3/remove/-100")
+                .delete("http://localhost:8080/api/route/-3/remove/-100")
                 .then()
                 .statusCode(404);
         given()
@@ -139,7 +139,7 @@ class RouteEndpointTest {
                         "Bearer " + getToken("jkowalski", "Kowal123!"))
                 .contentType("application/json")
                 .when()
-                .delete("https://localhost:8080/api/route/-100/remove/-2")
+                .delete("http://localhost:8080/api/route/-100/remove/-2")
                 .then()
                 .statusCode(404);
     }
@@ -151,7 +151,7 @@ class RouteEndpointTest {
                 .contentType("application/json")
                 .body(new RouteDTO("test edit maintainer","5c",-3L))
                 .when()
-                .put("https://localhost:8080/api/route/-3/edit/-3")
+                .put("http://localhost:8080/api/route/-3/edit/-3")
                 .then()
                 .statusCode(200)
                 .contentType(JSON)
@@ -163,7 +163,7 @@ class RouteEndpointTest {
                 .contentType("application/json")
                 .body(new RouteDTO("test edit owner","5b",-3L))
                 .when()
-                .put("https://localhost:8080/api/route/-3/edit/-3")
+                .put("http://localhost:8080/api/route/-3/edit/-3")
                 .then()
                 .statusCode(200)
                 .contentType(JSON)
@@ -179,7 +179,7 @@ class RouteEndpointTest {
                 .contentType("application/json")
                 .body(new RouteDTO("test edit maintainer","5c",-3L))
                 .when()
-                .put("https://localhost:8080/api/route/-100/edit/-2")
+                .put("http://localhost:8080/api/route/-100/edit/-2")
                 .then()
                 .statusCode(404);
         given().headers(
@@ -188,7 +188,7 @@ class RouteEndpointTest {
                 .contentType("application/json")
                 .body(new RouteDTO("test edit maintainer","5c",-3L))
                 .when()
-                .put("https://localhost:8080/api/route/-3/edit/-100")
+                .put("http://localhost:8080/api/route/-3/edit/-100")
                 .then()
                 .statusCode(404);
         given().headers(
@@ -197,7 +197,7 @@ class RouteEndpointTest {
                 .contentType("application/json")
                 .body(new RouteDTO("test edit maintainer","5c",-3L))
                 .when()
-                .put("https://localhost:8080/api/route/-2/edit/-2")
+                .put("http://localhost:8080/api/route/-2/edit/-2")
                 .then()
                 .statusCode(403);
 

@@ -238,7 +238,7 @@ public class UserService {
                 + URLEncoder.encode(userEntity.getEmailResetToken(), StandardCharsets.UTF_8) + "&email="
                 + URLEncoder.encode(emailDTO.getEmail(), StandardCharsets.UTF_8));
         String body = templateEngine.process("template", context);
-        emailSender.sendEmail("mrpawrob@gmail.com", "PerfectBeta - potwierdzenie zmiany adresu email", body);
+        emailSender.sendEmail(userEntity.getEmail(), "PerfectBeta - potwierdzenie zmiany adresu email", body);
 
         return userMokRepository.save(userEntity);
     }
@@ -259,7 +259,7 @@ public class UserService {
         context.setVariable("description", "https://localhost:8080/api/users/reset_password?id=" + userEntity.getId()
                 + "&token=" + URLEncoder.encode(userEntity.getPasswordResetToken(), StandardCharsets.UTF_8));
         String body = templateEngine.process("template", context);
-        emailSender.sendEmail("mrpawrob@gmail.com", "PerfectBeta - potwierdzenie zmiany hasła", body);
+        emailSender.sendEmail(userEntity.getEmail(), "PerfectBeta - potwierdzenie zmiany hasła", body);
 
         return userMokRepository.save(userEntity);
     }

@@ -30,7 +30,7 @@ class ManagerEndpointTest {
                 .contentType("application/json")
                 .body(credentialsDTO)
                 .when()
-                .post("https://localhost:8080/api/auth/authenticate")
+                .post("http://localhost:8080/api/auth/authenticate")
                 .then()
                 .statusCode(200).extract().body().as(TokenDTO.class);
         return token.getToken();
@@ -47,7 +47,7 @@ class ManagerEndpointTest {
                 .contentType("application/json")
                 .body(registrationDTO)
                 .when()
-                .post("https://localhost:8080/api/managers/register")
+                .post("http://localhost:8080/api/managers/register")
                 .then()
                 .statusCode(200)
                 .contentType(JSON)
@@ -70,7 +70,7 @@ class ManagerEndpointTest {
                 "Bearer " + getToken("pbucki", "Pbucki123!"))
                 .contentType("application/json")
                 .when()
-                .put("https://localhost:8080/api/managers/deactivate/-1")
+                .put("http://localhost:8080/api/managers/deactivate/-1")
                 .then()
                 .statusCode(200)
                 .contentType(JSON)
@@ -84,7 +84,7 @@ class ManagerEndpointTest {
                 "Bearer " + getToken("pbucki", "Pbucki123!"))
                 .contentType("application/json")
                 .when()
-                .put("https://localhost:8080/api/managers/activate/-1")
+                .put("http://localhost:8080/api/managers/activate/-1")
                 .then()
                 .statusCode(200)
                 .contentType(JSON)
@@ -101,7 +101,7 @@ class ManagerEndpointTest {
                 "Bearer " + getToken("pbucki", "Pbucki123!"))
                 .contentType("application/json")
                 .when()
-                .put("https://localhost:8080/api/managers/deactivate/-100")
+                .put("http://localhost:8080/api/managers/deactivate/-100")
                 .then()
                 .statusCode(404);
 
@@ -110,7 +110,7 @@ class ManagerEndpointTest {
                 "Bearer " + getToken("pbucki", "Pbucki123!"))
                 .contentType("application/json")
                 .when()
-                .put("https://localhost:8080/api/managers/activate/-100")
+                .put("http://localhost:8080/api/managers/activate/-100")
                 .then()
                 .statusCode(404);
 
