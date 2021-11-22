@@ -9,7 +9,7 @@
         <relativePath/>
     </parent>
     <groupId>pl.ftims.ias</groupId>
-    <artifactId>your_climbing_gym</artifactId>
+    <artifactId>perfectbeta</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>perfectbeta</name>
     <description>Project for bachelor degree</description>
