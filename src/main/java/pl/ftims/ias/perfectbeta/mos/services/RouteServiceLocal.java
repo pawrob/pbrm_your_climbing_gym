@@ -9,7 +9,7 @@ public interface RouteServiceLocal {
 
     RouteEntity addRoute(RouteDTO wallDTO) throws AbstractAppException;
 
-    ResponseEntity removeRoute(Long gymId, Long routeId)  throws AbstractAppException;
+    ResponseEntity removeRoute(Long gymId, Long routeId) throws AbstractAppException;
 
-    RouteEntity editRouteDetails(Long gymId, Long routeId, RouteDTO routeDTO) throws AbstractAppException ;
+    RouteEntity editRouteDetails(Long gymId, Long routeId, RouteDTO routeDTO) throws AbstractAppException;
 }

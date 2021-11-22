@@ -7,6 +7,7 @@ import pl.ftims.ias.perfectbeta.dto.ResetPasswordDTO;
 import pl.ftims.ias.perfectbeta.entities.PersonalDataEntity;
 import pl.ftims.ias.perfectbeta.entities.UserEntity;
 import pl.ftims.ias.perfectbeta.exceptions.AbstractAppException;
+
 import java.util.List;
 
 public interface UserServiceLocal {
