@@ -9,12 +9,6 @@ import java.nio.charset.StandardCharsets;
 
 public class SymmetricCrypt {
 
-// todo how to get that from application.properties
-//    @Value("${crypt.symmetricCryptKey}")
-//    private static  String key;
-//    @Value("${crypt.symmetricCryptSalt}")
-//    private static  String salt;
-
 
     private static final String key = "7B66CB2371B02644841583934AC34B048C33E8188218812078461349140C5997";
     private static final String salt = "365F69DD9BBF0E6F";

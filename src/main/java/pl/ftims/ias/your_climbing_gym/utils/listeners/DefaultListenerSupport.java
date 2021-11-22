@@ -6,7 +6,6 @@ import org.springframework.retry.RetryContext;
 import org.springframework.retry.listener.RetryListenerSupport;
 import pl.ftims.ias.your_climbing_gym.utils.loggers.TransactionLogger;
 
-//class for retrying
 public class DefaultListenerSupport extends RetryListenerSupport {
 
     private final TransactionLogger transactionLogger = new TransactionLogger();

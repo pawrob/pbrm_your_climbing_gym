@@ -14,7 +14,6 @@ public class TransactionLogger {
     }
 
     public TransactionLogger() {
-
         logger = LogManager.getLogger(this.getClass());
     }
 
@@ -22,11 +21,6 @@ public class TransactionLogger {
         logger.info(prepareLog("transaction begin"));
     }
 
-    /**
-     * Metoda dodająca do wpisu informacje o zakonczonej transakcji.
-     *
-     * @param committed informacja o tym czy transakcja została zatwierdzona
-     */
     public void logTransactionEnd(boolean committed) {
         String log = "transaction end with " + (committed ? "commit" : "rollback");
         logger.info(prepareLog(log));

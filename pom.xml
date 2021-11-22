@@ -11,7 +11,7 @@
     <groupId>pl.ftims.ias</groupId>
     <artifactId>your_climbing_gym</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>your_climbing_gym</name>
+    <name>perfectbeta</name>
     <description>Project for bachelor degree</description>
     <properties>
         <java.version>11</java.version>
@@ -33,30 +33,12 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
-            <!--            <exclusions>-->
-            <!--                <exclusion>-->
-            <!--                    <groupId>org.hibernate</groupId>-->
-            <!--                    <artifactId>hibernate-entitymanager</artifactId>-->
-            <!--                </exclusion>-->
-            <!--                <exclusion>-->
-            <!--                    <groupId>org.hibernate</groupId>-->
-            <!--                    <artifactId>hibernate-core</artifactId>-->
-            <!--                </exclusion>-->
-            <!--            </exclusions>-->
         </dependency>
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
-
-        <!--for eclipselink jpa provider-->
-        <!--        <dependency>-->
-        <!--            <groupId>org.eclipse.persistence</groupId>-->
-        <!--            <artifactId>org.eclipse.persistence.jpa</artifactId>-->
-        <!--            <version>2.7.8</version>-->
-        <!--        </dependency>-->
-        <!--		JDBC Driver - PostgreSQL-->
+        <!--        sql driver-->
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
@@ -84,12 +66,6 @@
             <groupId>javax</groupId>
             <artifactId>javaee-api</artifactId>
             <version>8.0.1</version>
-        </dependency>
-        <!--        xml serializer for eclipselink-->
-        <dependency>
-            <groupId>jakarta.xml.bind</groupId>
-            <artifactId>jakarta.xml.bind-api</artifactId>
-            <version>2.3.2</version>
         </dependency>
         <!--		iterable to list-->
         <dependency>
@@ -139,14 +115,13 @@
             <artifactId>aws-java-sdk</artifactId>
             <version>1.11.486</version>
         </dependency>
-
+        <!--         testing-->
         <dependency>
             <groupId>io.rest-assured</groupId>
             <artifactId>rest-assured</artifactId>
             <version>3.3.0</version>
             <scope>test</scope>
         </dependency>
-
         <dependency>
             <groupId>org.flywaydb.flyway-test-extensions</groupId>
             <artifactId>flyway-spring-test</artifactId>
@@ -161,14 +136,13 @@
     </dependencies>
 
     <build>
+        <finalName>perfectbeta</finalName>
         <plugins>
-
             <plugin>
                 <groupId>org.flywaydb</groupId>
                 <artifactId>flyway-maven-plugin</artifactId>
                 <version>7.14.0</version>
             </plugin>
-
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
