@@ -12,6 +12,8 @@ import pl.ftims.ias.perfectbeta.exceptions.UploadFileException;
 import pl.ftims.ias.perfectbeta.moch.services.CloudService;
 import pl.ftims.ias.perfectbeta.moch.services.CloudServiceLocal;
 
+import java.io.IOException;
+
 @RestController
 @RequestMapping("image")
 public class CloudEndpoint {
@@ -25,7 +27,7 @@ public class CloudEndpoint {
     }
 
     @PostMapping("/upload")
-    public ResponseEntity<String> uploadFile(@RequestParam(value = "file") MultipartFile file) throws UploadFileException {
-        return new ResponseEntity<>(service.uploadFile(file), HttpStatus.OK);
+    public ResponseEntity<String> uploadFile(@RequestParam(value = "file") MultipartFile file) throws UploadFileException, IOException {
+        return new ResponseEntity<>(service.uploadFileToCloudinary(file), HttpStatus.OK);
     }
 }

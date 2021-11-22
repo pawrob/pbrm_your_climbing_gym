@@ -1,9 +1,7 @@
 package pl.ftims.ias.perfectbeta.moch.services;
 
-import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.model.PutObjectRequest;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import pl.ftims.ias.perfectbeta.exceptions.UploadFileException;
@@ -11,27 +9,23 @@ import pl.ftims.ias.perfectbeta.exceptions.UploadFileException;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Map;
 
 
 @Service
 public class CloudService implements CloudServiceLocal {
 
-    @Value("${cloud.aws.bucket.name}")
-    private String bucketName;
-    private final AmazonS3 client;
 
-
-    @Autowired
-    public CloudService(AmazonS3 client) {
-        this.client = client;
-    }
-
-    public String uploadFile(MultipartFile file) throws UploadFileException {
+    public String uploadFileToCloudinary(MultipartFile file) throws UploadFileException, IOException {
         File fileObj = convertMultiPartFileToFile(file);
-        String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
-        client.putObject(new PutObjectRequest(bucketName, "photos/" + fileName, fileObj));
+        Map config = ObjectUtils.asMap(
+                "cloud_name", "dpzabnzub",
+                "api_key", "161728387735838",
+                "api_secret", "FKYUj4BnM86j7vYDU9YLQhjiZ-8");
+        Cloudinary cloudinary = new Cloudinary(config);
+        Map result = cloudinary.uploader().upload(fileObj, ObjectUtils.emptyMap());
         fileObj.delete();
-        return client.getUrl(bucketName, "photos/" + fileName).toString();
+        return result.get("secure_url").toString();
     }
 
 
