@@ -4,8 +4,10 @@
 * Maven 3.6
 * Docker
 ## Installation and run
-### 1. Pull repository
-
+### 1. Clone repository
+````
+git clone https://github.com/pawrob/perfectbeta.git
+````
 ### 2. Run database
 ````
 docker build -t perfectbeta_db db
