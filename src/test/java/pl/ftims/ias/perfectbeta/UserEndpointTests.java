@@ -104,9 +104,9 @@ class UserEndpointTests {
     @Test
     @Transactional(transactionManager = "mokTransactionManager", isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRES_NEW)
     public void testRegisterClient() throws AbstractAppException {
-        RegistrationDTO registrationDTO = new RegistrationDTO("mrpawrob", "mrpawrob@gmail.com", "Test123!");
-        RegistrationDTO loginTaken = new RegistrationDTO("mrpawrob", "mrpawrob@gmail.com", "Test123!");
-        RegistrationDTO emailTaken = new RegistrationDTO("nottaken", "mrpawrob@gmail.com", "Test123!");
+        RegistrationDTO registrationDTO = new RegistrationDTO("mrpawrob", "mrpawrob@perfectbeta.com", "Test123!");
+        RegistrationDTO loginTaken = new RegistrationDTO("mrpawrob", "mrpawrob@perfectbeta.com", "Test123!");
+        RegistrationDTO emailTaken = new RegistrationDTO("nottaken", "mrpawrob@perfectbeta.com", "Test123!");
         RegistrationDTO tooShortPassword = new RegistrationDTO("nottaken", "nottaken@gmail.com", "Test123");
 
         UserWithPersonalDataAccessLevelDTO user = given()
@@ -120,7 +120,7 @@ class UserEndpointTests {
                 .extract()
                 .body().as(UserWithPersonalDataAccessLevelDTO.class);
         assertEquals(user.getLogin(), "mrpawrob");
-        assertEquals(user.getEmail(), "mrpawrob@gmail.com");
+        assertEquals(user.getEmail(), "mrpawrob@perfectbeta.com");
         assertEquals(user.getIsActive(), true);
         assertEquals(user.getIsVerified(), false);
 
@@ -138,7 +138,7 @@ class UserEndpointTests {
                 .extract()
                 .body().as(UserWithAccessLevelDTO.class);
         assertEquals(userWithAccessLevelDTO.getLogin(), "mrpawrob");
-        assertEquals(userWithAccessLevelDTO.getEmail(), "mrpawrob@gmail.com");
+        assertEquals(userWithAccessLevelDTO.getEmail(), "mrpawrob@perfectbeta.com");
         assertEquals(userWithAccessLevelDTO.getIsActive(), true);
         assertEquals(userWithAccessLevelDTO.getIsVerified(), true);
 
