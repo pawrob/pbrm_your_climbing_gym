@@ -13,6 +13,7 @@ import pl.ftims.ias.perfectbeta.dto.user_dtos.UserDTO;
 import pl.ftims.ias.perfectbeta.dto.user_dtos.UserWithPersonalDataAccessLevelDTO;
 import pl.ftims.ias.perfectbeta.exceptions.AbstractAppException;
 import pl.ftims.ias.perfectbeta.mok.services.ManagerService;
+import pl.ftims.ias.perfectbeta.mok.services.ManagerServiceLocal;
 import pl.ftims.ias.perfectbeta.utils.converters.UserConverter;
 
 import javax.validation.Valid;
@@ -22,7 +23,7 @@ import javax.validation.Valid;
 @Transactional(isolation = Isolation.READ_COMMITTED, propagation = Propagation.NEVER)
 public class ManagerEndpoint {
 
-    ManagerService managerService;
+    ManagerServiceLocal managerService;
     RetryTemplate retry;
 
     @Autowired

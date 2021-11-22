@@ -14,7 +14,7 @@ import java.io.IOException;
 
 
 @Service
-public class CloudService {
+public class CloudService implements CloudServiceLocal {
 
     @Value("${cloud.aws.bucket.name}")
     private String bucketName;

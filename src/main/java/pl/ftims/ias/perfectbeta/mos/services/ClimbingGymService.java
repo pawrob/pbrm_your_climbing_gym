@@ -25,7 +25,7 @@ import java.util.Optional;
 
 @Service
 @Transactional(transactionManager = "mosTransactionManager", isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRES_NEW)
-public class ClimbingGymService {
+public class ClimbingGymService implements ClimbingGymServiceLocal {
 
     ClimbingGymRepository climbingGymRepository;
     UserMosRepository userMosRepository;

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import pl.ftims.ias.perfectbeta.auth.security.JwtRequestFilter;
 import pl.ftims.ias.perfectbeta.auth.service.AuthUserDetailsService;
 import pl.ftims.ias.perfectbeta.auth.service.JwtService;
+import pl.ftims.ias.perfectbeta.auth.service.JwtServiceLocal;
 import pl.ftims.ias.perfectbeta.dto.CredentialsDTO;
 import pl.ftims.ias.perfectbeta.dto.TokenDTO;
 import pl.ftims.ias.perfectbeta.exceptions.AbstractAppException;
@@ -31,7 +32,7 @@ public class AuthenticationEndpoint {
 
     private AuthUserDetailsService userDetailsService;
 
-    private JwtService jwtService;
+    private JwtServiceLocal jwtService;
 
     @Autowired
     public AuthenticationEndpoint(AuthenticationManager authenticationManager, AuthUserDetailsService userDetailsService, JwtService jwtService) {

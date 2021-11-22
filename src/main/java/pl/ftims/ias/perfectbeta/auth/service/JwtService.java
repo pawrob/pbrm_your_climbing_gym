@@ -18,7 +18,7 @@ import java.util.*;
 
 @Service
 @Transactional(transactionManager = "authTransactionManager", isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRES_NEW)
-public class JwtService {
+public class JwtService implements JwtServiceLocal {
 
     @Autowired
     private AuthViewRepository authViewRepository;
@@ -37,7 +37,7 @@ public class JwtService {
     }
 
     @Value("${jwt.refreshExpirationInMs}")
-    public void setjwtRefreshExpirationInMs(int jwtRefreshExpirationInMs) {
+    public void setJwtRefreshExpirationInMs(int jwtRefreshExpirationInMs) {
         this.jwtRefreshExpirationInMs = jwtRefreshExpirationInMs;
     }
 

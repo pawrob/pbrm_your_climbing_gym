@@ -10,13 +10,19 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import pl.ftims.ias.perfectbeta.exceptions.UploadFileException;
 import pl.ftims.ias.perfectbeta.moch.services.CloudService;
+import pl.ftims.ias.perfectbeta.moch.services.CloudServiceLocal;
 
 @RestController
 @RequestMapping("image")
 public class CloudEndpoint {
 
+
+    CloudServiceLocal service;
+
     @Autowired
-    private CloudService service;
+    public CloudEndpoint(CloudService service) {
+        this.service = service;
+    }
 
     @PostMapping("/upload")
     public ResponseEntity<String> uploadFile(@RequestParam(value = "file") MultipartFile file) throws UploadFileException {

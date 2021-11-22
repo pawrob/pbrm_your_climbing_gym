@@ -32,7 +32,7 @@ import java.util.List;
 
 @Service
 @Transactional(transactionManager = "mokTransactionManager", isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRES_NEW)
-public class UserService {
+public class UserService implements UserServiceLocal {
 
 
     private final UserMokRepository userMokRepository;

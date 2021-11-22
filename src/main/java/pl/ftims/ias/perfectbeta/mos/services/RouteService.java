@@ -22,7 +22,7 @@ import pl.ftims.ias.perfectbeta.mos.repositories.UserMosRepository;
 
 @Service
 @Transactional(transactionManager = "mosTransactionManager", isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRES_NEW)
-public class RouteService {
+public class RouteService implements RouteServiceLocal {
 
     RouteRepository routeRepository;
     UserMosRepository userMosRepository;
@@ -52,9 +52,9 @@ public class RouteService {
         return route;
     }
 
-    public ResponseEntity removeRoute(Long gym_id, Long route_id) throws AbstractAppException {
-        ClimbingGymEntity gym = climbingGymRepository.findById(gym_id)
-                .orElseThrow(() -> GymNotFoundException.createGymWithProvidedIdNotFoundException(gym_id));
+    public ResponseEntity removeRoute(Long gymId, Long routeId) throws AbstractAppException {
+        ClimbingGymEntity gym = climbingGymRepository.findById(gymId)
+                .orElseThrow(() -> GymNotFoundException.createGymWithProvidedIdNotFoundException(gymId));
 
         if (Boolean.FALSE.equals(checkIfPermitted(gym))) {
             throw NotAllowedAppException.createYouAreNotMaintainerOrOwnerException();
@@ -62,13 +62,30 @@ public class RouteService {
         if (!gym.getStatus().equals(GymStatusEnum.VERIFIED)) {
             throw NotAllowedAppException.createGymNotVerifiedException();
         }
-        RouteEntity route = routeRepository.findById(route_id)
-                .orElseThrow(() -> RouteNotFoundException.createRouteWithProvidedIdNotFoundException(route_id));
+        RouteEntity route = routeRepository.findById(routeId)
+                .orElseThrow(() -> RouteNotFoundException.createRouteWithProvidedIdNotFoundException(routeId));
 
         routeRepository.delete(route);
         return ResponseEntity.ok().build();
     }
 
+    public RouteEntity editRouteDetails(Long gymId, Long routeId, RouteDTO routeDTO) throws AbstractAppException {
+        ClimbingGymEntity gym = climbingGymRepository.findById(gymId)
+                .orElseThrow(() -> GymNotFoundException.createGymWithProvidedIdNotFoundException(gymId));
+
+        if (Boolean.FALSE.equals(checkIfPermitted(gym))) {
+            throw NotAllowedAppException.createYouAreNotMaintainerOrOwnerException();
+        }
+        if (!gym.getStatus().equals(GymStatusEnum.VERIFIED)) {
+            throw NotAllowedAppException.createGymNotVerifiedException();
+        }
+
+        RouteEntity route = routeRepository.findById(routeId)
+                .orElseThrow(() -> RouteNotFoundException.createRouteWithProvidedIdNotFoundException(routeId));
+        route.setRouteName(routeDTO.getRouteName());
+        route.setDifficulty(routeDTO.getDifficulty());
+        return route;
+    }
 
     private Boolean checkIfPermitted(ClimbingGymEntity gym) {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -84,24 +101,5 @@ public class RouteService {
         }
         return Boolean.FALSE;
     }
-
-    public RouteEntity editRouteDetails(Long gym_id, Long route_id, RouteDTO routeDTO) throws AbstractAppException {
-        ClimbingGymEntity gym = climbingGymRepository.findById(gym_id)
-                .orElseThrow(() -> GymNotFoundException.createGymWithProvidedIdNotFoundException(gym_id));
-
-        if (Boolean.FALSE.equals(checkIfPermitted(gym))) {
-            throw NotAllowedAppException.createYouAreNotMaintainerOrOwnerException();
-        }
-        if (!gym.getStatus().equals(GymStatusEnum.VERIFIED)) {
-            throw NotAllowedAppException.createGymNotVerifiedException();
-        }
-
-        RouteEntity route = routeRepository.findById(route_id)
-                .orElseThrow(() -> RouteNotFoundException.createRouteWithProvidedIdNotFoundException(route_id));
-        route.setRouteName(routeDTO.getRouteName());
-        route.setDifficulty(routeDTO.getDifficulty());
-        return route;
-    }
-
 
 }

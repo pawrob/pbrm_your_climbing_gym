@@ -13,6 +13,7 @@ import pl.ftims.ias.perfectbeta.dto.*;
 import pl.ftims.ias.perfectbeta.dto.user_dtos.*;
 import pl.ftims.ias.perfectbeta.exceptions.AbstractAppException;
 import pl.ftims.ias.perfectbeta.mok.services.UserService;
+import pl.ftims.ias.perfectbeta.mok.services.UserServiceLocal;
 import pl.ftims.ias.perfectbeta.utils.converters.PersonalDataConverter;
 import pl.ftims.ias.perfectbeta.utils.converters.UserConverter;
 
@@ -25,7 +26,7 @@ import java.util.List;
 @Transactional(isolation = Isolation.READ_COMMITTED, propagation = Propagation.NEVER)
 public class UserEndpoint {
 
-    UserService userService;
+    UserServiceLocal userService;
     RetryTemplate retry;
 
     @Autowired

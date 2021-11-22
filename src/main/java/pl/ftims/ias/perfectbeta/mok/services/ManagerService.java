@@ -16,7 +16,7 @@ import pl.ftims.ias.perfectbeta.utils.HashGenerator;
 
 @Service
 @Transactional(transactionManager = "mokTransactionManager", isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRES_NEW)
-public class ManagerService {
+public class ManagerService implements ManagerServiceLocal{
 
     private final UserMokRepository userMokRepository;
 

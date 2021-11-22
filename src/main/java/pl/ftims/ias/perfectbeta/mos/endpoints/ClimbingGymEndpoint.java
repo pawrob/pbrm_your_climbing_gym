@@ -12,6 +12,7 @@ import pl.ftims.ias.perfectbeta.dto.routes_dtos.ClimbingGymWithDetailsDTO;
 import pl.ftims.ias.perfectbeta.dto.routes_dtos.ClimbingGymWithMaintainersDTO;
 import pl.ftims.ias.perfectbeta.dto.routes_dtos.GymDetailsDTO;
 import pl.ftims.ias.perfectbeta.exceptions.AbstractAppException;
+import pl.ftims.ias.perfectbeta.mos.services.ClimbingGymServiceLocal;
 import pl.ftims.ias.perfectbeta.mos.services.ClimbingGymService;
 import pl.ftims.ias.perfectbeta.utils.converters.ClimbingGymConverter;
 
@@ -26,7 +27,7 @@ public class ClimbingGymEndpoint {
 
 
     RetryTemplate retry;
-    ClimbingGymService climbingGymService;
+    ClimbingGymServiceLocal climbingGymService;
 
     @Autowired
     public ClimbingGymEndpoint(RetryTemplate retry, ClimbingGymService climbingGymService) {
@@ -35,7 +36,7 @@ public class ClimbingGymEndpoint {
     }
 
     @GetMapping("verified/all")
-    public List<ClimbingGymDTO> listAllVerified() throws AbstractAppException {
+    public List<ClimbingGymDTO> listAllVerified(){
         return retry.execute(arg0 -> ClimbingGymConverter.createGymListDTOFromEntity(climbingGymService.listVerifiedGyms()));
     }
 
@@ -58,7 +59,7 @@ public class ClimbingGymEndpoint {
 
     @Secured("ROLE_ADMINISTRATOR")
     @GetMapping("all")
-    public List<ClimbingGymDTO> listAllGyms() throws AbstractAppException {
+    public List<ClimbingGymDTO> listAllGyms(){
         return retry.execute(arg0 -> ClimbingGymConverter.createGymListDTOFromEntity(climbingGymService.listAllGyms()));
     }
 

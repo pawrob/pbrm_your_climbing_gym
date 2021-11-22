@@ -22,19 +22,6 @@ public class UserConverter {
         return new UserEntity(userDTO.getLogin(), userDTO.getEmail(), userDTO.getPassword());
     }
 
-//    public static UserEntity userWithPersonalDataDTOtoEntity(UserWithPersonalDataDTO userDTO, String password) {
-//        UserEntity userEntity = createNewUserEntityFromDTO(userDTO, password);
-//        userEntity.setActive(userDTO.getIsActive());
-//        userEntity.setVerified(userDTO.getIsVerified());
-//        if (null != userDTO.getPersonalData()) {
-//            userEntity.setPersonalData(
-//                    PersonalDataConverter.personalDataEntityFromDTO(
-//                            userDTO.getPersonalData(), userDTO.getId()
-//                    ));
-//        }
-//        return userEntity;
-//    }
-
     public static List<UserDTO> createUserListDTOFromEntity(Collection<UserEntity> userEntities) {
         return null == userEntities ? null : userEntities.stream()
                 .filter(Objects::nonNull)
