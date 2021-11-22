@@ -18,7 +18,7 @@ git clone https://github.com/pawrob/perfectbeta.git
 
 ````
 docker build -t perfectbeta_db db
-docker run -dp 2137:5432 perfectbeta_db
+docker run -dp 5432:5432 perfectbeta_db
 ````
 
 ### 3. Run spring boot rest api with tests
