@@ -15,7 +15,7 @@
 
     <properties>
         <java.version>11</java.version>
-        <flyway.url>jdbc:postgresql://172.30.217.65/perfectbeta</flyway.url>
+        <flyway.url>jdbc:postgresql://172.30.217.65:5432/perfectbeta</flyway.url>
         <flyway.user>postgres</flyway.user>
         <flyway.password>m4gnus123!</flyway.password>
     </properties>
