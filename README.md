@@ -1,4 +1,5 @@
 # PerfectBeta - Spring Boot
+<img src="https://i.imgur.com/aKSxfR5.png"  width="200px"/>  
 
 ## Requirements
 
@@ -9,19 +10,16 @@
 ## Installation and run
 
 ### 1. Clone repository
-
 ````
 git clone https://github.com/pawrob/perfectbeta.git
 ````
-
-### 2. Run database
-
+### 2. Set credentials for gmail and cloudinary in [application.properties](https://github.com/pawrob/perfectbeta/blob/main/src/main/resources/application.properties)
+### 3. Run database
 ````
 docker build -t perfectbeta_db db
 docker run -dp 5432:5432 perfectbeta_db
 ````
-
-### 3. Run spring boot rest api with tests
+### 4. Run spring boot rest api with tests
 
 ````
 mvn clean package
