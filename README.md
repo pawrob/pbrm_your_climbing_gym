@@ -13,7 +13,7 @@
 ````
 git clone https://github.com/pawrob/perfectbeta.git
 ````
-### 2. Set credentials for gmaila and cloudinary in [application.properties](https://github.com/pawrob/perfectbeta/blob/main/src/main/resources/application.properties)
+### 2. Set credentials for gmail and cloudinary in [application.properties](https://github.com/pawrob/perfectbeta/blob/main/src/main/resources/application.properties)
 
 ### 3. Run database
 
