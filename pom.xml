@@ -129,7 +129,15 @@
             <artifactId>junit</artifactId>
             <scope>test</scope>
         </dependency>
+<!--        actuator-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+            <version>2.6.0</version>
+        </dependency>
+
     </dependencies>
+
 
     <build>
         <finalName>perfectbeta</finalName>
