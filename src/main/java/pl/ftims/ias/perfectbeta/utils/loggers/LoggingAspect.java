@@ -34,14 +34,10 @@ public class LoggingAspect {
             " || within(pl.ftims.ias.perfectbeta.mok.endpoints..*)" +
             " || within(pl.ftims.ias.perfectbeta.mok.services..*)" +
             " || within(pl.ftims.ias.perfectbeta.mok.repositories..*)"+
-            " || within(pl.ftims.ias.perfectbeta.mos.repositories..*)"+
             " || within(pl.ftims.ias.perfectbeta.mos.services..*)"+
             " || within(pl.ftims.ias.perfectbeta.mos.endpoints..*)"+
             " || within(pl.ftims.ias.perfectbeta.auth.repositories..*)"+
             " || within(pl.ftims.ias.perfectbeta.auth.endpoints..*)"+
-            " || within(pl.ftims.ias.perfectbeta.auth.service..*)" +
-            " || within(pl.ftims.ias.perfectbeta.auth.service..*)" +
-            " || within(pl.ftims.ias.perfectbeta.auth.service..*)" +
             " || within(pl.ftims.ias.perfectbeta.auth.security..*)" +
             " || within(pl.ftims.ias.perfectbeta.moch.endpoints..*)" +
             " || within(pl.ftims.ias.perfectbeta.moch.services..*)"

@@ -59,7 +59,6 @@ class ManagerEndpointTest {
         assertEquals(user.getIsVerified(), true);
         assertEquals(user.getAccessLevels().get(0).getAccessLevel(), "MANAGER");
 
-        System.out.println(getToken("new_manager", "Test123!"));
 
     }
 
