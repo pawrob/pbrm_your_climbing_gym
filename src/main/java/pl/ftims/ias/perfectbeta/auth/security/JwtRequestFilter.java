@@ -43,7 +43,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
             } else {
                 log.info("Cannot set the Security Context - invoke without authentication. Path: {}, from address: {}",
-                        request.getServletPath(), request.getRemoteUser());
+                        request.getServletPath(), request.getRemoteAddr());
             }
         } catch (ExpiredJwtException ex) {
             request.setAttribute("exception", ex);
