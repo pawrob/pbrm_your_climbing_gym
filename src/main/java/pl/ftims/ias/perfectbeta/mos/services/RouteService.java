@@ -1,6 +1,8 @@
 package pl.ftims.ias.perfectbeta.mos.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -35,6 +37,14 @@ public class RouteService implements RouteServiceLocal {
         this.climbingGymRepository = climbingGymRepository;
         this.userMosRepository = userMosRepository;
     }
+
+    public Page<RouteEntity> findAllByGymId(Long gymId, Pageable page) throws AbstractAppException {
+        ClimbingGymEntity gym = climbingGymRepository.findById(gymId)
+                .orElseThrow(() -> GymNotFoundException.createGymWithProvidedIdNotFoundException(gymId));
+
+        return routeRepository.findAllByClimbingGym(gym, page);
+    }
+
 
     public RouteEntity addRoute(RouteDTO wallDTO) throws AbstractAppException {
         ClimbingGymEntity gym = climbingGymRepository.findById(wallDTO.getClimbingGymId())

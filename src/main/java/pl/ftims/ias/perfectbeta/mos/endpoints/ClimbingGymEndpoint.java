@@ -1,6 +1,8 @@
 package pl.ftims.ias.perfectbeta.mos.endpoints;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.retry.support.RetryTemplate;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.transaction.annotation.Isolation;
@@ -17,7 +19,6 @@ import pl.ftims.ias.perfectbeta.mos.services.ClimbingGymServiceLocal;
 import pl.ftims.ias.perfectbeta.utils.converters.ClimbingGymConverter;
 
 import javax.validation.Valid;
-import java.util.List;
 
 
 @RestController
@@ -36,8 +37,8 @@ public class ClimbingGymEndpoint {
     }
 
     @GetMapping("verified/all")
-    public List<ClimbingGymDTO> listAllVerified() {
-        return retry.execute(arg0 -> ClimbingGymConverter.createGymListDTOFromEntity(climbingGymService.listVerifiedGyms()));
+    public Page<ClimbingGymDTO> listAllVerified(Pageable page) {
+        return retry.execute(arg0 -> ClimbingGymConverter.climbingGymEntityPageToDTOPage(climbingGymService.listVerifiedGyms(page)));
     }
 
     @GetMapping("verified/{id}")
@@ -47,20 +48,20 @@ public class ClimbingGymEndpoint {
 
     @Secured("ROLE_MANAGER")
     @GetMapping("owned_gyms")
-    public List<ClimbingGymDTO> listOwnedGyms() throws AbstractAppException {
-        return retry.execute(arg0 -> ClimbingGymConverter.createGymListDTOFromEntity(climbingGymService.listOwnedGyms()));
+    public Page<ClimbingGymDTO> listOwnedGyms(Pageable page) throws AbstractAppException {
+        return retry.execute(arg0 -> ClimbingGymConverter.climbingGymEntityPageToDTOPage(climbingGymService.listOwnedGyms(page)));
     }
 
     @Secured("ROLE_MANAGER")
     @GetMapping("maintained_gyms")
-    public List<ClimbingGymDTO> listMaintainedGyms() throws AbstractAppException {
-        return retry.execute(arg0 -> ClimbingGymConverter.createGymListDTOFromEntity(climbingGymService.listMaintainedGyms()));
+    public Page<ClimbingGymDTO> listMaintainedGyms(Pageable page) throws AbstractAppException {
+        return retry.execute(arg0 -> ClimbingGymConverter.climbingGymEntityPageToDTOPage(climbingGymService.listMaintainedGyms(page)));
     }
 
     @Secured("ROLE_ADMINISTRATOR")
     @GetMapping("all")
-    public List<ClimbingGymDTO> listAllGyms() {
-        return retry.execute(arg0 -> ClimbingGymConverter.createGymListDTOFromEntity(climbingGymService.listAllGyms()));
+    public Page<ClimbingGymDTO> listAllGyms(Pageable page) {
+        return retry.execute(arg0 -> ClimbingGymConverter.climbingGymEntityPageToDTOPage(climbingGymService.listAllGyms(page)));
     }
 
     @Secured("ROLE_ADMINISTRATOR")
@@ -71,7 +72,7 @@ public class ClimbingGymEndpoint {
 
     @Secured("ROLE_MANAGER")
     @PostMapping("register/{gymName}")
-    public ClimbingGymWithDetailsDTO registerClient(@PathVariable String gymName) {
+    public ClimbingGymWithDetailsDTO registerGym(@PathVariable String gymName) {
         return retry.execute(arg0 -> ClimbingGymConverter.climbingGymWithDetailsEntityToDTO(climbingGymService.registerNewClimbingGym(gymName)));
     }
 

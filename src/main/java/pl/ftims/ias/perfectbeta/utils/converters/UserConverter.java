@@ -1,9 +1,15 @@
 package pl.ftims.ias.perfectbeta.utils.converters;
 
 import lombok.NoArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.security.core.userdetails.User;
+import pl.ftims.ias.perfectbeta.dto.routes_dtos.RouteDTO;
 import pl.ftims.ias.perfectbeta.dto.user_dtos.*;
+import pl.ftims.ias.perfectbeta.entities.RouteEntity;
 import pl.ftims.ias.perfectbeta.entities.UserEntity;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
@@ -35,6 +41,18 @@ public class UserConverter {
                 .map(UserConverter::userWithPersonalDataAccessLevelDTOFromEntity)
                 .collect(Collectors.toList());
     }
+    public static Page<UserWithPersonalDataAccessLevelDTO> userEntityPageToDTOPage(Page<UserEntity> entity) {
+
+        List<UserEntity> entities = entity.getContent();
+
+        List<UserWithPersonalDataAccessLevelDTO> dtos = new ArrayList<>();
+        for (UserEntity e : entities){
+            dtos.add(userWithPersonalDataAccessLevelDTOFromEntity(e));
+        }
+        Page<UserWithPersonalDataAccessLevelDTO> page = new PageImpl<UserWithPersonalDataAccessLevelDTO>(dtos,entity.getPageable(),dtos.size());
+        return page;
+    }
+
 
 
     public static UserWithAccessLevelDTO userWithAccessLevelDTOFromEntity(UserEntity userEntity) {

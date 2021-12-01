@@ -1,6 +1,9 @@
 package pl.ftims.ias.perfectbeta.mos.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -8,6 +11,7 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import pl.ftims.ias.perfectbeta.dto.routes_dtos.GymDetailsDTO;
+import pl.ftims.ias.perfectbeta.dto.routes_dtos.RouteDTO;
 import pl.ftims.ias.perfectbeta.entities.*;
 import pl.ftims.ias.perfectbeta.entities.enums.GymStatusEnum;
 import pl.ftims.ias.perfectbeta.exceptions.AbstractAppException;
@@ -39,13 +43,13 @@ public class ClimbingGymService implements ClimbingGymServiceLocal {
     }
 
 
-    public List<ClimbingGymEntity> listOwnedGyms() throws AbstractAppException {
+    public Page<ClimbingGymEntity> listOwnedGyms(Pageable page) throws AbstractAppException {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         UserEntity owner = userMosRepository.findByLogin(auth.getName()).orElseThrow(() -> UserNotFoundAppException.createUserWithProvidedLoginNotFoundException(auth.getName()));
-        return climbingGymRepository.findByOwner(owner).orElseThrow(() -> GymNotFoundException.createGymWithProvidedOwnerNotFoundException(owner.getLogin()));
+        return climbingGymRepository.findByOwner(owner, page);
     }
 
-    public List<ClimbingGymEntity> listMaintainedGyms() throws AbstractAppException {
+    public Page<ClimbingGymEntity> listMaintainedGyms(Pageable page) throws AbstractAppException {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         UserEntity owner = userMosRepository.findByLogin(auth.getName()).orElseThrow(() -> UserNotFoundAppException.createUserWithProvidedLoginNotFoundException(auth.getName()));
         List<GymMaintainerEntity> gymMaintainerEntities = gymMaintainerRepository.findByUser(owner);
@@ -53,11 +57,11 @@ public class ClimbingGymService implements ClimbingGymServiceLocal {
         for (GymMaintainerEntity g : gymMaintainerEntities) {
             climbingGymEntities.add(g.getMaintainedGym());
         }
-        return climbingGymEntities;
+        return new PageImpl<ClimbingGymEntity>(climbingGymEntities,page,climbingGymEntities.size());
     }
 
-    public List<ClimbingGymEntity> listAllGyms() {
-        return climbingGymRepository.findAll();
+    public Page<ClimbingGymEntity> listAllGyms(Pageable page) {
+        return climbingGymRepository.findAll(page);
     }
 
     public ClimbingGymEntity findById(Long id) throws AbstractAppException {
@@ -68,8 +72,8 @@ public class ClimbingGymService implements ClimbingGymServiceLocal {
         return climbingGymRepository.findVerifiedById(id).orElseThrow(() -> GymNotFoundException.createGymWithProvidedIdNotFoundException(id));
     }
 
-    public List<ClimbingGymEntity> listVerifiedGyms() {
-        return climbingGymRepository.findAllVerified();
+    public Page<ClimbingGymEntity> listVerifiedGyms(Pageable page) {
+        return climbingGymRepository.findAllVerified(page);
     }
 
     public ClimbingGymEntity registerNewClimbingGym(String gymName) {

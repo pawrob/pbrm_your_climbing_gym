@@ -1,11 +1,15 @@
 package pl.ftims.ias.perfectbeta.mos.services;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import pl.ftims.ias.perfectbeta.dto.routes_dtos.RouteDTO;
 import pl.ftims.ias.perfectbeta.entities.RouteEntity;
 import pl.ftims.ias.perfectbeta.exceptions.AbstractAppException;
 
 public interface RouteServiceLocal {
+
+    Page<RouteEntity> findAllByGymId(Long gymId, Pageable page) throws AbstractAppException;
 
     RouteEntity addRoute(RouteDTO wallDTO) throws AbstractAppException;
 

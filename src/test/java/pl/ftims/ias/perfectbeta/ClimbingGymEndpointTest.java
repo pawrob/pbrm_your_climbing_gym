@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Isolation;
@@ -61,9 +62,8 @@ class ClimbingGymEndpointTest {
                 .then()
                 .statusCode(200)
                 .contentType(JSON)
-                .extract()
-                .body().jsonPath().getList(".", ClimbingGymDTO.class);
-        assertEquals(gym.findAllVerified().size(), gyms.size());
+                .extract().path("content");
+        assertEquals(gym.findAllVerified(Pageable.unpaged()).getTotalElements(), gyms.size());
     }
 
     @Test
@@ -105,8 +105,7 @@ class ClimbingGymEndpointTest {
                 .then()
                 .statusCode(200)
                 .contentType(JSON)
-                .extract()
-                .body().jsonPath().getList(".", ClimbingGymDTO.class);
+                .extract().path("content");
         assertEquals(4, gyms.size());
     }
 
@@ -123,9 +122,8 @@ class ClimbingGymEndpointTest {
                 .then()
                 .statusCode(200)
                 .contentType(JSON)
-                .extract()
-                .body().jsonPath().getList(".", ClimbingGymDTO.class);
-        assertEquals(gym.findAll().size(), gyms.size());
+                .extract().path("content");
+        assertEquals(gym.findAll(Pageable.unpaged()).getTotalElements(), gyms.size());
     }
 
     @Test
@@ -342,8 +340,9 @@ class ClimbingGymEndpointTest {
                 .get("http://localhost:8080/api/gym/maintained_gyms")
                 .then()
                 .statusCode(200)
-                .extract()
-                .body().jsonPath().getList(".", ClimbingGymDTO.class);
+                .extract().path("content");
+        assertEquals(2, maintainerDTOList.size());
+
 
         List<ClimbingGymDTO> maintainerDTOListEmpty = given().headers(
                         "Authorization",
@@ -353,7 +352,8 @@ class ClimbingGymEndpointTest {
                 .get("http://localhost:8080/api/gym/maintained_gyms")
                 .then()
                 .statusCode(200)
-                .extract()
-                .body().jsonPath().getList(".", ClimbingGymDTO.class);
+                .extract().path("content");
+        assertEquals(0, maintainerDTOListEmpty.size());
+
     }
 }

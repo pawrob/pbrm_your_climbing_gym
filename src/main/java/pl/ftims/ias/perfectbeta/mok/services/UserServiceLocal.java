@@ -1,5 +1,7 @@
 package pl.ftims.ias.perfectbeta.mok.services;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import pl.ftims.ias.perfectbeta.dto.ChangePasswordDTO;
 import pl.ftims.ias.perfectbeta.dto.EmailDTO;
 import pl.ftims.ias.perfectbeta.dto.PasswordDTO;
@@ -12,7 +14,7 @@ import java.util.List;
 
 public interface UserServiceLocal {
 
-    List<UserEntity> getAllUsers();
+    Page<UserEntity> getAllUsers(Pageable page);
 
     UserEntity getUserById(Long id) throws AbstractAppException;
 

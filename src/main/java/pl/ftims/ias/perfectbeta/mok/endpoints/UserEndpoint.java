@@ -1,6 +1,8 @@
 package pl.ftims.ias.perfectbeta.mok.endpoints;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.retry.support.RetryTemplate;
@@ -37,8 +39,8 @@ public class UserEndpoint {
 
     @Secured({"ROLE_ADMINISTRATOR", "ROLE_MANAGER"})
     @GetMapping
-    public List<UserWithPersonalDataAccessLevelDTO> getAllUsers() {
-        return retry.execute(arg0 -> UserConverter.createUserWithPersonalDataAccessLevelDTOListFromEntity(userService.getAllUsers()));
+    public Page<UserWithPersonalDataAccessLevelDTO> getAllUsers(Pageable page) {
+        return retry.execute(arg0 -> UserConverter.userEntityPageToDTOPage(userService.getAllUsers(page)));
     }
 
     @Secured({"ROLE_ADMINISTRATOR", "ROLE_MANAGER"})

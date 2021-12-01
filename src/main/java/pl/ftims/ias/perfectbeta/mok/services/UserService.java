@@ -1,8 +1,9 @@
 package pl.ftims.ias.perfectbeta.mok.services;
 
-import org.apache.commons.collections4.IterableUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -28,7 +29,6 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.time.OffsetDateTime;
 import java.time.temporal.ChronoUnit;
-import java.util.List;
 
 @Service
 @Transactional(transactionManager = "mokTransactionManager", isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRES_NEW)
@@ -49,8 +49,8 @@ public class UserService implements UserServiceLocal {
         this.templateEngine = templateEngine;
     }
 
-    public List<UserEntity> getAllUsers() {
-        return IterableUtils.toList(userMokRepository.findAll());
+    public Page<UserEntity> getAllUsers(Pageable page) {
+        return userMokRepository.findAll(page);
     }
 
 

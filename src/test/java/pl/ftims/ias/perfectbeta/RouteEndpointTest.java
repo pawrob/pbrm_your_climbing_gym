@@ -4,14 +4,18 @@ package pl.ftims.ias.perfectbeta;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import pl.ftims.ias.perfectbeta.dto.CredentialsDTO;
 import pl.ftims.ias.perfectbeta.dto.TokenDTO;
 import pl.ftims.ias.perfectbeta.dto.routes_dtos.RouteDTO;
 
+import java.util.List;
+
 import static io.restassured.RestAssured.given;
 import static io.restassured.http.ContentType.JSON;
+import static org.junit.Assert.assertEquals;
 
 @RunWith(SpringRunner.class)
 @ActiveProfiles("test")
@@ -31,6 +35,24 @@ class RouteEndpointTest {
     }
 
     public RouteEndpointTest() {
+    }
+
+
+    @Test
+    public void getRoutesTest() {
+//todo test get all routes
+
+        List<RouteDTO> routes = given().headers(
+                        "Authorization",
+                        "Bearer " + getToken("pbucki", "Pbucki123!"))
+                .contentType("application/json")
+                .when()
+                .get("http://localhost:8080/api/route/-3")
+                .then()
+                .statusCode(200)
+                .contentType(JSON)
+                .extract().path("content");
+        assertEquals(3, routes.size());
     }
 
     @Test

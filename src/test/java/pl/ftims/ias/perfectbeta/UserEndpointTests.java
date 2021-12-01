@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Isolation;
@@ -62,9 +63,8 @@ class UserEndpointTests {
                 .then()
                 .statusCode(200)
                 .contentType(JSON)
-                .extract()
-                .body().jsonPath().getList(".", UserWithPersonalDataAccessLevelDTO.class);
-        assertEquals(userMokRepository.findAll().size(), users.size());
+                .extract().path("content");
+        assertEquals(userMokRepository.findAll(Pageable.unpaged()).getTotalElements(), users.size());
     }
 
     @Test

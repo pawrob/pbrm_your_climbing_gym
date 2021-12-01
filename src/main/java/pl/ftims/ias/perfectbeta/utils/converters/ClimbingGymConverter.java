@@ -1,10 +1,14 @@
 package pl.ftims.ias.perfectbeta.utils.converters;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import pl.ftims.ias.perfectbeta.dto.routes_dtos.*;
 import pl.ftims.ias.perfectbeta.entities.ClimbingGymEntity;
 import pl.ftims.ias.perfectbeta.entities.GymDetailsEntity;
 import pl.ftims.ias.perfectbeta.entities.GymMaintainerEntity;
+import pl.ftims.ias.perfectbeta.entities.RouteEntity;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
@@ -29,6 +33,18 @@ public class ClimbingGymConverter {
                 .filter(Objects::nonNull)
                 .map(ClimbingGymConverter::climbingGymEntityToDTO)
                 .collect(Collectors.toList());
+    }
+
+    public static Page<ClimbingGymDTO> climbingGymEntityPageToDTOPage(Page<ClimbingGymEntity> entity) {
+
+        List<ClimbingGymEntity> entities = entity.getContent();
+
+        List<ClimbingGymDTO> dtos = new ArrayList<>();
+        for (ClimbingGymEntity e : entities){
+            dtos.add(climbingGymEntityToDTO(e));
+        }
+        Page<ClimbingGymDTO> page = new PageImpl<ClimbingGymDTO>(dtos,entity.getPageable(),dtos.size());
+        return page;
     }
 
     public static ClimbingGymWithMaintainersDTO climbingGymEntityWithMaintainersEntityToDTO(ClimbingGymEntity entity) {

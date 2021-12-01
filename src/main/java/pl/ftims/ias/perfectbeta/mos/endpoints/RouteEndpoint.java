@@ -1,6 +1,9 @@
 package pl.ftims.ias.perfectbeta.mos.endpoints;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.bind.DefaultValue;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.retry.support.RetryTemplate;
 import org.springframework.security.access.annotation.Secured;
@@ -29,6 +32,13 @@ public class RouteEndpoint {
         this.routeService = routeService;
         this.retry = retry;
     }
+
+
+    @GetMapping("{gym_id}")
+    public Page<RouteDTO> findAllRoutesByGymId(@PathVariable Long gym_id,Pageable page) throws AbstractAppException {
+        return retry.execute(arg0 -> RouteConverter.climbingWallEntityPageToDTOPage(routeService.findAllByGymId(gym_id,page)));
+    }
+
 
     @Secured("ROLE_MANAGER")
     @PostMapping("add")

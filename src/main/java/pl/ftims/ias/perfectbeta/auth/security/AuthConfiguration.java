@@ -48,6 +48,7 @@ public class AuthConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/actuator").permitAll()
                 .antMatchers("/image/**").permitAll()
                 .antMatchers("/gym/verified/**").permitAll()
+                .antMatchers("/route/**").permitAll()
                 .antMatchers("/users/resetPassword").permitAll()
                 .antMatchers("/users/request_reset_password").permitAll()
                 .antMatchers("/users/reset_password").permitAll()
