@@ -9,9 +9,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import pl.ftims.ias.perfectbeta.dto.routes_dtos.PhotoDTO;
 import pl.ftims.ias.perfectbeta.dto.routes_dtos.RouteDTO;
 import pl.ftims.ias.perfectbeta.entities.ClimbingGymEntity;
 import pl.ftims.ias.perfectbeta.entities.GymMaintainerEntity;
+import pl.ftims.ias.perfectbeta.entities.PhotoEntity;
 import pl.ftims.ias.perfectbeta.entities.RouteEntity;
 import pl.ftims.ias.perfectbeta.entities.enums.GymStatusEnum;
 import pl.ftims.ias.perfectbeta.exceptions.AbstractAppException;
@@ -21,6 +23,9 @@ import pl.ftims.ias.perfectbeta.exceptions.RouteNotFoundException;
 import pl.ftims.ias.perfectbeta.mos.repositories.ClimbingGymRepository;
 import pl.ftims.ias.perfectbeta.mos.repositories.RouteRepository;
 import pl.ftims.ias.perfectbeta.mos.repositories.UserMosRepository;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @Transactional(transactionManager = "mosTransactionManager", isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRES_NEW)
@@ -46,9 +51,9 @@ public class RouteService implements RouteServiceLocal {
     }
 
 
-    public RouteEntity addRoute(RouteDTO wallDTO) throws AbstractAppException {
-        ClimbingGymEntity gym = climbingGymRepository.findById(wallDTO.getClimbingGymId())
-                .orElseThrow(() -> GymNotFoundException.createGymWithProvidedIdNotFoundException(wallDTO.getClimbingGymId()));
+    public RouteEntity addRoute(RouteDTO routeDTO) throws AbstractAppException {
+        ClimbingGymEntity gym = climbingGymRepository.findById(routeDTO.getClimbingGymId())
+                .orElseThrow(() -> GymNotFoundException.createGymWithProvidedIdNotFoundException(routeDTO.getClimbingGymId()));
 
         if (Boolean.FALSE.equals(checkIfPermitted(gym))) {
             throw NotAllowedAppException.createYouAreNotMaintainerOrOwnerException();
@@ -57,8 +62,20 @@ public class RouteService implements RouteServiceLocal {
             throw NotAllowedAppException.createGymNotVerifiedException();
         }
 
-        RouteEntity route = new RouteEntity(wallDTO.getRouteName(), wallDTO.getPhotoWithBoxesLink(), wallDTO.getPhotoWithNumbersLink(), wallDTO.getHoldsDetails(), wallDTO.getDifficulty(), gym);
-        routeRepository.save(route);
+
+        RouteEntity route = new RouteEntity(routeDTO.getRouteName(), routeDTO.getHoldsDetails(), routeDTO.getDescription(), routeDTO.getDifficulty(), gym, new ArrayList<PhotoEntity>());
+        route = routeRepository.save(route);
+        if (routeDTO.getPhotos().size() != 0) {
+            List<PhotoEntity> photoEntityList = new ArrayList<>();
+            for (PhotoDTO photo : routeDTO.getPhotos()) {
+                photoEntityList.add(new PhotoEntity(photo.getPhotoUrl(), route));
+
+            }
+            route.setPhotos(photoEntityList);
+            routeRepository.save(route);
+        }
+
+
         return route;
     }
 

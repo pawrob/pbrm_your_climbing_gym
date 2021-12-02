@@ -83,12 +83,11 @@ VALUES (-4, 0, -4, 'POLAND', 'WROCLAW', 'ul. Piernikowa', '37', 'climbing wall')
 
 INSERT INTO public.gym_maintainer (id, climbing_gym_id, user_id, is_active, version)
 VALUES (-1, -3, -3, true, 0);
-INSERT INTO public.route (id, climbing_gym_id, route_name, photo_with_boxes_link, photo_with_numbers_link,
-                          holds_details, difficulty, version)
-VALUES (-1, -3, 'init route', 'link to photo with boxes', 'link to photo with numbers', 'json de rulo', '8c+', 0);
-INSERT INTO public.route (id, climbing_gym_id, route_name, photo_with_boxes_link, photo_with_numbers_link,
-                          holds_details, difficulty, version)
-VALUES (-2, -3, 'init route 2', 'link to photo with boxes', 'link to photo with numbers', 'json de rulo', '6b', 0);
-INSERT INTO public.route (id, climbing_gym_id, route_name, photo_with_boxes_link, photo_with_numbers_link,
-                          holds_details, difficulty, version)
-VALUES (-3, -3, 'init route 3', 'link to photo with boxes', 'link to photo with numbers', 'json de rulo', '4a', 0);
+
+
+INSERT INTO public.route (id, climbing_gym_id, route_name, description,holds_details, difficulty, version)
+VALUES (-1, -3, 'init route', 'opsi gym 1', 'json de rulo', '8c+', 0);
+INSERT INTO public.route (id, climbing_gym_id, route_name, description,holds_details, difficulty, version)
+VALUES (-2, -3, 'init route 2', 'opsi gym 2',  'json de rulo', '6b', 0);
+INSERT INTO public.route (id, climbing_gym_id, route_name, description,holds_details, difficulty, version)
+VALUES (-3, -3, 'init route 3', 'opsi gym 3', 'json de rulo', '4a', 0);

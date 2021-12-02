@@ -139,8 +139,7 @@ CREATE TABLE public.route
     id                      BIGSERIAL             NOT NULL,
     climbing_gym_id         BIGINT                NOT NULL,
     route_name              CHARACTER VARYING(64) NOT NULL,
-    photo_with_boxes_link   CHARACTER VARYING     NOT NULL,
-    photo_with_numbers_link CHARACTER VARYING     NOT NULL,
+    description              CHARACTER VARYING,
     holds_details           CHARACTER VARYING     NOT NULL,
     difficulty              CHARACTER VARYING(10),
     version                 BIGINT                NOT NULL DEFAULT 1,
@@ -148,6 +147,20 @@ CREATE TABLE public.route
     CONSTRAINT route_pkey PRIMARY KEY (id),
     CONSTRAINT climbing_gym_id_fkey FOREIGN KEY (climbing_gym_id)
         REFERENCES public.climbing_gym (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+);
+
+CREATE TABLE public.photo
+(
+    id                      BIGSERIAL             NOT NULL,
+    photo_url           CHARACTER VARYING     NOT NULL,
+    route_id           BIGSERIAL     NOT NULL,
+    version                 BIGINT                NOT NULL DEFAULT 1,
+    CONSTRAINT photo_url_key UNIQUE (photo_url),
+    CONSTRAINT photo_pkey PRIMARY KEY (id),
+    CONSTRAINT route_id_fkey FOREIGN KEY (route_id)
+        REFERENCES public.route (id) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
 );
@@ -224,6 +237,14 @@ CREATE
         (climbing_gym_id ASC NULLS LAST)
     TABLESPACE pg_default;
 
+DROP
+    INDEX IF EXISTS photo_route_id;
+CREATE
+    INDEX photo_route_id
+    ON public.photo USING btree
+        (route_id ASC NULLS LAST)
+    TABLESPACE pg_default;
+
 
 -- grants
 GRANT USAGE ON SEQUENCE public.user_id_seq TO perfectbeta_mok;
@@ -234,6 +255,7 @@ GRANT USAGE ON SEQUENCE public.climbing_gym_id_seq TO perfectbeta_mos;
 GRANT USAGE ON SEQUENCE public.route_id_seq TO perfectbeta_mos;
 GRANT USAGE ON SEQUENCE public.climbing_gym_details_id_seq TO perfectbeta_mos;
 GRANT USAGE ON SEQUENCE public.gym_maintainer_id_seq TO perfectbeta_mos;
+GRANT USAGE ON SEQUENCE public.photo_id_seq TO perfectbeta_mos;
 
 -- auth
 GRANT SELECT ON TABLE public.authentication_view TO perfectbeta_auth;
@@ -256,3 +278,4 @@ GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE public.climbing_gym TO perfectbeta
 GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE public.route TO perfectbeta_mos;
 GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE public.climbing_gym_details TO perfectbeta_mos;
 GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE public.gym_maintainer TO perfectbeta_mos;
+GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE public.photo TO perfectbeta_mos;

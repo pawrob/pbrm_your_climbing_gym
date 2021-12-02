@@ -6,6 +6,8 @@ import pl.ftims.ias.perfectbeta.dto.AbstractDTO;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @Builder
@@ -22,10 +24,7 @@ public class RouteDTO extends AbstractDTO {
     private String difficulty;
     @NotBlank
     @NotNull
-    private String photoWithBoxesLink;
-    @NotBlank
-    @NotNull
-    private String photoWithNumbersLink;
+    private String description;
     @NotBlank
     @NotNull
     private String holdsDetails;
@@ -33,13 +32,22 @@ public class RouteDTO extends AbstractDTO {
     @NotNull
     private Long climbingGymId;
 
+    public List<PhotoDTO> photos = new ArrayList<>();
 
-    public RouteDTO(long id, Long version, String routeName, String difficulty, String photoWithBoxesLink, String photoWithNumbersLink, String holdsDetails, Long climbingGymId) {
+
+    public RouteDTO(long id, Long version, String routeName, String difficulty, String description, String holdsDetails, Long climbingGymId,List<PhotoDTO> photos) {
         super(id, version);
         this.routeName = routeName;
         this.difficulty = difficulty;
-        this.photoWithBoxesLink = photoWithBoxesLink;
-        this.photoWithNumbersLink = photoWithNumbersLink;
+        this.description = description;
+        this.holdsDetails = holdsDetails;
+        this.climbingGymId = climbingGymId;
+        this.photos = photos;
+    }
+    public RouteDTO(String routeName, String difficulty, String description, String holdsDetails, Long climbingGymId) {
+        this.routeName = routeName;
+        this.difficulty = difficulty;
+        this.description = description;
         this.holdsDetails = holdsDetails;
         this.climbingGymId = climbingGymId;
     }

@@ -4,9 +4,13 @@ import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Entity
@@ -18,11 +22,11 @@ import java.io.Serializable;
 public class RouteEntity extends AbstractEntity implements Serializable {
 
     private String routeName;
-    private String photoWithBoxesLink;
-    private String photoWithNumbersLink;
     private String holdsDetails;
+    private String description;
     private String difficulty;
     private ClimbingGymEntity climbingGym;
+    private List<PhotoEntity> photos = new ArrayList<>();
 
 
     @Basic
@@ -31,22 +35,17 @@ public class RouteEntity extends AbstractEntity implements Serializable {
         return routeName;
     }
 
-    @Basic
-    @Column(name = "photo_with_boxes_link")
-    public String getPhotoWithBoxesLink() {
-        return photoWithBoxesLink;
-    }
-
-    @Basic
-    @Column(name = "photo_with_numbers_link")
-    public String getPhotoWithNumbersLink() {
-        return photoWithNumbersLink;
-    }
 
     @Basic
     @Column(name = "holds_details")
     public String getHoldsDetails() {
         return holdsDetails;
+    }
+
+    @Basic
+    @Column(name = "description")
+    public String getDescription() {
+        return description;
     }
 
     @Basic
@@ -59,6 +58,12 @@ public class RouteEntity extends AbstractEntity implements Serializable {
     @JoinColumn(name = "climbing_gym_id", referencedColumnName = "id", nullable = false)
     public ClimbingGymEntity getClimbingGym() {
         return climbingGym;
+    }
+
+    @OneToMany(mappedBy = "route", cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
+    @Fetch(value = FetchMode.SUBSELECT)
+    public List<PhotoEntity> getPhotos() {
+        return photos;
     }
 
 
