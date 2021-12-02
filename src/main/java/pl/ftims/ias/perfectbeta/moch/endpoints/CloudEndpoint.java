@@ -13,6 +13,8 @@ import pl.ftims.ias.perfectbeta.moch.services.CloudService;
 import pl.ftims.ias.perfectbeta.moch.services.CloudServiceLocal;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @RequestMapping("image")
@@ -27,7 +29,13 @@ public class CloudEndpoint {
     }
 
     @PostMapping("/upload")
-    public ResponseEntity<String> uploadFile(@RequestParam(value = "file") MultipartFile file) throws UploadFileException, IOException {
-        return new ResponseEntity<>(service.uploadFileToCloudinary(file), HttpStatus.OK);
+    public ResponseEntity<List<String>> uploadFile(@RequestParam(value = "files") MultipartFile[] files) throws UploadFileException, IOException {
+
+        List<String> fileNames = new ArrayList<>();
+        for (MultipartFile file : files) {
+            fileNames.add(service.uploadFileToCloudinary(file));
+        }
+
+        return new ResponseEntity<List<String>>(fileNames, HttpStatus.OK);
     }
 }
