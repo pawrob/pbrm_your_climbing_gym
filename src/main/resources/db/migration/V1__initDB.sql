@@ -139,6 +139,7 @@ CREATE TABLE public.route
     id              BIGSERIAL             NOT NULL,
     climbing_gym_id BIGINT                NOT NULL,
     route_name      CHARACTER VARYING(64) NOT NULL,
+    avg_rating      FLOAT                 NOT NULL DEFAULT 0,
     description     CHARACTER VARYING,
     holds_details   CHARACTER VARYING     NOT NULL,
     difficulty      CHARACTER VARYING(10),
@@ -181,6 +182,25 @@ CREATE TABLE public.favourites
         ON DELETE NO ACTION
 );
 
+CREATE TABLE public.rating
+(
+    id       BIGSERIAL NOT NULL,
+    rate     FLOAT     NOT NULL,
+    comment  CHARACTER VARYING,
+    route_id BIGSERIAL NOT NULL,
+    user_id  BIGINT                NOT NULL,
+    version  BIGINT    NOT NULL DEFAULT 1,
+
+    CONSTRAINT rating_pkey PRIMARY KEY (id),
+    CONSTRAINT route_id_fkey FOREIGN KEY (route_id)
+        REFERENCES public.route (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+    CONSTRAINT rating_user_id_fkey FOREIGN KEY (user_id)
+        REFERENCES public.user (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+);
 
 
 CREATE OR REPLACE VIEW public.authentication_view
@@ -261,6 +281,21 @@ CREATE
     ON public.photo USING btree
         (route_id ASC NULLS LAST)
     TABLESPACE pg_default;
+
+DROP
+    INDEX IF EXISTS rating_route_id;
+CREATE
+    INDEX rating_route_id
+    ON public.rating USING btree
+        (route_id ASC NULLS LAST)
+    TABLESPACE pg_default;
+DROP
+    INDEX IF EXISTS rating_user_id;
+CREATE
+    INDEX rating_user_id
+    ON public.rating USING btree
+        (user_id ASC NULLS LAST)
+    TABLESPACE pg_default;
 DROP
     INDEX IF EXISTS favourites_climber_id;
 CREATE
@@ -283,6 +318,7 @@ GRANT USAGE ON SEQUENCE public.route_id_seq TO perfectbeta_mos;
 GRANT USAGE ON SEQUENCE public.climbing_gym_details_id_seq TO perfectbeta_mos;
 GRANT USAGE ON SEQUENCE public.gym_maintainer_id_seq TO perfectbeta_mos;
 GRANT USAGE ON SEQUENCE public.photo_id_seq TO perfectbeta_mos;
+GRANT USAGE ON SEQUENCE public.rating_id_seq TO perfectbeta_mos;
 -- auth
 GRANT SELECT ON TABLE public.authentication_view TO perfectbeta_auth;
 GRANT INSERT, SELECT, UPDATE ON TABLE public.user TO perfectbeta_auth;
@@ -306,3 +342,4 @@ GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE public.climbing_gym_details TO per
 GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE public.gym_maintainer TO perfectbeta_mos;
 GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE public.photo TO perfectbeta_mos;
 GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE public.favourites TO perfectbeta_mos;
+GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE public.rating TO perfectbeta_mos;

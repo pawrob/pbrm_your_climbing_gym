@@ -28,19 +28,22 @@ public class RouteDTO extends AbstractDTO {
     @NotBlank
     @NotNull
     private String holdsDetails;
-
+    @NotBlank
+    @NotNull
+    private Double avgRating;
     @NotNull
     private Long climbingGymId;
 
     public List<PhotoDTO> photos = new ArrayList<>();
 
 
-    public RouteDTO(long id, Long version, String routeName, String difficulty, String description, String holdsDetails, Long climbingGymId, List<PhotoDTO> photos) {
+    public RouteDTO(long id, Long version, String routeName, String difficulty, String description, String holdsDetails,Double avgRating, Long climbingGymId, List<PhotoDTO> photos) {
         super(id, version);
         this.routeName = routeName;
         this.difficulty = difficulty;
         this.description = description;
         this.holdsDetails = holdsDetails;
+        this.avgRating = avgRating;
         this.climbingGymId = climbingGymId;
         this.photos = photos;
     }

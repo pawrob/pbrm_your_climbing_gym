@@ -11,11 +11,13 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import pl.ftims.ias.perfectbeta.dto.routes_dtos.PhotoDTO;
+import pl.ftims.ias.perfectbeta.dto.routes_dtos.RatingDTO;
 import pl.ftims.ias.perfectbeta.dto.routes_dtos.RouteDTO;
 import pl.ftims.ias.perfectbeta.entities.*;
 import pl.ftims.ias.perfectbeta.entities.enums.GymStatusEnum;
 import pl.ftims.ias.perfectbeta.exceptions.*;
 import pl.ftims.ias.perfectbeta.mos.repositories.ClimbingGymRepository;
+import pl.ftims.ias.perfectbeta.mos.repositories.RatingRepository;
 import pl.ftims.ias.perfectbeta.mos.repositories.RouteRepository;
 import pl.ftims.ias.perfectbeta.mos.repositories.UserMosRepository;
 
@@ -29,15 +31,18 @@ public class RouteService implements RouteServiceLocal {
     RouteRepository routeRepository;
     UserMosRepository userMosRepository;
     ClimbingGymRepository climbingGymRepository;
+    RatingRepository ratingRepository;
 
 
     @Autowired
-    public RouteService(RouteRepository routeRepository, ClimbingGymRepository climbingGymRepository, UserMosRepository userMosRepository) {
+    public RouteService(RouteRepository routeRepository, ClimbingGymRepository climbingGymRepository, UserMosRepository userMosRepository, RatingRepository ratingRepository) {
         this.routeRepository = routeRepository;
         this.climbingGymRepository = climbingGymRepository;
         this.userMosRepository = userMosRepository;
+        this.ratingRepository = ratingRepository;
     }
 
+    @Override
     public Page<RouteEntity> findAllByGymId(Long gymId, Pageable page) throws AbstractAppException {
         ClimbingGymEntity gym = climbingGymRepository.findById(gymId)
                 .orElseThrow(() -> GymNotFoundException.createGymWithProvidedIdNotFoundException(gymId));
@@ -45,7 +50,7 @@ public class RouteService implements RouteServiceLocal {
         return routeRepository.findAllByClimbingGym(gym, page);
     }
 
-
+    @Override
     public RouteEntity addRoute(RouteDTO routeDTO) throws AbstractAppException {
         ClimbingGymEntity gym = climbingGymRepository.findById(routeDTO.getClimbingGymId())
                 .orElseThrow(() -> GymNotFoundException.createGymWithProvidedIdNotFoundException(routeDTO.getClimbingGymId()));
@@ -58,7 +63,7 @@ public class RouteService implements RouteServiceLocal {
         }
 
 
-        RouteEntity route = new RouteEntity(routeDTO.getRouteName(), routeDTO.getHoldsDetails(), routeDTO.getDescription(), routeDTO.getDifficulty(), gym, new ArrayList<PhotoEntity>());
+        RouteEntity route = new RouteEntity(routeDTO.getRouteName(), routeDTO.getHoldsDetails(), routeDTO.getDescription(), routeDTO.getDifficulty(), 0.0, gym, new ArrayList<PhotoEntity>());
         route = routeRepository.save(route);
         if (routeDTO.getPhotos().size() != 0) {
             List<PhotoEntity> photoEntityList = new ArrayList<>();
@@ -74,6 +79,7 @@ public class RouteService implements RouteServiceLocal {
         return route;
     }
 
+    @Override
     public ResponseEntity removeRoute(Long gymId, Long routeId) throws AbstractAppException {
         ClimbingGymEntity gym = climbingGymRepository.findById(gymId)
                 .orElseThrow(() -> GymNotFoundException.createGymWithProvidedIdNotFoundException(gymId));
@@ -91,6 +97,7 @@ public class RouteService implements RouteServiceLocal {
         return ResponseEntity.ok().build();
     }
 
+    @Override
     public RouteEntity editRouteDetails(Long gymId, Long routeId, RouteDTO routeDTO) throws AbstractAppException {
         ClimbingGymEntity gym = climbingGymRepository.findById(gymId)
                 .orElseThrow(() -> GymNotFoundException.createGymWithProvidedIdNotFoundException(gymId));
@@ -142,13 +149,80 @@ public class RouteService implements RouteServiceLocal {
         return ResponseEntity.ok().build();
     }
 
-
+    @Override
     public Page<RouteEntity> getFavouriteRoutes(Pageable page) throws AbstractAppException {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         UserEntity user = userMosRepository.findByLogin(auth.getName())
                 .orElseThrow(() -> UserNotFoundAppException.createUserWithProvidedLoginNotFoundException(auth.getName()));
 
         return routeRepository.findAllFavouritesRoutes(user, page);
+    }
+
+
+    @Override
+    public RouteEntity updateRating(Long route_id, RatingDTO ratingDTO) throws AbstractAppException {
+        RouteEntity route = routeRepository.findById(route_id)
+                .orElseThrow(() -> RouteNotFoundException.createRouteWithProvidedIdNotFoundException(route_id));
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        UserEntity user = userMosRepository.findByLogin(auth.getName())
+                .orElseThrow(() -> UserNotFoundAppException.createUserWithProvidedLoginNotFoundException(auth.getName()));
+        route.getRatings().add(new RatingEntity(ratingDTO.getRate(), ratingDTO.getComment(), route, user));
+
+        routeRepository.save(route);
+        calculateRatings(route);
+        return route;
+    }
+
+    @Override
+    public ResponseEntity deleteOwnRating(Long rating_id) throws AbstractAppException {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        UserEntity user = userMosRepository.findByLogin(auth.getName())
+                .orElseThrow(() -> UserNotFoundAppException.createUserWithProvidedLoginNotFoundException(auth.getName()));
+
+        RatingEntity rate = ratingRepository.findById(rating_id)
+                .orElseThrow(() -> RouteNotFoundException.createRouteWithProvidedIdNotFoundException(rating_id));
+        RouteEntity route = routeRepository.findById(rate.getRoute().getId())
+                .orElseThrow(() -> RouteNotFoundException.createRouteWithProvidedIdNotFoundException(rate.getRoute().getId()));
+        if(rate.getUser().equals(user)){
+            route.getRatings().remove(rate);
+            ratingRepository.delete(rate);
+        }
+        else throw NotAllowedAppException.createYouAreNotMaintainerOrOwnerException();
+
+        routeRepository.save(route);
+        calculateRatings(route);
+        return ResponseEntity.ok().build();
+    }
+
+    @Override
+    public ResponseEntity deleteRatingByOwnerOrMaintainer(Long rating_id) throws AbstractAppException {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+        RatingEntity rate = ratingRepository.findById(rating_id)
+                .orElseThrow(() -> RouteNotFoundException.createRouteWithProvidedIdNotFoundException(rating_id));
+        RouteEntity route = routeRepository.findById(rate.getRoute().getId())
+                .orElseThrow(() -> RouteNotFoundException.createRouteWithProvidedIdNotFoundException(rate.getRoute().getId()));
+        ClimbingGymEntity gym = climbingGymRepository.findById(route.getClimbingGym().getId())
+                .orElseThrow(() -> GymNotFoundException.createGymWithProvidedIdNotFoundException(route.getClimbingGym().getId()));
+
+        if(checkIfPermitted(gym)){
+            route.getRatings().remove(rate);
+            ratingRepository.delete(rate);
+        }
+        else throw NotAllowedAppException.createYouAreNotMaintainerOrOwnerException();
+
+        routeRepository.save(route);
+        calculateRatings(route);
+        return ResponseEntity.ok().build();
+    }
+
+    private void calculateRatings(RouteEntity route){
+        Double avgRating = 0.0;
+        for (RatingEntity r : route.getRatings()) {
+            avgRating += r.getRate();
+        }
+        route.setAvgRating(avgRating / route.getRatings().size());
+        routeRepository.save(route);
     }
 
     private Boolean checkIfPermitted(ClimbingGymEntity gym) {
