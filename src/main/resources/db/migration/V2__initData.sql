@@ -64,7 +64,7 @@ INSERT INTO public.access_level_table (id, user_id, access_level, is_active)
 VALUES (-35, -5, 'MANAGER', false);
 
 INSERT INTO public.climbing_gym (id, gym_name, status, user_id, version)
-VALUES (-1, 'testGym_unverified', 'UNVERIFIED', -1, 0);
+VALUES (-1, 'testGym_unverified', 'UNVERIFIED', -1, 1);
 INSERT INTO public.climbing_gym (id, gym_name, status, user_id, version)
 VALUES (-2, 'testGym_toVerify', 'UNVERIFIED', -1, 0);
 INSERT INTO public.climbing_gym (id, gym_name, status, user_id, version)
