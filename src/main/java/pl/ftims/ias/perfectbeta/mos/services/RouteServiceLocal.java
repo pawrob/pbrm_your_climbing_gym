@@ -25,6 +25,8 @@ public interface RouteServiceLocal {
     ResponseEntity deleteRouteFromFavourites(Long id) throws AbstractAppException;
 
     RouteEntity updateRating(Long route_id, RatingDTO ratingDTO) throws AbstractAppException;
+
     ResponseEntity deleteOwnRating(Long rating_id) throws AbstractAppException;
+
     ResponseEntity deleteRatingByOwnerOrMaintainer(Long rating_id) throws AbstractAppException;
 }

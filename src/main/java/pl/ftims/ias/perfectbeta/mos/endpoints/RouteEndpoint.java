@@ -75,23 +75,24 @@ public class RouteEndpoint {
     public ResponseEntity removeRouteFromFavourites(@PathVariable Long route_id) throws AbstractAppException {
         return retry.execute(arg0 -> routeService.deleteRouteFromFavourites(route_id));
     }
+
     @Secured("ROLE_CLIMBER")
     @PostMapping("/{route_id}/rate")
-    public RouteDTO updateRating(@PathVariable Long route_id,@RequestBody @Valid RatingDTO ratingDTO) throws AbstractAppException {
-        return retry.execute(arg0 -> RouteConverter.climbingWallEntityToDTO(routeService.updateRating(route_id,ratingDTO)));
+    public RouteDTO updateRating(@PathVariable Long route_id, @RequestBody @Valid RatingDTO ratingDTO) throws AbstractAppException {
+        return retry.execute(arg0 -> RouteConverter.climbingWallEntityToDTO(routeService.updateRating(route_id, ratingDTO)));
     }
 
     @Secured("ROLE_CLIMBER")
     @DeleteMapping("/rate/{rate_id}/delete")
     public ResponseEntity deleteOwnRating(@PathVariable Long rate_id) throws AbstractAppException {
-        return retry.execute(arg0 ->routeService.deleteOwnRating(rate_id));
+        return retry.execute(arg0 -> routeService.deleteOwnRating(rate_id));
 
     }
 
     @Secured("ROLE_MANAGER")
     @DeleteMapping("/rate/{rate_id}/force-delete")
     public ResponseEntity deleteRatingByOwnerOrMaintainer(@PathVariable Long rate_id) throws AbstractAppException {
-        return retry.execute(arg0 ->routeService.deleteRatingByOwnerOrMaintainer(rate_id));
+        return retry.execute(arg0 -> routeService.deleteRatingByOwnerOrMaintainer(rate_id));
     }
 
 }

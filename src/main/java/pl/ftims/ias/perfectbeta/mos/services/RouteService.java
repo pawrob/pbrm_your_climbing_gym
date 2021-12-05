@@ -183,11 +183,10 @@ public class RouteService implements RouteServiceLocal {
                 .orElseThrow(() -> RouteNotFoundException.createRouteWithProvidedIdNotFoundException(rating_id));
         RouteEntity route = routeRepository.findById(rate.getRoute().getId())
                 .orElseThrow(() -> RouteNotFoundException.createRouteWithProvidedIdNotFoundException(rate.getRoute().getId()));
-        if(rate.getUser().equals(user)){
+        if (rate.getUser().equals(user)) {
             route.getRatings().remove(rate);
             ratingRepository.delete(rate);
-        }
-        else throw NotAllowedAppException.createYouAreNotMaintainerOrOwnerException();
+        } else throw NotAllowedAppException.createYouAreNotMaintainerOrOwnerException();
 
         routeRepository.save(route);
         calculateRatings(route);
@@ -205,18 +204,17 @@ public class RouteService implements RouteServiceLocal {
         ClimbingGymEntity gym = climbingGymRepository.findById(route.getClimbingGym().getId())
                 .orElseThrow(() -> GymNotFoundException.createGymWithProvidedIdNotFoundException(route.getClimbingGym().getId()));
 
-        if(checkIfPermitted(gym)){
+        if (checkIfPermitted(gym)) {
             route.getRatings().remove(rate);
             ratingRepository.delete(rate);
-        }
-        else throw NotAllowedAppException.createYouAreNotMaintainerOrOwnerException();
+        } else throw NotAllowedAppException.createYouAreNotMaintainerOrOwnerException();
 
         routeRepository.save(route);
         calculateRatings(route);
         return ResponseEntity.ok().build();
     }
 
-    private void calculateRatings(RouteEntity route){
+    private void calculateRatings(RouteEntity route) {
         Double avgRating = 0.0;
         for (RatingEntity r : route.getRatings()) {
             avgRating += r.getRate();

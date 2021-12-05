@@ -98,6 +98,7 @@ public class AppExceptionHandler {
         ExceptionDTO exceptionDTO = new ExceptionDTO(e.getMessage(), HttpStatus.CONFLICT, ZonedDateTime.now(), "ROUTE_NOT_IN_FAVOURITES");
         return new ResponseEntity<>(exceptionDTO, HttpStatus.CONFLICT);
     }
+
     @ExceptionHandler(value = MethodArgumentTypeMismatchException.class)
     public ResponseEntity<Object> handleNotFavouriteException(MethodArgumentTypeMismatchException e) {
         ExceptionDTO exceptionDTO = new ExceptionDTO(e.getMessage(), HttpStatus.BAD_REQUEST, ZonedDateTime.now(), "INCORRECT_INPUT");

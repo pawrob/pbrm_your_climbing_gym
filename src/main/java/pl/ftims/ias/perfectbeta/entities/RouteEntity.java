@@ -32,8 +32,6 @@ public class RouteEntity extends AbstractEntity implements Serializable {
     private List<RatingEntity> ratings = new ArrayList<>();
 
 
-
-
     @Basic
     @Column(name = "route_name")
     public String getRouteName() {
@@ -76,6 +74,7 @@ public class RouteEntity extends AbstractEntity implements Serializable {
     public List<PhotoEntity> getPhotos() {
         return photos;
     }
+
     @OneToMany(mappedBy = "route", cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
     @Fetch(value = FetchMode.SUBSELECT)
     public List<RatingEntity> getRatings() {
@@ -98,7 +97,8 @@ public class RouteEntity extends AbstractEntity implements Serializable {
         this.difficulty = difficulty;
         this.climbingGym = climbingGym;
     }
-    public RouteEntity(String routeName, String holdsDetails, String description, String difficulty,Double avgRating, ClimbingGymEntity gym, ArrayList<PhotoEntity> photoEntities) {
+
+    public RouteEntity(String routeName, String holdsDetails, String description, String difficulty, Double avgRating, ClimbingGymEntity gym, ArrayList<PhotoEntity> photoEntities) {
         this.routeName = routeName;
         this.holdsDetails = holdsDetails;
         this.description = description;

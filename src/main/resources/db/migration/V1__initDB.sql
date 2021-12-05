@@ -188,7 +188,7 @@ CREATE TABLE public.rating
     rate     FLOAT     NOT NULL,
     comment  CHARACTER VARYING,
     route_id BIGSERIAL NOT NULL,
-    user_id  BIGINT                NOT NULL,
+    user_id  BIGINT    NOT NULL,
     version  BIGINT    NOT NULL DEFAULT 1,
 
     CONSTRAINT rating_pkey PRIMARY KEY (id),

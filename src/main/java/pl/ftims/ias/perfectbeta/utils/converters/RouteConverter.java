@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 public class RouteConverter {
 
     public static RouteDTO climbingWallEntityToDTO(RouteEntity entity) {
-        return new RouteDTO(entity.getId(), entity.getVersion(), entity.getRouteName(), entity.getDifficulty(), entity.getDescription(), entity.getHoldsDetails(),entity.getAvgRating(),
+        return new RouteDTO(entity.getId(), entity.getVersion(), entity.getRouteName(), entity.getDifficulty(), entity.getDescription(), entity.getHoldsDetails(), entity.getAvgRating(),
                 entity.getClimbingGym().getId(), photoListDTOFromEntity(entity.getPhotos()));
     }
 
