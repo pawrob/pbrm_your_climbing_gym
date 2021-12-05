@@ -16,4 +16,10 @@ public interface RouteServiceLocal {
     ResponseEntity removeRoute(Long gymId, Long routeId) throws AbstractAppException;
 
     RouteEntity editRouteDetails(Long gymId, Long routeId, RouteDTO routeDTO) throws AbstractAppException;
+
+    RouteEntity addRouteToFavourites(Long id) throws AbstractAppException;
+
+    Page<RouteEntity> getFavouriteRoutes(Pageable page) throws AbstractAppException;
+
+    ResponseEntity deleteRouteFromFavourites(Long id) throws AbstractAppException;
 }

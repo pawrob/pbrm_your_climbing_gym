@@ -27,6 +27,16 @@ public class RouteEntity extends AbstractEntity implements Serializable {
     private String difficulty;
     private ClimbingGymEntity climbingGym;
     private List<PhotoEntity> photos = new ArrayList<>();
+    private List<UserEntity> likedBy = new ArrayList<>();
+
+    public RouteEntity(String routeName, String holdsDetails, String description, String difficulty, ClimbingGymEntity gym, ArrayList<PhotoEntity> photoEntities) {
+        this.routeName = routeName;
+        this.holdsDetails = holdsDetails;
+        this.description = description;
+        this.difficulty = difficulty;
+        this.climbingGym = gym;
+        this.photos = photoEntities;
+    }
 
 
     @Basic
@@ -64,6 +74,16 @@ public class RouteEntity extends AbstractEntity implements Serializable {
     @Fetch(value = FetchMode.SUBSELECT)
     public List<PhotoEntity> getPhotos() {
         return photos;
+    }
+
+    @ManyToMany
+    @JoinTable(
+            name = "favourites",
+            joinColumns = @JoinColumn(name = "route_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "climber_id", referencedColumnName = "id")
+    )
+    public List<UserEntity> getLikedBy() {
+        return likedBy;
     }
 
 

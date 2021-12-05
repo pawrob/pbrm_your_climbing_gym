@@ -19,6 +19,7 @@ public class RouteConverter {
                 entity.getClimbingGym().getId(), photoListDTOFromEntity(entity.getPhotos()));
     }
 
+
     public static PhotoDTO photoEntityToDTO(PhotoEntity entity) {
         return new PhotoDTO(entity.getId(), entity.getVersion(), entity.getPhotoUrl(), entity.getRoute().getId());
     }

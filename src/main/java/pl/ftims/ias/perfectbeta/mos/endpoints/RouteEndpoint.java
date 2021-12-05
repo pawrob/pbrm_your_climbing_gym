@@ -1,7 +1,6 @@
 package pl.ftims.ias.perfectbeta.mos.endpoints;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.properties.bind.DefaultValue;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -35,8 +34,8 @@ public class RouteEndpoint {
 
 
     @GetMapping("{gym_id}")
-    public Page<RouteDTO> findAllRoutesByGymId(@PathVariable Long gym_id,Pageable page) throws AbstractAppException {
-        return retry.execute(arg0 -> RouteConverter.climbingWallEntityPageToDTOPage(routeService.findAllByGymId(gym_id,page)));
+    public Page<RouteDTO> findAllRoutesByGymId(@PathVariable Long gym_id, Pageable page) throws AbstractAppException {
+        return retry.execute(arg0 -> RouteConverter.climbingWallEntityPageToDTOPage(routeService.findAllByGymId(gym_id, page)));
     }
 
 
@@ -58,4 +57,21 @@ public class RouteEndpoint {
         return retry.execute(arg0 -> RouteConverter.climbingWallEntityToDTO(routeService.editRouteDetails(gym_id, route_id, routeDTO)));
     }
 
+    @Secured("ROLE_CLIMBER")
+    @GetMapping("favorites")
+    public Page<RouteDTO> getFavouriteRoutes(Pageable page) throws AbstractAppException {
+        return retry.execute(arg0 -> RouteConverter.climbingWallEntityPageToDTOPage(routeService.getFavouriteRoutes(page)));
+    }
+
+    @Secured("ROLE_CLIMBER")
+    @PostMapping("/{route_id}/add-favorite")
+    public RouteDTO addRouteToFavourites(@PathVariable Long route_id) throws AbstractAppException {
+        return retry.execute(arg0 -> RouteConverter.climbingWallEntityToDTO(routeService.addRouteToFavourites(route_id)));
+    }
+
+    @Secured("ROLE_CLIMBER")
+    @DeleteMapping("/{route_id}/remove-favorite")
+    public ResponseEntity removeRouteFromFavourites(@PathVariable Long route_id) throws AbstractAppException {
+        return retry.execute(arg0 -> routeService.deleteRouteFromFavourites(route_id));
+    }
 }

@@ -6,8 +6,6 @@ import pl.ftims.ias.perfectbeta.dto.routes_dtos.GymDetailsDTO;
 import pl.ftims.ias.perfectbeta.entities.ClimbingGymEntity;
 import pl.ftims.ias.perfectbeta.exceptions.AbstractAppException;
 
-import java.util.List;
-
 public interface ClimbingGymServiceLocal {
 
     Page<ClimbingGymEntity> listOwnedGyms(Pageable page) throws AbstractAppException;

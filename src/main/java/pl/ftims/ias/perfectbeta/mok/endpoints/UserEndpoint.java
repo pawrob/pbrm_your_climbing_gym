@@ -21,7 +21,6 @@ import pl.ftims.ias.perfectbeta.utils.converters.UserConverter;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import java.util.List;
 
 @RestController
 @RequestMapping("users")

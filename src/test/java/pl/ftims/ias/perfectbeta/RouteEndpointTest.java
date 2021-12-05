@@ -4,7 +4,6 @@ package pl.ftims.ias.perfectbeta;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import pl.ftims.ias.perfectbeta.dto.CredentialsDTO;
@@ -174,7 +173,7 @@ class RouteEndpointTest {
                         "Authorization",
                         "Bearer " + getToken("pbucki", "Pbucki123!"))
                 .contentType("application/json")
-                .body(new RouteDTO("test edit maintainer",  "5a", "link to photo with boxes", "json", -3L,new ArrayList<>()))
+                .body(new RouteDTO("test edit maintainer", "5a", "link to photo with boxes", "json", -3L, new ArrayList<>()))
                 .when()
                 .put("http://localhost:8080/api/route/-3/edit/-3")
                 .then()
@@ -186,7 +185,7 @@ class RouteEndpointTest {
                         "Authorization",
                         "Bearer " + getToken("jkowalski", "Kowal123!"))
                 .contentType("application/json")
-                .body(new RouteDTO("test edit owner", "5a", "link to photo with boxes", "json", -3L,new ArrayList<>()))
+                .body(new RouteDTO("test edit owner", "5a", "link to photo with boxes", "json", -3L, new ArrayList<>()))
                 .when()
                 .put("http://localhost:8080/api/route/-3/edit/-3")
                 .then()
@@ -202,7 +201,7 @@ class RouteEndpointTest {
                         "Authorization",
                         "Bearer " + getToken("pbucki", "Pbucki123!"))
                 .contentType("application/json")
-                .body(new RouteDTO("test edit maintainer", "5c", "link to photo with boxes", "json", -3L,new ArrayList<>()))
+                .body(new RouteDTO("test edit maintainer", "5c", "link to photo with boxes", "json", -3L, new ArrayList<>()))
                 .when()
                 .put("http://localhost:8080/api/route/-100/edit/-2")
                 .then()
@@ -211,7 +210,7 @@ class RouteEndpointTest {
                         "Authorization",
                         "Bearer " + getToken("pbucki", "Pbucki123!"))
                 .contentType("application/json")
-                .body(new RouteDTO("test edit maintainer", "5a", "link to photo with boxes", "json", -3L,new ArrayList<>()))
+                .body(new RouteDTO("test edit maintainer", "5a", "link to photo with boxes", "json", -3L, new ArrayList<>()))
                 .when()
                 .put("http://localhost:8080/api/route/-3/edit/-100")
                 .then()
@@ -220,7 +219,7 @@ class RouteEndpointTest {
                         "Authorization",
                         "Bearer " + getToken("pbucki", "Pbucki123!"))
                 .contentType("application/json")
-                .body(new RouteDTO("test edit maintainer", "5a", "link to photo with boxes", "json", -3L,new ArrayList<>()))
+                .body(new RouteDTO("test edit maintainer", "5a", "link to photo with boxes", "json", -3L, new ArrayList<>()))
                 .when()
                 .put("http://localhost:8080/api/route/-2/edit/-2")
                 .then()

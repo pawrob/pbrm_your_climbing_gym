@@ -11,7 +11,6 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import pl.ftims.ias.perfectbeta.dto.routes_dtos.GymDetailsDTO;
-import pl.ftims.ias.perfectbeta.dto.routes_dtos.RouteDTO;
 import pl.ftims.ias.perfectbeta.entities.*;
 import pl.ftims.ias.perfectbeta.entities.enums.GymStatusEnum;
 import pl.ftims.ias.perfectbeta.exceptions.AbstractAppException;
@@ -57,7 +56,7 @@ public class ClimbingGymService implements ClimbingGymServiceLocal {
         for (GymMaintainerEntity g : gymMaintainerEntities) {
             climbingGymEntities.add(g.getMaintainedGym());
         }
-        return new PageImpl<ClimbingGymEntity>(climbingGymEntities,page,climbingGymEntities.size());
+        return new PageImpl<ClimbingGymEntity>(climbingGymEntities, page, climbingGymEntities.size());
     }
 
     public Page<ClimbingGymEntity> listAllGyms(Pageable page) {

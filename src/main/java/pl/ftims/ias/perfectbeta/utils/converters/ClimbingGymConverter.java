@@ -6,7 +6,6 @@ import pl.ftims.ias.perfectbeta.dto.routes_dtos.*;
 import pl.ftims.ias.perfectbeta.entities.ClimbingGymEntity;
 import pl.ftims.ias.perfectbeta.entities.GymDetailsEntity;
 import pl.ftims.ias.perfectbeta.entities.GymMaintainerEntity;
-import pl.ftims.ias.perfectbeta.entities.RouteEntity;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -40,10 +39,10 @@ public class ClimbingGymConverter {
         List<ClimbingGymEntity> entities = entity.getContent();
 
         List<ClimbingGymDTO> dtos = new ArrayList<>();
-        for (ClimbingGymEntity e : entities){
+        for (ClimbingGymEntity e : entities) {
             dtos.add(climbingGymEntityToDTO(e));
         }
-        Page<ClimbingGymDTO> page = new PageImpl<ClimbingGymDTO>(dtos,entity.getPageable(),dtos.size());
+        Page<ClimbingGymDTO> page = new PageImpl<ClimbingGymDTO>(dtos, entity.getPageable(), dtos.size());
         return page;
     }
 

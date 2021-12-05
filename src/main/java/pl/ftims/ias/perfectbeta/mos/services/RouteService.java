@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
@@ -11,15 +12,9 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import pl.ftims.ias.perfectbeta.dto.routes_dtos.PhotoDTO;
 import pl.ftims.ias.perfectbeta.dto.routes_dtos.RouteDTO;
-import pl.ftims.ias.perfectbeta.entities.ClimbingGymEntity;
-import pl.ftims.ias.perfectbeta.entities.GymMaintainerEntity;
-import pl.ftims.ias.perfectbeta.entities.PhotoEntity;
-import pl.ftims.ias.perfectbeta.entities.RouteEntity;
+import pl.ftims.ias.perfectbeta.entities.*;
 import pl.ftims.ias.perfectbeta.entities.enums.GymStatusEnum;
-import pl.ftims.ias.perfectbeta.exceptions.AbstractAppException;
-import pl.ftims.ias.perfectbeta.exceptions.GymNotFoundException;
-import pl.ftims.ias.perfectbeta.exceptions.NotAllowedAppException;
-import pl.ftims.ias.perfectbeta.exceptions.RouteNotFoundException;
+import pl.ftims.ias.perfectbeta.exceptions.*;
 import pl.ftims.ias.perfectbeta.mos.repositories.ClimbingGymRepository;
 import pl.ftims.ias.perfectbeta.mos.repositories.RouteRepository;
 import pl.ftims.ias.perfectbeta.mos.repositories.UserMosRepository;
@@ -112,6 +107,48 @@ public class RouteService implements RouteServiceLocal {
         route.setRouteName(routeDTO.getRouteName());
         route.setDifficulty(routeDTO.getDifficulty());
         return route;
+    }
+
+    @Override
+    public RouteEntity addRouteToFavourites(Long id) throws AbstractAppException {
+        RouteEntity route = routeRepository.findById(id)
+                .orElseThrow(() -> RouteNotFoundException.createRouteWithProvidedIdNotFoundException(id));
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        UserEntity user = userMosRepository.findByLogin(auth.getName())
+                .orElseThrow(() -> UserNotFoundAppException.createUserWithProvidedLoginNotFoundException(auth.getName()));
+
+        if (route.getLikedBy().contains(user)) {
+            throw UniqueConstraintAppException.createFavouriteAlreadyException();
+        }
+        route.getLikedBy().add(user);
+
+        return routeRepository.save(route);
+    }
+
+    @Override
+    public ResponseEntity deleteRouteFromFavourites(Long id) throws AbstractAppException {
+        RouteEntity route = routeRepository.findById(id)
+                .orElseThrow(() -> RouteNotFoundException.createRouteWithProvidedIdNotFoundException(id));
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        UserEntity user = userMosRepository.findByLogin(auth.getName())
+                .orElseThrow(() -> UserNotFoundAppException.createUserWithProvidedLoginNotFoundException(auth.getName()));
+
+        if (!route.getLikedBy().contains(user)) {
+            throw UniqueConstraintAppException.createNotFavouriteAlreadyException();
+        }
+        route.getLikedBy().remove(user);
+
+        routeRepository.save(route);
+        return ResponseEntity.ok().build();
+    }
+
+
+    public Page<RouteEntity> getFavouriteRoutes(Pageable page) throws AbstractAppException {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        UserEntity user = userMosRepository.findByLogin(auth.getName())
+                .orElseThrow(() -> UserNotFoundAppException.createUserWithProvidedLoginNotFoundException(auth.getName()));
+
+        return routeRepository.findAllFavouritesRoutes(user, page);
     }
 
     private Boolean checkIfPermitted(ClimbingGymEntity gym) {

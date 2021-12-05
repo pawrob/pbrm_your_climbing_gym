@@ -85,4 +85,16 @@ public class AppExceptionHandler {
         ExceptionDTO exceptionDTO = new ExceptionDTO(e.getMessage(), HttpStatus.NOT_FOUND, ZonedDateTime.now(), "ROUTE_NOT_FOUND");
         return new ResponseEntity<>(exceptionDTO, HttpStatus.NOT_FOUND);
     }
+
+    @ExceptionHandler(value = UniqueConstraintAppException.FavouriteAlreadyAppException.class)
+    public ResponseEntity<Object> handleFavouriteAlreadyException(UniqueConstraintAppException.FavouriteAlreadyAppException e) {
+        ExceptionDTO exceptionDTO = new ExceptionDTO(e.getMessage(), HttpStatus.CONFLICT, ZonedDateTime.now(), "ROUTE_ALREADY_IN_FAVOURITES");
+        return new ResponseEntity<>(exceptionDTO, HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(value = UniqueConstraintAppException.NotFavouriteAlreadyAppException.class)
+    public ResponseEntity<Object> handleNotFavouriteException(UniqueConstraintAppException.NotFavouriteAlreadyAppException e) {
+        ExceptionDTO exceptionDTO = new ExceptionDTO(e.getMessage(), HttpStatus.CONFLICT, ZonedDateTime.now(), "ROUTE_NOT_IN_FAVOURITES");
+        return new ResponseEntity<>(exceptionDTO, HttpStatus.CONFLICT);
+    }
 }

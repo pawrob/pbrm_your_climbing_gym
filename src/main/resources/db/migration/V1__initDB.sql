@@ -1,4 +1,4 @@
-CREATE TABLE public."user"
+CREATE TABLE public.user
 (
     id                             BIGSERIAL             NOT NULL,
     login                          CHARACTER VARYING(16) NOT NULL,
@@ -136,13 +136,13 @@ CREATE TABLE public.gym_maintainer
 
 CREATE TABLE public.route
 (
-    id                      BIGSERIAL             NOT NULL,
-    climbing_gym_id         BIGINT                NOT NULL,
-    route_name              CHARACTER VARYING(64) NOT NULL,
-    description              CHARACTER VARYING,
-    holds_details           CHARACTER VARYING     NOT NULL,
-    difficulty              CHARACTER VARYING(10),
-    version                 BIGINT                NOT NULL DEFAULT 1,
+    id              BIGSERIAL             NOT NULL,
+    climbing_gym_id BIGINT                NOT NULL,
+    route_name      CHARACTER VARYING(64) NOT NULL,
+    description     CHARACTER VARYING,
+    holds_details   CHARACTER VARYING     NOT NULL,
+    difficulty      CHARACTER VARYING(10),
+    version         BIGINT                NOT NULL DEFAULT 1,
     CONSTRAINT route_name_key UNIQUE (route_name),
     CONSTRAINT route_pkey PRIMARY KEY (id),
     CONSTRAINT climbing_gym_id_fkey FOREIGN KEY (climbing_gym_id)
@@ -153,10 +153,10 @@ CREATE TABLE public.route
 
 CREATE TABLE public.photo
 (
-    id                      BIGSERIAL             NOT NULL,
-    photo_url           CHARACTER VARYING     NOT NULL,
-    route_id           BIGSERIAL     NOT NULL,
-    version                 BIGINT                NOT NULL DEFAULT 1,
+    id        BIGSERIAL         NOT NULL,
+    photo_url CHARACTER VARYING NOT NULL,
+    route_id  BIGSERIAL         NOT NULL,
+    version   BIGINT            NOT NULL DEFAULT 1,
     CONSTRAINT photo_url_key UNIQUE (photo_url),
     CONSTRAINT photo_pkey PRIMARY KEY (id),
     CONSTRAINT route_id_fkey FOREIGN KEY (route_id)
@@ -164,6 +164,23 @@ CREATE TABLE public.photo
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
 );
+
+CREATE TABLE public.favourites
+(
+    climber_id BIGINT NOT NULL,
+    route_id   BIGINT NOT NULL,
+    version    BIGINT NOT NULL DEFAULT 1,
+    CONSTRAINT favourites_pkey PRIMARY KEY (climber_id, route_id),
+    CONSTRAINT favourites_climber_id_fkey FOREIGN KEY (climber_id)
+        REFERENCES public.user (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+    CONSTRAINT favourites_route_id_fkey FOREIGN KEY (route_id)
+        REFERENCES public.route (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+);
+
 
 
 CREATE OR REPLACE VIEW public.authentication_view
@@ -244,7 +261,17 @@ CREATE
     ON public.photo USING btree
         (route_id ASC NULLS LAST)
     TABLESPACE pg_default;
+DROP
+    INDEX IF EXISTS favourites_climber_id;
+CREATE
+    INDEX favourites_climber_id
+    ON public.favourites (climber_id);
 
+DROP
+    INDEX IF EXISTS favourites_route_id;
+CREATE
+    INDEX favourites_route_id
+    ON public.favourites (route_id);
 
 -- grants
 GRANT USAGE ON SEQUENCE public.user_id_seq TO perfectbeta_mok;
@@ -256,7 +283,6 @@ GRANT USAGE ON SEQUENCE public.route_id_seq TO perfectbeta_mos;
 GRANT USAGE ON SEQUENCE public.climbing_gym_details_id_seq TO perfectbeta_mos;
 GRANT USAGE ON SEQUENCE public.gym_maintainer_id_seq TO perfectbeta_mos;
 GRANT USAGE ON SEQUENCE public.photo_id_seq TO perfectbeta_mos;
-
 -- auth
 GRANT SELECT ON TABLE public.authentication_view TO perfectbeta_auth;
 GRANT INSERT, SELECT, UPDATE ON TABLE public.user TO perfectbeta_auth;
@@ -279,3 +305,4 @@ GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE public.route TO perfectbeta_mos;
 GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE public.climbing_gym_details TO perfectbeta_mos;
 GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE public.gym_maintainer TO perfectbeta_mos;
 GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE public.photo TO perfectbeta_mos;
+GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE public.favourites TO perfectbeta_mos;

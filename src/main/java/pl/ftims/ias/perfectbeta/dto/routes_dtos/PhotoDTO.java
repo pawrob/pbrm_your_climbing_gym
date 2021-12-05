@@ -24,6 +24,7 @@ public class PhotoDTO extends AbstractDTO {
         this.photoUrl = photoUrl;
         this.routeId = routeId;
     }
+
     public PhotoDTO(long id, Long version, String photoUrl) {
         super(id, version);
         this.photoUrl = photoUrl;

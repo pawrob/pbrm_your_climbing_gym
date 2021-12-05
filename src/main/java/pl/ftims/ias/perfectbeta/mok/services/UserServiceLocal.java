@@ -10,8 +10,6 @@ import pl.ftims.ias.perfectbeta.entities.PersonalDataEntity;
 import pl.ftims.ias.perfectbeta.entities.UserEntity;
 import pl.ftims.ias.perfectbeta.exceptions.AbstractAppException;
 
-import java.util.List;
-
 public interface UserServiceLocal {
 
     Page<UserEntity> getAllUsers(Pageable page);
