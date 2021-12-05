@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import pl.ftims.ias.perfectbeta.dto.ExceptionDTO;
 
 import javax.persistence.OptimisticLockException;
@@ -96,5 +97,10 @@ public class AppExceptionHandler {
     public ResponseEntity<Object> handleNotFavouriteException(UniqueConstraintAppException.NotFavouriteAlreadyAppException e) {
         ExceptionDTO exceptionDTO = new ExceptionDTO(e.getMessage(), HttpStatus.CONFLICT, ZonedDateTime.now(), "ROUTE_NOT_IN_FAVOURITES");
         return new ResponseEntity<>(exceptionDTO, HttpStatus.CONFLICT);
+    }
+    @ExceptionHandler(value = MethodArgumentTypeMismatchException.class)
+    public ResponseEntity<Object> handleNotFavouriteException(MethodArgumentTypeMismatchException e) {
+        ExceptionDTO exceptionDTO = new ExceptionDTO(e.getMessage(), HttpStatus.BAD_REQUEST, ZonedDateTime.now(), "INCORRECT_INPUT");
+        return new ResponseEntity<>(exceptionDTO, HttpStatus.BAD_REQUEST);
     }
 }
