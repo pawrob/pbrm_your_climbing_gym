@@ -28,9 +28,8 @@ public class RouteDTO extends AbstractDTO {
     @NotBlank
     @NotNull
     private String holdsDetails;
-    @NotBlank
-    @NotNull
-    private Double avgRating;
+
+    private Double avgRating = 0.0;
     @NotNull
     private Long climbingGymId;
 

@@ -1,6 +1,6 @@
 # PerfectBeta - Spring Boot
 
-<img src="https://i.imgur.com/aKSxfR5.png"  width="200px"/>  
+<img src="https://i.imgur.com/aKSxfR5.png"  width="200px" alt="logo_perfectbeta"/>  
 
 ## Requirements
 
