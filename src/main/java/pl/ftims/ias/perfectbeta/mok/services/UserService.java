@@ -2,8 +2,6 @@ package pl.ftims.ias.perfectbeta.mok.services;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -22,7 +20,7 @@ import pl.ftims.ias.perfectbeta.entities.UserEntity;
 import pl.ftims.ias.perfectbeta.exceptions.*;
 import pl.ftims.ias.perfectbeta.mok.repositories.PersonalDataMokRepository;
 import pl.ftims.ias.perfectbeta.mok.repositories.UserMokRepository;
-import pl.ftims.ias.perfectbeta.utils.HashGenerator;
+import pl.ftims.ias.perfectbeta.utils.security.HashGenerator;
 import pl.ftims.ias.perfectbeta.utils.mailing.EmailSender;
 
 import java.net.URLEncoder;
@@ -49,15 +47,8 @@ public class UserService implements UserServiceLocal {
         this.templateEngine = templateEngine;
     }
 
-    public Page<UserEntity> getAllUsers(Pageable page) {
-        return userMokRepository.findAll(page);
-    }
 
-
-    public UserEntity getUserById(Long id) throws AbstractAppException {
-        return userMokRepository.findById(id).orElseThrow(() -> UserNotFoundAppException.createUserWithProvidedIdNotFoundException(id));
-    }
-
+    @Override
     public UserEntity createUserAccountWithAccessLevel(UserEntity userEntity) {
         userEntity.setPassword(HashGenerator.generateHash(userEntity.getPassword()));
         userEntity.setVerifyToken(RandomStringUtils.randomAlphabetic(64));

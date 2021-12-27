@@ -2,6 +2,7 @@ package pl.ftims.ias.perfectbeta.auth.service;
 
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import pl.ftims.ias.perfectbeta.exceptions.InvalidTokenException;
 import pl.ftims.ias.perfectbeta.exceptions.UserNotFoundAppException;
 
 import java.util.List;
@@ -16,7 +17,7 @@ public interface JwtServiceLocal {
 
     public String doGenerateRefreshToken(Map<String, Object> claims, String subject);
 
-    public boolean validateToken(String authToken) throws UserNotFoundAppException;
+    public boolean validateToken(String authToken) throws UserNotFoundAppException, InvalidTokenException;
 
     public String getUsernameFromToken(String token);
 

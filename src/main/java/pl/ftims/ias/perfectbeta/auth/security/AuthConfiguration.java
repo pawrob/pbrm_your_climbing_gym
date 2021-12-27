@@ -43,18 +43,14 @@ public class AuthConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(HttpSecurity http) throws Exception {
         http.csrf().disable().authorizeRequests()
-                .antMatchers("/users/register").permitAll()
-                .antMatchers("/actuator/**").permitAll()
-                .antMatchers("/actuator").permitAll()
-                .antMatchers("/image/**").permitAll()
-                .antMatchers("/gym/verified/**").permitAll()
-                .antMatchers("/route/**").permitAll()
-                .antMatchers("/users/resetPassword").permitAll()
                 .antMatchers("/users/request_reset_password").permitAll()
                 .antMatchers("/users/reset_password").permitAll()
                 .antMatchers("/users/verify").permitAll()
+                .antMatchers("/users/register").permitAll()
                 .antMatchers("/auth/refreshtoken").hasAnyRole("CLIMBER", "MANAGER", "ADMINISTRATOR")
-                .antMatchers("/auth/authenticate").permitAll().anyRequest().authenticated()
+                .antMatchers("/auth/authenticate").permitAll()
+                .antMatchers("/gym/verified/**").permitAll()
+                .antMatchers("/route/**").permitAll().anyRequest().authenticated()
                 .and().exceptionHandling().authenticationEntryPoint(jwtAuthExceptionHandler)
                 .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).
                 and().addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);

@@ -3,7 +3,7 @@ package pl.ftims.ias.perfectbeta.utils;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.retry.support.RetryTemplate;
-import pl.ftims.ias.perfectbeta.utils.listeners.DefaultListenerSupport;
+import pl.ftims.ias.perfectbeta.utils.loggers.TransactionListenerSupport;
 
 @Configuration
 public class AppConfig {
@@ -11,7 +11,7 @@ public class AppConfig {
     @Bean
     public RetryTemplate retryTemplate() {
         RetryTemplate retryTemplate = new RetryTemplate();
-        retryTemplate.registerListener(new DefaultListenerSupport());
+        retryTemplate.registerListener(new TransactionListenerSupport());
         return retryTemplate;
     }
 }

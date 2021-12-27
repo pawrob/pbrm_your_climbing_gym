@@ -3,7 +3,7 @@ package pl.ftims.ias.perfectbeta.dto.serialization;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
-import pl.ftims.ias.perfectbeta.utils.SymmetricCrypt;
+import pl.ftims.ias.perfectbeta.utils.security.SymmetricCrypt;
 
 import javax.json.bind.JsonbException;
 import java.io.IOException;

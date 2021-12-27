@@ -1,4 +1,4 @@
-package pl.ftims.ias.perfectbeta.utils.listeners;
+package pl.ftims.ias.perfectbeta.utils.loggers;
 
 
 import org.springframework.retry.RetryCallback;
@@ -6,7 +6,7 @@ import org.springframework.retry.RetryContext;
 import org.springframework.retry.listener.RetryListenerSupport;
 import pl.ftims.ias.perfectbeta.utils.loggers.TransactionLogger;
 
-public class DefaultListenerSupport extends RetryListenerSupport {
+public class TransactionListenerSupport extends RetryListenerSupport {
 
     private final TransactionLogger transactionLogger = new TransactionLogger();
     private boolean lastCommitted = true;

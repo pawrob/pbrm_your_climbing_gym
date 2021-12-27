@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import pl.ftims.ias.perfectbeta.auth.repositories.AuthViewRepository;
+import pl.ftims.ias.perfectbeta.exceptions.InvalidTokenException;
 import pl.ftims.ias.perfectbeta.exceptions.UserNotFoundAppException;
 
 import java.util.*;
@@ -77,7 +78,7 @@ public class JwtService implements JwtServiceLocal {
                 .signWith(SignatureAlgorithm.HS512, secret).compact();
     }
 
-    public boolean validateToken(String authToken) throws UserNotFoundAppException {
+    public boolean validateToken(String authToken) throws UserNotFoundAppException, InvalidTokenException {
         try {
 
             if (authViewRepository.findByLogin(getUsernameFromToken(authToken)).get().isEmpty())
@@ -86,9 +87,9 @@ public class JwtService implements JwtServiceLocal {
             Jws<Claims> claims = Jwts.parser().setSigningKey(secret).parseClaimsJws(authToken);
             return true;
         } catch (SignatureException | MalformedJwtException | UnsupportedJwtException | IllegalArgumentException ex) {
-            throw new BadCredentialsException("INVALID_CREDENTIALS", ex);
+            throw new BadCredentialsException("INVALID_TOKEN");
         } catch (ExpiredJwtException ex) {
-            throw ex;
+            throw InvalidTokenException.createTokenExpiredException();
         }
     }
 

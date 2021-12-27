@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.*;
 import pl.ftims.ias.perfectbeta.dto.*;
 import pl.ftims.ias.perfectbeta.dto.user_dtos.*;
 import pl.ftims.ias.perfectbeta.exceptions.AbstractAppException;
+import pl.ftims.ias.perfectbeta.mok.services.ManagerService;
+import pl.ftims.ias.perfectbeta.mok.services.ManagerServiceLocal;
 import pl.ftims.ias.perfectbeta.mok.services.UserService;
 import pl.ftims.ias.perfectbeta.mok.services.UserServiceLocal;
 import pl.ftims.ias.perfectbeta.utils.converters.PersonalDataConverter;
@@ -28,24 +30,26 @@ import javax.validation.constraints.NotNull;
 public class UserEndpoint {
 
     UserServiceLocal userService;
+    ManagerServiceLocal managerService;
     RetryTemplate retry;
 
     @Autowired
-    public UserEndpoint(UserService userService, RetryTemplate retry) {
+    public UserEndpoint(UserService userService, ManagerService managerService, RetryTemplate retry) {
         this.userService = userService;
+        this.managerService = managerService;
         this.retry = retry;
     }
 
-    @Secured({"ROLE_ADMINISTRATOR", "ROLE_MANAGER"})
+    @Secured("ROLE_ADMINISTRATOR")
     @GetMapping
     public Page<UserWithPersonalDataAccessLevelDTO> getAllUsers(Pageable page) {
-        return retry.execute(arg0 -> UserConverter.userEntityPageToDTOPage(userService.getAllUsers(page)));
+        return retry.execute(arg0 -> UserConverter.userEntityPageToDTOPage(managerService.getAllUsers(page)));
     }
 
-    @Secured({"ROLE_ADMINISTRATOR", "ROLE_MANAGER"})
+    @Secured("ROLE_ADMINISTRATOR")
     @GetMapping("/{id}")
     public UserWithPersonalDataAccessLevelDTO getUserById(@PathVariable Long id) throws AbstractAppException {
-        return retry.execute(arg0 -> UserConverter.userWithPersonalDataAccessLevelDTOFromEntity(userService.getUserById(id)));
+        return retry.execute(arg0 -> UserConverter.userWithPersonalDataAccessLevelDTOFromEntity(managerService.getUserById(id)));
     }
 
     @PostMapping("register")

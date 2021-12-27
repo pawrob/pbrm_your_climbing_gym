@@ -1,4 +1,4 @@
-package pl.ftims.ias.perfectbeta.utils;
+package pl.ftims.ias.perfectbeta.utils.security;
 
 import org.springframework.security.crypto.codec.Hex;
 import org.springframework.security.crypto.encrypt.BytesEncryptor;

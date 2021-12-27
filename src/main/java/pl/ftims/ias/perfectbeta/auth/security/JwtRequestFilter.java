@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 import pl.ftims.ias.perfectbeta.auth.service.JwtService;
+import pl.ftims.ias.perfectbeta.exceptions.InvalidTokenException;
 import pl.ftims.ias.perfectbeta.exceptions.UserNotFoundAppException;
 
 import javax.servlet.FilterChain;
@@ -45,11 +46,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                 log.info("Cannot set the Security Context - invoke without authentication. Path: {}, from address: {}",
                         request.getServletPath(), request.getRemoteAddr());
             }
-        } catch (ExpiredJwtException ex) {
-            request.setAttribute("exception", ex);
-        } catch (BadCredentialsException ex) {
-            request.setAttribute("exception", ex);
-        } catch (UserNotFoundAppException ex) {
+        } catch (ExpiredJwtException | BadCredentialsException | UserNotFoundAppException | InvalidTokenException ex) {
             request.setAttribute("exception", ex);
         }
         chain.doFilter(request, response);
