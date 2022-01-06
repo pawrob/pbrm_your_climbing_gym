@@ -45,6 +45,8 @@ public class AuthConfiguration extends WebSecurityConfigurerAdapter {
         http.csrf().disable().authorizeRequests()
                 .antMatchers("/users/request_reset_password").permitAll()
                 .antMatchers("/users/reset_password").permitAll()
+                .antMatchers("/actuator/**").permitAll()
+                .antMatchers("/actuator").permitAll()
                 .antMatchers("/users/verify").permitAll()
                 .antMatchers("/users/register").permitAll()
                 .antMatchers("/auth/refreshtoken").hasAnyRole("CLIMBER", "MANAGER", "ADMINISTRATOR")
