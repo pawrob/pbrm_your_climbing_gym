@@ -98,23 +98,23 @@ public class UserEndpoint {
     }
 
     @Secured({"ROLE_ADMINISTRATOR", "ROLE_MANAGER", "ROLE_CLIMBER"})
-    @GetMapping("request_change_email")
+    @PutMapping("request_change_email")
     public UserDTO requestChangeEmail(@RequestBody @NotNull @Valid EmailDTO emailDTO) throws AbstractAppException {
         return retry.execute(arg0 -> UserConverter.userEntityToDTO(userService.requestChangeEmail(emailDTO)));
     }
 
     @Secured({"ROLE_ADMINISTRATOR", "ROLE_MANAGER", "ROLE_CLIMBER"})
-    @GetMapping("change_email")
+    @PutMapping("change_email")
     public UserDTO changeEmail(@NotNull @RequestParam("token") String token, @NotNull @RequestParam("email") String email) throws AbstractAppException {
         return retry.execute(arg0 -> UserConverter.userEntityToDTO(userService.changeEmail(token, email)));
     }
 
-    @GetMapping("request_reset_password")
+    @PutMapping("request_reset_password")
     public UserDTO requestResetPassword(@RequestBody @NotNull @Valid EmailDTO emailDTO) throws AbstractAppException {
         return retry.execute(arg0 -> UserConverter.userEntityToDTO(userService.requestResetPassword(emailDTO)));
     }
 
-    @GetMapping("reset_password")
+    @PutMapping("reset_password")
     public UserDTO resetPassword(@NotNull @RequestParam("id") Long id, @NotNull @RequestParam("token") String token, @RequestBody @NotNull @Valid ResetPasswordDTO resetPasswordDTO) throws AbstractAppException {
         return retry.execute(arg0 -> UserConverter.userEntityToDTO(userService.resetPassword(id, token, resetPasswordDTO)));
     }
