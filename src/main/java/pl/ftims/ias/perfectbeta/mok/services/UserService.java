@@ -225,7 +225,7 @@ public class UserService implements UserServiceLocal {
         context.setVariable("header", "potwierdzenie zmiany adresu email w serwisie PerfectBeta");
         context.setVariable("title", "Czas lepiej się poznac");
         // todo set link to production host
-        context.setVariable("description", "https://localhost:8080/api/users/change_email?token="
+        context.setVariable("description", "https://perfectbeta-spring-boot-tls-pyclimb.apps.okd.cti.p.lodz.pl/api/users/change_email?token="
                 + URLEncoder.encode(userEntity.getEmailResetToken(), StandardCharsets.UTF_8) + "&email="
                 + URLEncoder.encode(emailDTO.getEmail(), StandardCharsets.UTF_8));
         String body = templateEngine.process("template", context);
@@ -247,7 +247,7 @@ public class UserService implements UserServiceLocal {
         context.setVariable("header", "potwierdzenie zmiany hasła  w serwisie PerfectBeta");
         context.setVariable("title", "Czas lepiej się poznac");
         // todo set link to production host
-        context.setVariable("description", "https://localhost:8080/api/users/reset_password?id=" + userEntity.getId()
+        context.setVariable("description", "https://perfectbeta-spring-boot-tls-pyclimb.apps.okd.cti.p.lodz.pl/api/users/reset_password?id=" + userEntity.getId()
                 + "&token=" + URLEncoder.encode(userEntity.getPasswordResetToken(), StandardCharsets.UTF_8));
         String body = templateEngine.process("template", context);
         emailSender.sendEmail(userEntity.getEmail(), "PerfectBeta - potwierdzenie zmiany hasła", body);
