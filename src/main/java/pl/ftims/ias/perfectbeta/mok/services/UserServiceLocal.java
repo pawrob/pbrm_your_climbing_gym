@@ -32,4 +32,6 @@ public interface UserServiceLocal {
     UserEntity requestResetPassword(EmailDTO emailDTO) throws AbstractAppException;
 
     UserEntity resetPassword(Long id, String token, ResetPasswordDTO resetPasswordDTO) throws AbstractAppException;
+
+    UserEntity getSelfUser() throws AbstractAppException;
 }

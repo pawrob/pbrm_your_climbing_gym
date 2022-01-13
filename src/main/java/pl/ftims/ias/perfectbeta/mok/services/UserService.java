@@ -69,6 +69,11 @@ public class UserService implements UserServiceLocal {
 
         return userEntity;
     }
+    @Override
+    public UserEntity getSelfUser() throws AbstractAppException {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        return userMokRepository.findByLogin(auth.getName()).orElseThrow(() -> UserNotFoundAppException.createUserWithProvidedLoginNotFoundException(auth.getName()));
+    }
 
     public UserEntity verifyUser(String username, String token) throws AbstractAppException {
         UserEntity userEntity = userMokRepository.findByLogin(username)

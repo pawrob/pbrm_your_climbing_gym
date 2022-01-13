@@ -51,6 +51,11 @@ public class UserEndpoint {
     public UserWithPersonalDataAccessLevelDTO getUserById(@PathVariable Long id) throws AbstractAppException {
         return retry.execute(arg0 -> UserConverter.userWithPersonalDataAccessLevelDTOFromEntity(managerService.getUserById(id)));
     }
+    @Secured({"ROLE_ADMINISTRATOR", "ROLE_MANAGER", "ROLE_CLIMBER"})
+    @GetMapping("/self")
+    public UserWithPersonalDataAccessLevelDTO getSelfUser() throws AbstractAppException {
+        return retry.execute(arg0 -> UserConverter.userWithPersonalDataAccessLevelDTOFromEntity(userService.getSelfUser()));
+    }
 
     @PostMapping("register")
     public UserWithPersonalDataAccessLevelDTO registerClient(@RequestBody @Valid RegistrationDTO user) {
