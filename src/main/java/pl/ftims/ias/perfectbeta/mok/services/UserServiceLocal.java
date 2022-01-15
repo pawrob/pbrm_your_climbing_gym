@@ -7,6 +7,7 @@ import pl.ftims.ias.perfectbeta.dto.ResetPasswordDTO;
 import pl.ftims.ias.perfectbeta.entities.PersonalDataEntity;
 import pl.ftims.ias.perfectbeta.entities.UserEntity;
 import pl.ftims.ias.perfectbeta.exceptions.AbstractAppException;
+import pl.ftims.ias.perfectbeta.exceptions.UserNotFoundAppException;
 
 public interface UserServiceLocal {
 
@@ -34,4 +35,6 @@ public interface UserServiceLocal {
     UserEntity resetPassword(Long id, String token, ResetPasswordDTO resetPasswordDTO) throws AbstractAppException;
 
     UserEntity getSelfUser() throws AbstractAppException;
+
+    UserEntity verifyUserByToken(String userToken) throws AbstractAppException;
 }

@@ -46,6 +46,11 @@ public class UserEndpoint {
         return retry.execute(arg0 -> UserConverter.userEntityPageToDTOPage(managerService.getAllUsers(page)));
     }
 
+    @GetMapping("/token_verify")
+    public UserDTO verifyUserByToken(@RequestParam("token") String userToken) throws AbstractAppException {
+        return retry.execute(arg0 -> UserConverter.userEntityToDTO(userService.verifyUserByToken(userToken)));
+    }
+
     @Secured("ROLE_ADMINISTRATOR")
     @GetMapping("/{id}")
     public UserWithPersonalDataAccessLevelDTO getUserById(@PathVariable Long id) throws AbstractAppException {

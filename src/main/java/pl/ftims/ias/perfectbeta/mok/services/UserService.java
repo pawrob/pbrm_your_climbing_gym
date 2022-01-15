@@ -22,6 +22,7 @@ import pl.ftims.ias.perfectbeta.mok.repositories.PersonalDataMokRepository;
 import pl.ftims.ias.perfectbeta.mok.repositories.UserMokRepository;
 import pl.ftims.ias.perfectbeta.utils.security.HashGenerator;
 import pl.ftims.ias.perfectbeta.utils.mailing.EmailSender;
+import pl.ftims.ias.perfectbeta.utils.security.SymmetricCrypt;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
@@ -59,10 +60,12 @@ public class UserService implements UserServiceLocal {
         userMokRepository.save(userEntity);
 
         //mailing
+        String encryptedUsername = SymmetricCrypt.encrypt(userEntity.getLogin());
         Context context = new Context();
         context.setVariable("header", "Dziękujemy za założenie profilu w serwisie PerfectBeta");
-        context.setVariable("title", "Czas lepiej się poznac");
-        context.setVariable("description", "Cieszymy się że jesteś z nami, kliknij w przycisk poniżej aby aktywować swoje konto");
+        context.setVariable("title", "Potwierdzenie adresu email aktywuje konto oraz pozwoli na zalogowanie się i korzystanie z serwisu!");
+        context.setVariable("description", "Wklej poniższy kod w aplikacji aby aktywować konto 👇");
+        context.setVariable("token", encryptedUsername);
         String body = templateEngine.process("template", context);
         emailSender.sendEmail(userEntity.getEmail(), "PerfectBeta - Dziękujemy za założenie profilu", body);
 
@@ -73,6 +76,35 @@ public class UserService implements UserServiceLocal {
     public UserEntity getSelfUser() throws AbstractAppException {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         return userMokRepository.findByLogin(auth.getName()).orElseThrow(() -> UserNotFoundAppException.createUserWithProvidedLoginNotFoundException(auth.getName()));
+    }
+
+    @Override
+    public UserEntity verifyUserByToken(String userToken) throws AbstractAppException {
+
+        if (null == userToken) throw InvalidTokenException.createTokenExpiredException();
+
+        String username = SymmetricCrypt.decrypt(userToken);
+        UserEntity userEntity = userMokRepository.findByLogin(username)
+                .orElseThrow(() -> UserNotFoundAppException.createUserWithProvidedLoginNotFoundException(username));
+
+        if (userEntity.getVerifyTokenTimestamp() == null)
+            throw InvalidTokenException.createTokenExpiredException();
+        if (userEntity.getVerifyTokenTimestamp().until(OffsetDateTime.now(), ChronoUnit.HOURS) > 24)
+            throw InvalidTokenException.createTokenExpiredException();
+
+        userEntity.setVerified(true);
+
+        userEntity.setVerifyTokenTimestamp(null);
+        userEntity.setVerifyToken(null);
+
+        Context context = new Context();
+        context.setVariable("header", "Dziękujemy za potwierdzenie konta");
+        context.setVariable("title", "Konto zostało potwierdzone");
+        context.setVariable("description", "Cieszymy się że jesteś z nami, Dziękujemy za potwierdzenie konta");
+        String body = templateEngine.process("template", context);
+        emailSender.sendEmail(userEntity.getEmail(), "PerfectBeta - Dziękujemy za potwierdzenie adresu email", body);
+
+        return userMokRepository.save(userEntity);
     }
 
     public UserEntity verifyUser(String username, String token) throws AbstractAppException {

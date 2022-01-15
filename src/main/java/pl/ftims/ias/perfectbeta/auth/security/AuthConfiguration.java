@@ -48,6 +48,7 @@ public class AuthConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/actuator/**").permitAll()
                 .antMatchers("/actuator").permitAll()
                 .antMatchers("/users/verify").permitAll()
+                .antMatchers("/users/token_verify").permitAll()
                 .antMatchers("/users/register").permitAll()
                 .antMatchers("/auth/refreshtoken").hasAnyRole("CLIMBER", "MANAGER", "ADMINISTRATOR")
                 .antMatchers("/auth/authenticate").permitAll()
