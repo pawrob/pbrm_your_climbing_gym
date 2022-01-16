@@ -28,6 +28,6 @@ public interface ClimbingGymServiceLocal {
 
     ClimbingGymEntity editGymDetails(Long id, GymDetailsDTO detailsDTO) throws AbstractAppException;
 
-    ClimbingGymEntity addMaintainer(Long gymId, Long userId) throws AbstractAppException;
+    ClimbingGymEntity addMaintainer(Long gymId, String username) throws AbstractAppException;
 
 }

@@ -123,6 +123,7 @@ CREATE TABLE public.gym_maintainer
     is_active       BOOLEAN   NOT NULL DEFAULT TRUE,
     version         BIGINT    NOT NULL DEFAULT 1,
     CONSTRAINT gym_maintainer_pkey PRIMARY KEY (id),
+    CONSTRAINT user_id_key UNIQUE (user_id),
     CONSTRAINT gym_maintainer_user_id_fkey FOREIGN KEY (user_id)
         REFERENCES public.user (id) MATCH SIMPLE
         ON UPDATE NO ACTION

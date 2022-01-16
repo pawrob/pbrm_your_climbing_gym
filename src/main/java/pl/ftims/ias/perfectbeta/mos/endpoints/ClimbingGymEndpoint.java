@@ -89,9 +89,9 @@ public class ClimbingGymEndpoint {
     }
 
     @Secured("ROLE_MANAGER")
-    @PutMapping("{gymId}/add_maintainer/{userId}")
-    public ClimbingGymWithMaintainersDTO addMaintainer(@PathVariable Long gymId, @PathVariable Long userId) throws AbstractAppException {
-        return retry.execute(arg0 -> ClimbingGymConverter.climbingGymEntityWithMaintainersEntityToDTO(climbingGymService.addMaintainer(gymId, userId)));
+    @PutMapping("{gymId}/add_maintainer/{username}")
+    public ClimbingGymWithMaintainersDTO addMaintainer(@PathVariable Long gymId, @PathVariable String username) throws AbstractAppException {
+        return retry.execute(arg0 -> ClimbingGymConverter.climbingGymEntityWithMaintainersEntityToDTO(climbingGymService.addMaintainer(gymId, username)));
     }
 
     @Secured("ROLE_MANAGER")

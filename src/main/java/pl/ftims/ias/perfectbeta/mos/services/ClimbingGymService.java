@@ -119,15 +119,15 @@ public class ClimbingGymService implements ClimbingGymServiceLocal {
     }
 
 
-    public ClimbingGymEntity addMaintainer(Long gymId, Long userId) throws AbstractAppException {
+    public ClimbingGymEntity addMaintainer(Long gymId, String username) throws AbstractAppException {
         ClimbingGymEntity gym = climbingGymRepository.findById(gymId)
                 .orElseThrow(() -> GymNotFoundException.createGymWithProvidedIdNotFoundException(gymId));
 
         if (!gym.getOwner().getLogin().equals(SecurityContextHolder.getContext().getAuthentication().getName())) {
             throw NotAllowedAppException.createNotAllowedException();
         }
-        UserEntity maintainer = userMosRepository.findById(userId)
-                .orElseThrow(() -> UserNotFoundAppException.createUserWithProvidedIdNotFoundException(userId));
+        UserEntity maintainer = userMosRepository.findByLogin(username)
+                .orElseThrow(() -> UserNotFoundAppException.createUserWithProvidedLoginNotFoundException(username));
         if (!checkIfManager(maintainer)) {
             throw NotAllowedAppException.createNotAllowedException();
         }
