@@ -214,6 +214,13 @@ public class RouteService implements RouteServiceLocal {
         return ResponseEntity.ok().build();
     }
 
+    @Override
+    public List<RatingEntity> getRatings(Long route_id) throws AbstractAppException {
+        RouteEntity route = routeRepository.findById(route_id)
+                .orElseThrow(() -> RouteNotFoundException.createRouteWithProvidedIdNotFoundException(route_id));
+        return route.getRatings();
+    }
+
     private void calculateRatings(RouteEntity route) {
         Double avgRating = 0.0;
         for (RatingEntity r : route.getRatings()) {

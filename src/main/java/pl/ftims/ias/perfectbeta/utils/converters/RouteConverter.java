@@ -3,8 +3,10 @@ package pl.ftims.ias.perfectbeta.utils.converters;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import pl.ftims.ias.perfectbeta.dto.routes_dtos.PhotoDTO;
+import pl.ftims.ias.perfectbeta.dto.routes_dtos.RatingDTO;
 import pl.ftims.ias.perfectbeta.dto.routes_dtos.RouteDTO;
 import pl.ftims.ias.perfectbeta.entities.PhotoEntity;
+import pl.ftims.ias.perfectbeta.entities.RatingEntity;
 import pl.ftims.ias.perfectbeta.entities.RouteEntity;
 
 import java.util.ArrayList;
@@ -24,6 +26,9 @@ public class RouteConverter {
         return new PhotoDTO(entity.getId(), entity.getVersion(), entity.getPhotoUrl(), entity.getRoute().getId());
     }
 
+    public static RatingDTO ratingEntityToDTO(RatingEntity entity) {
+        return new RatingDTO(entity.getComment(),entity.getRate(),  entity.getRoute().getId(),entity.getUser().getId(),entity.getUser().getLogin());
+    }
 
     public static List<PhotoDTO> photoListDTOFromEntity(List<PhotoEntity> photoEntities) {
 
@@ -33,6 +38,13 @@ public class RouteConverter {
                 .collect(Collectors.toList());
 
 
+    }
+ public static List<RatingDTO> ratingListDTOFromEntity(List<RatingEntity> ratingEntities) {
+
+        return null == ratingEntities ? null : ratingEntities.stream()
+                .filter(Objects::nonNull)
+                .map(RouteConverter::ratingEntityToDTO)
+                .collect(Collectors.toList());
     }
 
 

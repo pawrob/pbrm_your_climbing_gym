@@ -5,8 +5,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import pl.ftims.ias.perfectbeta.dto.routes_dtos.RatingDTO;
 import pl.ftims.ias.perfectbeta.dto.routes_dtos.RouteDTO;
+import pl.ftims.ias.perfectbeta.entities.RatingEntity;
 import pl.ftims.ias.perfectbeta.entities.RouteEntity;
 import pl.ftims.ias.perfectbeta.exceptions.AbstractAppException;
+
+import java.util.List;
 
 public interface RouteServiceLocal {
 
@@ -29,4 +32,6 @@ public interface RouteServiceLocal {
     ResponseEntity deleteOwnRating(Long rating_id) throws AbstractAppException;
 
     ResponseEntity deleteRatingByOwnerOrMaintainer(Long rating_id) throws AbstractAppException;
+
+    List<RatingEntity> getRatings(Long route_id) throws AbstractAppException;
 }

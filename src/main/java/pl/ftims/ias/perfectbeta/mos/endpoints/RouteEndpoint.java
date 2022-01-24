@@ -18,6 +18,7 @@ import pl.ftims.ias.perfectbeta.mos.services.RouteServiceLocal;
 import pl.ftims.ias.perfectbeta.utils.converters.RouteConverter;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("route")
@@ -80,6 +81,12 @@ public class RouteEndpoint {
     @PostMapping("/{route_id}/rate")
     public RouteDTO updateRating(@PathVariable Long route_id, @RequestBody @Valid RatingDTO ratingDTO) throws AbstractAppException {
         return retry.execute(arg0 -> RouteConverter.climbingWallEntityToDTO(routeService.updateRating(route_id, ratingDTO)));
+    }
+
+
+    @GetMapping("/rates/{route_id}")
+    public List<RatingDTO> getRatings(@PathVariable Long route_id) throws AbstractAppException {
+        return retry.execute(arg0 -> RouteConverter.ratingListDTOFromEntity(routeService.getRatings(route_id)));
     }
 
     @Secured("ROLE_CLIMBER")
