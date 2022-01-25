@@ -20,7 +20,8 @@ public class RatingDTO extends AbstractDTO {
     private Long routeId;
     private Long userId;
 
-    public RatingDTO(String comment, Double rate, Long routeId, Long userId,String username) {
+    public RatingDTO(long id, Long version, String comment, Double rate, Long routeId, Long userId,String username) {
+        super(id, version);
         this.comment = comment;
         this.rate = rate;
         this.routeId = routeId;

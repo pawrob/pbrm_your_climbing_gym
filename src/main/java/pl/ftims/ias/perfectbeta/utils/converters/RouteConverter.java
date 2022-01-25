@@ -27,7 +27,7 @@ public class RouteConverter {
     }
 
     public static RatingDTO ratingEntityToDTO(RatingEntity entity) {
-        return new RatingDTO(entity.getComment(),entity.getRate(),  entity.getRoute().getId(),entity.getUser().getId(),entity.getUser().getLogin());
+        return new RatingDTO(entity.getId(), entity.getVersion(), entity.getComment(),entity.getRate(),  entity.getRoute().getId(),entity.getUser().getId(),entity.getUser().getLogin());
     }
 
     public static List<PhotoDTO> photoListDTOFromEntity(List<PhotoEntity> photoEntities) {
