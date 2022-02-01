@@ -37,4 +37,8 @@ public interface UserServiceLocal {
     UserEntity getSelfUser() throws AbstractAppException;
 
     UserEntity verifyUserByToken(String userToken) throws AbstractAppException;
+
+    UserEntity changeEmailByToken(String token, String email) throws AbstractAppException;
+
+    UserEntity resetPasswordByToken(String token, ResetPasswordDTO resetPasswordDTO) throws AbstractAppException;
 }

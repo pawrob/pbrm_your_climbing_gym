@@ -23,9 +23,6 @@ import pl.ftims.ias.perfectbeta.mok.repositories.UserMokRepository;
 import pl.ftims.ias.perfectbeta.utils.security.HashGenerator;
 import pl.ftims.ias.perfectbeta.utils.mailing.EmailSender;
 import pl.ftims.ias.perfectbeta.utils.security.SymmetricCrypt;
-
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.time.OffsetDateTime;
 import java.time.temporal.ChronoUnit;
 
@@ -245,6 +242,27 @@ public class UserService implements UserServiceLocal {
         return userMokRepository.save(userEntity);
     }
 
+    public UserEntity changeEmailByToken(String token, String email) throws AbstractAppException {
+        if (null == token) throw InvalidTokenException.createTokenExpiredException();
+
+        String username = SymmetricCrypt.decrypt(token);
+        UserEntity userEntity = userMokRepository.findByLogin(username)
+                .orElseThrow(() -> UserNotFoundAppException.createUserWithProvidedLoginNotFoundException(username));
+
+        if (userEntity.getEmailResetToken() == null || userEntity.getEmailResetTokenTimestamp() == null)
+            throw InvalidTokenException.createTokenExpiredException();
+        if (userEntity.getEmailResetTokenTimestamp().until(OffsetDateTime.now(), ChronoUnit.MINUTES) > 20)
+            throw InvalidTokenException.createTokenExpiredException();
+        if (!userMokRepository.findByEmail(email).isEmpty())
+            throw UniqueConstraintAppException.createEmailTakenException();
+
+        userEntity.setEmailResetToken(null);
+        userEntity.setEmailResetTokenTimestamp(null);
+
+        userEntity.setEmail(email);
+        return userMokRepository.save(userEntity);
+    }
+
     public UserEntity requestChangeEmail(EmailDTO emailDTO) throws AbstractAppException {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
@@ -256,15 +274,13 @@ public class UserService implements UserServiceLocal {
         }
         userEntity.setEmailResetToken(RandomStringUtils.randomAlphabetic(64));
         userEntity.setEmailResetTokenTimestamp(OffsetDateTime.now());
-
+        String encryptedUsername = SymmetricCrypt.encrypt(userEntity.getLogin());
         //mailing
         Context context = new Context();
         context.setVariable("header", "potwierdzenie zmiany adresu email w serwisie PerfectBeta");
         context.setVariable("title", "Czas lepiej się poznac");
         // todo set link to production host
-        context.setVariable("description", "https://perfectbeta-spring-boot-tls-pyclimb.apps.okd.cti.p.lodz.pl/api/users/change_email?token="
-                + URLEncoder.encode(userEntity.getEmailResetToken(), StandardCharsets.UTF_8) + "&email="
-                + URLEncoder.encode(emailDTO.getEmail(), StandardCharsets.UTF_8));
+        context.setVariable("description", encryptedUsername);
         String body = templateEngine.process("template", context);
         emailSender.sendEmail(userEntity.getEmail(), "PerfectBeta - potwierdzenie zmiany adresu email", body);
 
@@ -279,16 +295,42 @@ public class UserService implements UserServiceLocal {
         userEntity.setPasswordResetToken(RandomStringUtils.randomAlphabetic(64));
         userEntity.setPasswordResetTokenTimestamp(OffsetDateTime.now());
 
+        String encryptedUsername = SymmetricCrypt.encrypt(userEntity.getLogin());
         //mailing
         Context context = new Context();
         context.setVariable("header", "potwierdzenie zmiany hasła  w serwisie PerfectBeta");
         context.setVariable("title", "Czas lepiej się poznac");
         // todo set link to production host
-        context.setVariable("description", "https://perfectbeta-spring-boot-tls-pyclimb.apps.okd.cti.p.lodz.pl/api/users/reset_password?id=" + userEntity.getId()
-                + "&token=" + URLEncoder.encode(userEntity.getPasswordResetToken(), StandardCharsets.UTF_8));
+        context.setVariable("description", encryptedUsername);
         String body = templateEngine.process("template", context);
         emailSender.sendEmail(userEntity.getEmail(), "PerfectBeta - potwierdzenie zmiany hasła", body);
 
+        return userMokRepository.save(userEntity);
+    }
+
+    public UserEntity resetPasswordByToken(String token, ResetPasswordDTO resetPasswordDTO) throws AbstractAppException {
+
+        String username = SymmetricCrypt.decrypt(token);
+        UserEntity userEntity = userMokRepository.findByLogin(username)
+                .orElseThrow(() -> UserNotFoundAppException.createUserWithProvidedLoginNotFoundException(username));
+
+        if (userEntity.getPasswordResetToken() == null || userEntity.getPasswordResetTokenTimestamp() == null)
+            throw InvalidTokenException.createTokenExpiredException();
+        if (userEntity.getPasswordResetTokenTimestamp().until(OffsetDateTime.now(), ChronoUnit.MINUTES) > 20)
+            throw InvalidTokenException.createTokenExpiredException();
+
+
+        userEntity.setPasswordResetToken(null);
+        userEntity.setPasswordResetTokenTimestamp(null);
+
+        if (HashGenerator.checkPassword(resetPasswordDTO.getNewPassword(), userEntity.getPassword())) {
+            throw InvalidCredentialsException.createPasswordSameAsOldException();
+        }
+        if (!resetPasswordDTO.getNewPassword().equals(resetPasswordDTO.getNewPasswordConfirmation())) {
+            throw InvalidCredentialsException.createPasswordNotMatchException();
+        }
+
+        userEntity.setPassword(HashGenerator.generateHash(resetPasswordDTO.getNewPassword()));
         return userMokRepository.save(userEntity);
     }
 
